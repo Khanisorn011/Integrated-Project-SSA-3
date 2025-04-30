@@ -1,0 +1,22 @@
+package org.example.backend.services;
+
+import org.example.backend.entities.SaleItemBase;
+import org.example.backend.repositories.SaleItemBaseRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class SaleItemService {
+    @Autowired
+    private SaleItemBaseRepository saleItemBaseRepository;
+
+    public List<SaleItemBase> getAll() {
+        return saleItemBaseRepository.findAll();
+    }
+
+    public List<SaleItemBase> getAllByCreateTime() {
+        return saleItemBaseRepository.findAllByOrderByCreatedOnAsc();
+    }
+}
