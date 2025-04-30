@@ -1,25 +1,24 @@
-create database integrateDatabase;
 drop database integrateDatabase;
+create database integrateDatabase;
 use integrateDatabase;
 
 create table BRAND_BASE (
 	id int auto_increment not null,
     name varchar(30) character set utf8 not null,
-    websiteUrl text,
+    websiteUrl varchar(40),
     isActive boolean,
-    countryOfOrigin text character set utf8,
+    countryOfOrigin varchar(80) character set utf8,
     createdOn datetime default now() not null,
     updatedOn datetime default now() on update now() not null,
     check (trim(name) != ''),
-    check (length(websiteUrl) <= 40 and trim(name) != ''),
-    check (length(countryOfOrigin) <= 80 AND trim(countryOfOrigin) != ''),
+    check (trim(websiteUrl) != ''),
+    check (trim(countryOfOrigin) != ''),
     primary key (id)
 );
 
-CREATE TABLE SALE_ITEM_BASE (
+create table SALE_ITEM_BASE (
 	id int auto_increment not null,
     brand_id int not null,
-    -- brand varchar(30) character set utf8 not null ,
     model varchar(60) character set utf8 not null ,
     description text not null,
     quantity int not null default 1,
@@ -37,21 +36,15 @@ CREATE TABLE SALE_ITEM_BASE (
     foreign key (brand_id) references BRAND_BASE(id)
 );
 
-INSERT INTO BRAND_BASE (name, websiteUrl, isActive, countryOfOrigin) VALUES (
-    'Samsung',
-    'https://www.samsung.com',
-    TRUE,
-    'South Korea'
-);
+INSERT INTO BRAND_BASE (name, websiteUrl, isActive, countryOfOrigin) VALUES 
+    ('Samsung', 'https://www.samsung.com', TRUE, 'South Korea'),
+    ('Apple', 'https://www.apple.com', TRUE, 'America');
 
-INSERT INTO SALE_ITEM_BASE (model, brand_id, description, price, ramGb, screenSizeInch, storageGb, color, quantity) VALUES (
-    'Galaxy S23 Ultra',
-    1,
-    '512GB ซีพียูทรงพลัง กล้องเทพๆ รองรับ S-Pen จอใหญ่สะใจ เล่นเกมลื่นสุดๆ',
-    32900,
-    6,
-    6.7,
-    256,
-    'Phantom Black',
-    5
-);
+INSERT INTO SALE_ITEM_BASE (brand_id, model, description, quantity, price, screenSizeInch, ramGb, storageGb, color) VALUES
+(1, 'Galaxy S23 Ultra', '512GB ซีพียูทรงพลัง กล้องเทพๆ รองรับ S-Pen จอใหญ่สะใจ เล่นเกมลื่นสุดๆ',5, 32900,  6, 6.7, 256, 'Phantom Black'),
+(2, 'iPhone 14 Pro Max', 'ไอโฟนเรือธงรุ่นล่าสุด มาพร้อม Dynamic Island จอใหญ่สุดในตระกูล กล้องระดับโปร', 5, 42900, 6.7, 6, 512, 'Space Black'),
+(2, 'iPhone 14', 'ไอโฟนรุ่นใหม่ล่าสุด รองรับ 5G เร็วแรง ถ่ายภาพสวยทุกสภาพแสง', 8, 29700, 6.1, 6, 256, 'Midnight'),
+(2, 'iPhone 13 Pro', 'ไอโฟนรุ่นโปร จอ ProMotion 120Hz กล้องระดับมืออาชีพ', 3, 33000, 6.1, 6, 256, 'Sierra Blue'),
+(2, 'iPhone SE 2022', 'Budget-friendly model', 15, 14190, 4.7, 4, 64, 'Starlight'),
+(2, 'iPhone 14 Plus', 'iPhone 14 Plus 128GB สี Starlight เครื่องศูนย์ไทย โมเดล TH แบต 100% มีกล่องครบ ประกันศูนย์ถึง พ.ย. 68 ส่งฟรี', 7, 29700, 6.7, 6, 256, 'Blue'),
+(1, 'Galaxy S23 Ultra', 'Samsung Galaxy S23 Ultra 512GB สีดําปีศาจ สภาพนางฟ้า 99% ไร้รอย แถมเคสแท้ แบบต๊อดสุดๆ รองรับปากกา S-Pen', 1, 32900, 7.6, NULL, 512, NULL);
