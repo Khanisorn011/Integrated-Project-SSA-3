@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/sales-items")
+@RequestMapping("/itb-mshop")
 public class SaleItemController {
     @Autowired
     private SaleItemService saleItemService;
@@ -23,7 +23,7 @@ public class SaleItemController {
     @Autowired
     private ListMapper listMapper;
 
-    @GetMapping("")
+    @GetMapping("/v1/sales-items")
     public ResponseEntity<List<SaleItemDTO>> getSalesItems() {
         List<SaleItemBase> items = saleItemService.getAllByCreateTime();
         List<SaleItemDTO> dto = listMapper.mapList(items, SaleItemDTO.class, modelMapper);
@@ -31,7 +31,7 @@ public class SaleItemController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/v1/sales-items/{id}")
     public ResponseEntity<SaleItemDetailDTO> getSaleItemById(@PathVariable Integer id) {
         return ResponseEntity.ok(modelMapper.map(saleItemService.getById(id), SaleItemDetailDTO.class));
     }
