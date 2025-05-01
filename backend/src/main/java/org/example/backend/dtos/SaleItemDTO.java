@@ -10,14 +10,11 @@ import org.example.backend.entities.SaleItemBase;
 @Getter
 @Setter
 public class SaleItemDTO {
+    private Integer id;
     private String model;
     private String brandName;
     private Integer price;
+    private Integer ramGb;
     private Integer storageGb;
     private String color;
-
-    @JsonProperty("storageGb")
-    private String getStorageInGb() {
-        return storageGb + "Gb";
-    }
 }
