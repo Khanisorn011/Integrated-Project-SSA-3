@@ -8,8 +8,6 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
-import java.util.LinkedHashSet;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -26,15 +24,15 @@ public class BrandBase {
     @Column(name = "name", nullable = false, length = 30)
     private String name;
 
-    @Lob
-    @Column(name = "websiteUrl")
+    @Size(max = 40)
+    @Column(name = "websiteUrl", length = 40)
     private String websiteUrl;
 
     @Column(name = "isActive")
     private Boolean isActive;
 
-    @Lob
-    @Column(name = "countryOfOrigin")
+    @Size(max = 80)
+    @Column(name = "countryOfOrigin", length = 80)
     private String countryOfOrigin;
 
     @NotNull
@@ -46,8 +44,5 @@ public class BrandBase {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updatedOn", nullable = false)
     private Instant updatedOn;
-
-    @OneToMany(mappedBy = "brand")
-    private Set<SaleItemBase> saleItemBases = new LinkedHashSet<>();
 
 }

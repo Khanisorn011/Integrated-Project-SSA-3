@@ -23,7 +23,7 @@ public class SaleItemService {
 
     public SaleItemBase getById(int id) {
         return saleItemBaseRepository.findById(id).orElseThrow(
-                () -> new SaleItemNotFoundException("SaleItem not found")
+                () -> new SaleItemNotFoundException("SaleItem not found for this id :: " + id)
         );
     }
 }
