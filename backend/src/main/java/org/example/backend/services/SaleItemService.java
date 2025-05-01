@@ -1,6 +1,7 @@
 package org.example.backend.services;
 
 import org.example.backend.entities.SaleItemBase;
+import org.example.backend.exceptions.SaleItemNotFoundException;
 import org.example.backend.repositories.SaleItemBaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,5 +19,11 @@ public class SaleItemService {
 
     public List<SaleItemBase> getAllByCreateTime() {
         return saleItemBaseRepository.findAllByOrderByCreatedOnAsc();
+    }
+
+    public SaleItemBase getById(int id) {
+        return saleItemBaseRepository.findById(id).orElseThrow(
+                () -> new SaleItemNotFoundException("SaleItem not found")
+        );
     }
 }

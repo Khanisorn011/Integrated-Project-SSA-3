@@ -17,7 +17,7 @@ public class SaleItemDTO {
     private String color;
 
     @JsonProperty("storageGb")
-    private String storageInGb() {
+    private String getStorageInGb() {
         return storageGb + "Gb";
     }
 }
