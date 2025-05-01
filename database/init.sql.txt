@@ -48,5 +48,3 @@ INSERT INTO SALE_ITEM_BASE (brand_id, model, description, quantity, price, scree
 (2, 'iPhone SE 2022', 'Budget-friendly model', 15, 14190, 4.7, 4, 64, 'Starlight'),
 (2, 'iPhone 14 Plus', 'iPhone 14 Plus 128GB สี Starlight เครื่องศูนย์ไทย โมเดล TH แบต 100% มีกล่องครบ ประกันศูนย์ถึง พ.ย. 68 ส่งฟรี', 7, 29700, 6.7, 6, 256, 'Blue'),
 (1, 'Galaxy S23 Ultra', 'Samsung Galaxy S23 Ultra 512GB สีดําปีศาจ สภาพนางฟ้า 99% ไร้รอย แถมเคสแท้ แบบต๊อดสุดๆ รองรับปากกา S-Pen', 1, 32900, 7.6, NULL, 512, NULL);
-
-select * from sale_item_base;
