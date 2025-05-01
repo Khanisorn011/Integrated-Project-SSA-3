@@ -15,7 +15,7 @@ public class GlobalExceptionController {
             SaleItemNotFoundException ex , HttpServletRequest request
     ){
         MyErrorResponse myErrorResponse = new MyErrorResponse(
-                HttpStatus.BAD_REQUEST.value() , ex.toString(), ex.getMessage() , request.getRequestURI()
+                HttpStatus.NOT_FOUND.value() , "Not Found", ex.getMessage() , request.getRequestURI()
         );
         return ResponseEntity.status(myErrorResponse.getStatus()).body(myErrorResponse);
     }
