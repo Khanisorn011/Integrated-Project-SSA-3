@@ -12,7 +12,7 @@
 
       <!-- ถ้าไม่มีสินค้า -->
       <div
-        v-if="!loading && products.length === 0"
+        v-if="products.length === 0"
         class="text-center text-gray-300 text-xl py-10"
       >
         No Sale Item
@@ -21,24 +21,15 @@
       <!-- Product Grid -->
       <main
         v-else
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16"
+        class="Itbms-row grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16"
       >
         <ProductCard
           v-for="(product, index) in sortedProducts"
           :key="product.id || index"
           :product="product"
+          :imageUrl="imageArray[index % imageArray.length]?.url"
         />
       </main>
-
-      <!-- Loading -->
-      <div v-if="loading" class="text-center mt-4 text-white">
-        กำลังโหลดสินค้า...
-      </div>
-
-      <!-- Error -->
-      <div v-else-if="error" class="text-center mt-4 text-red-400">
-        เกิดข้อผิดพลาด: {{ error }}
-      </div>
 
       <!-- Footer -->
       <Footer />
@@ -49,28 +40,28 @@
 
 
 <script setup>
-import { onMounted, computed } from 'vue'
-import { useProductStore } from '@/stores/ProductStore'
-import Header from '@/components/Header.vue'
-import Footer from '@/components/Footer.vue'
-import ProductCard from '@/components/ProductCard.vue'
+import { onMounted, computed , ref } from 'vue'
+import {fetchProducts , fetchProductById} from '../libs/fetchProduct.js'
+import Header from '../components/Header.vue'
+import Footer from '../components/Footer.vue'
+import ProductCard from '../components/ProductCard.vue'
+import images from '../data/image.json'
 
-const store = useProductStore()
-const { products, loading, error } = store
+const products = ref([])
+const imageArray = images
+
 
 const sortedProducts = computed(() =>
-  [...products].sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime))
+  [...products.value].sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime))
 )
 
 onMounted(async () => {
-  store.clearError() // ✅ ล้าง error ก่อน
-
-  if (products.length === 0) {
+  console.log(imageArray);
     try {
-      await store.fetchProducts() // ✅ ต้อง await
+      products.value = await fetchProducts()
     } catch (err) {
-      console.error("โหลดสินค้าไม่สำเร็จ:", err)
+      throw new Error("Failed to Load")
     }
   }
-})
+)
 </script>

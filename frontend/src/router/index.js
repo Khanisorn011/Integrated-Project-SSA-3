@@ -19,6 +19,9 @@ const router = createRouter({
       path: "/sale-items/:id",
       name: "SaleItemDetail",
       component: () => import("../views/SaleItemDetail.vue"),
+      props: route => ({
+        imageUrl: route.state?.imageUrl || ''
+      })
     },
   ],
 });

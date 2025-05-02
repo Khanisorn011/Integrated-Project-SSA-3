@@ -15,8 +15,8 @@
 
         <router-link
           to="/sale-items"
-          class="inline-block bg-white text-black px-8 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-gray-200 transition-all duration-300">
-          เลือกซื้อสินค้า
+          class="Itbms-shopnow inline-block bg-white text-black px-8 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-gray-200 transition-all duration-300">
+          SHOP NOW
         </router-link>
       </section>
 
