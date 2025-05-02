@@ -5,17 +5,17 @@
       <Header />
 
       <!-- Hero Section -->
-      <section class="text-center py-20 px-4">
+      <section class="text-center py-24 px-6">
         <h2 class="text-5xl font-bold mb-6 tracking-wide text-white drop-shadow-lg">
           ยินดีต้อนรับสู่ <span class="text-[#facc15]">ITB MSHOP</span>
         </h2>
-        <p class="text-gray-400 text-xl mb-10 max-w-xl mx-auto">
+        <p class="text-gray-400 text-xl mb-10 max-w-2xl mx-auto leading-relaxed">
           พบกับมือถือรุ่นล่าสุด ดีไซน์พรีเมียม พร้อมข้อเสนอสุดพิเศษที่คุณไม่ควรพลาด
         </p>
 
         <router-link
           to="/sale-items"
-          class="Itbms-shopnow inline-block bg-white text-black px-8 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-gray-200 transition-all duration-300">
+          class="Itbms-shopnow inline-block bg-white text-black px-10 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-gray-200 transition-all duration-300">
           SHOP NOW
         </router-link>
       </section>
