@@ -1,6 +1,6 @@
 async function fetchProducts() {
     try {
-      const res = await fetch('http://localhost:8080/itb-mshop/v1/sales-items')
+      const res = await fetch('http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sales-items')
       if (!res.ok) throw new Error('โหลดสินค้าล้มเหลว')
       const data = await res.json()
       return data
@@ -11,7 +11,7 @@ async function fetchProducts() {
 
   async function fetchProductById(id) {
     try {
-      const res = await fetch(`http://localhost:8080/itb-mshop/v1/sales-items/${id}`)
+      const res = await fetch(`http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sales-items/${id}`)
       if (res.status === 404) {
         throw { status: 404, message: 'ไม่พบสินค้าที่ร้องขอ' }
       }

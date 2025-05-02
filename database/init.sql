@@ -1,13 +1,13 @@
 drop database integrateDatabase;
-create database integrateDatabase;
+create database integrateDatabase character set utf8mb4 collate utf8mb4_unicode_ci;
 use integrateDatabase;
 
 create table BRAND_BASE (
 	id int auto_increment not null,
-    name varchar(30) character set utf8 not null,
+    name varchar(30) character set utf8mb4 not null,
     websiteUrl varchar(40),
     isActive boolean,
-    countryOfOrigin varchar(80) character set utf8,
+    countryOfOrigin varchar(80) character set utf8mb4,
     createdOn datetime default now() not null,
     updatedOn datetime default now() on update now() not null,
     check (trim(name) != ''),
@@ -19,14 +19,14 @@ create table BRAND_BASE (
 create table SALE_ITEM_BASE (
 	id int auto_increment not null,
     brand_id int not null,
-    model varchar(60) character set utf8 not null ,
+    model varchar(60) character set utf8mb4 not null ,
     description text not null,
     quantity int not null default 1,
     price int not null,
     ramGb int,
     storageGb int,
     screenSizeInch numeric(4,1),
-    color text character set utf8,
+    color text character set utf8mb4,
     createdOn datetime default now() not null,
     updatedOn datetime default now() on update now() not null,
     check (trim(model) != ''),

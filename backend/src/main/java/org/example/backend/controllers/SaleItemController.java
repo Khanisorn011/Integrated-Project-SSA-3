@@ -13,9 +13,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = {
+    "http://ip24ssa3.sit.kmutt.ac.th",
+    "http://ip24ssa3.sit.kmutt.ac.th:5173"
+})
 @RestController
 @RequestMapping("/itb-mshop")
-@CrossOrigin(origins = "http://localhost:5173")
 
 public class SaleItemController {
     @Autowired
