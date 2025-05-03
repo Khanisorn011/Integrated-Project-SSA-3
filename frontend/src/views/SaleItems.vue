@@ -34,7 +34,7 @@
 
       <!-- Gallery View -->
       <main v-if="viewMode === 'gallery'"
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
+        class="itbms-row grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
         <ProductCard v-for="(product, index) in sortedProducts" :key="product.id || index" :product="product"
           :imageUrl="imageArray[index % imageArray.length]?.url" />
       </main>

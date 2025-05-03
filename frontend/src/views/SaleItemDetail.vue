@@ -25,16 +25,16 @@
         </div>
 
         <!-- Product Info -->
-        <div class="md:w-1/2 w-full space-y-4 text-base Itbms-row">
+        <div class="md:w-1/2 w-full space-y-4 text-base itbms-row">
           <h1 class="text-2xl font-semibold mb-2">
             {{ product.brandName }} {{ product.model }}
           </h1>
 
-          <p class="text-3xl font-extrabold text-yellow-400">
-            {{ product.price.toLocaleString() }} <span class="font-extrabold">Baht</span>
+          <p class="text-3xl font-extrabold text-yellow-400 itbms-price">
+            {{ product.price.toLocaleString() }} <span class="font-extrabold itbms-price-unit">Baht</span>
           </p>
 
-          <p class="text-gray-600 Itbms-description">
+          <p class="text-gray-600 itbms-description">
             {{ product.description || "-" }}
           </p>
 
@@ -42,7 +42,7 @@
             <!-- Brand -->
             <p>
               <strong>Brand: </strong>
-              <span class="Itbms-brand" :class="{ 'text-gray-400': !product.brandName?.trim() }">
+              <span class="itbms-brand" :class="{ 'text-gray-400': !product.brandName?.trim() }">
                 {{ product.brandName || "-" }}
               </span>
             </p>
@@ -50,7 +50,7 @@
             <!-- Model -->
             <p>
               <strong>Model: </strong>
-              <span class="Itbms-model" :class="{ 'text-gray-400': !product.model?.trim() }">
+              <span class="itbms-model" :class="{ 'text-gray-400': !product.model?.trim() }">
                 {{ product.model || "-" }}
               </span>
             </p>
@@ -58,28 +58,28 @@
             <!-- RAM -->
             <p>
               <strong>RAM: </strong>
-              <span class="Itbms-ramGb" :class="{ 'text-gray-400': !product.ramGb }">
+              <span class="itbms-ramGb" :class="{ 'text-gray-400': !product.ramGb }">
                 {{ product.ramGb || "-" }}
               </span>
-              <span class="Itbms-ramGb-unit" v-if="product.ramGb">GB</span>
+              <span class="itbms-ramGb-unit" v-if="product.ramGb">GB</span>
             </p>
 
             <!-- Screen Size -->
             <p>
               <strong>Screen Size: </strong>
-              <span class="Itbms-screenSizeInch" :class="{ 'text-gray-400': !product.screenSizeInch }">
+              <span class="itbms-screenSizeInch" :class="{ 'text-gray-400': !product.screenSizeInch }">
                 {{ product.screenSizeInch || "-" }}
               </span>
-              <span class="Itbms-screenSizeInch-unit" v-if="product.screenSizeInch"> inch</span>
+              <span class="itbms-screenSizeInch-unit" v-if="product.screenSizeInch"> inch</span>
             </p>
 
             <!-- Storage -->
             <p>
               <strong>Storage: </strong>
-              <span class="Itbms-storageGb" :class="{ 'text-gray-400': !product.storageGb }">
+              <span class="itbms-storageGb" :class="{ 'text-gray-400': !product.storageGb }">
                 {{ product.storageGb || "-" }}
               </span>
-              <span class="Itbms-storageGb-unit">
+              <span class="itbms-storageGb-unit">
                 {{ product.storageGb ? (product.storageGbUnit || "GB") : "" }}
               </span>
             </p>
@@ -87,7 +87,7 @@
             <!-- Color -->
             <p>
               <strong>Color: </strong>
-              <span class="Itbms-color" :class="{ 'text-gray-400': !product.color?.trim() }">
+              <span class="itbms-color" :class="{ 'text-gray-400': !product.color?.trim() }">
                 {{ product.color || "-" }}
               </span>
             </p>
@@ -95,10 +95,10 @@
             <!-- Quantity -->
             <p>
               <strong>Available Quantity: </strong>
-              <span class="Itbms-quantity" :class="{ 'text-gray-400': !product.quantity }">
+              <span class="itbms-quantity" :class="{ 'text-gray-400': !product.quantity }">
                 {{ product.quantity || "-" }}
               </span>
-              <span class="Itbms-quantity-unit"> units</span>
+              <span class="itbms-quantity-unit"> units</span>
             </p>
           </div>
         </div>
