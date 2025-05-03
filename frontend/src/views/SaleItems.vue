@@ -87,6 +87,21 @@
         </div>
       </main>
 
+    <!-- 404 Modal -->
+    <transition  name="fade">
+      <div v-if="getErrorModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
+        <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
+          <h2 class="text-xl font-bold text-red-600 mb-2">Item Not Found</h2>
+          <p class="itbms-message text-gray-700 mb-4">
+            The requested sale item does not exist.
+          </p>
+          <button @click="setErrorModal()"
+            class="itbms-button px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
+            ok
+          </button>
+        </div>
+      </div>
+    </transition>
 
       <!-- Footer -->
       <Footer />
@@ -96,12 +111,19 @@
 </template>
 
 <script setup>
-import { onMounted, computed, ref } from 'vue'
+import { onMounted, computed, ref} from 'vue'
+import { storeToRefs } from 'pinia'
 import { fetchProducts } from '../libs/fetchProduct.js'
 import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
 import ProductCard from '../components/ProductCard.vue'
+import { useStateStore } from '../stores/stateStore.js'
 import images from '../data/image.json'
+
+const stateStore = useStateStore()
+const {getErrorModal} = storeToRefs(stateStore)
+const {setErrorModal} = stateStore
+
 
 const products = ref([])
 const viewMode = ref('gallery')

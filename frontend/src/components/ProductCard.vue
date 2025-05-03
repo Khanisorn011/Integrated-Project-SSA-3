@@ -66,9 +66,9 @@
 </template>
 
 <script setup>
-import {useImageStore} from '../stores/imageStore.js'
-const imageStore = useImageStore()
-const {setImageUrl} = imageStore
+import {useStateStore} from '../stores/stateStore.js'
+const stateStore = useStateStore()
+const {setImageUrl} = stateStore
 const props = defineProps({
   product: {
     type: Object,
