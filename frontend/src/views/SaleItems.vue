@@ -29,7 +29,7 @@
 
       <!-- Empty State -->
       <div v-if="products.length === 0" class="text-center text-gray-300 text-xl py-10">
-        No Sale Item
+        no sale item
       </div>
 
       <!-- Gallery View -->

@@ -61,7 +61,7 @@
               <span class="Itbms-ramGb" :class="{ 'text-gray-400': !product.ramGb }">
                 {{ product.ramGb || "-" }}
               </span>
-              <span class="Itbms-ramGb-unit">GB</span>
+              <span class="Itbms-ramGb-unit" v-if="product.ramGb">GB</span>
             </p>
 
             <!-- Screen Size -->
@@ -70,7 +70,7 @@
               <span class="Itbms-screenSizeInch" :class="{ 'text-gray-400': !product.screenSizeInch }">
                 {{ product.screenSizeInch || "-" }}
               </span>
-              <span class="Itbms-screenSizeInch-unit">inch</span>
+              <span class="Itbms-screenSizeInch-unit" v-if="product.screenSizeInch"> inch</span>
             </p>
 
             <!-- Storage -->
@@ -94,11 +94,11 @@
 
             <!-- Quantity -->
             <p>
-              <strong>Quantity: </strong>
+              <strong>Available Quantity: </strong>
               <span class="Itbms-quantity" :class="{ 'text-gray-400': !product.quantity }">
                 {{ product.quantity || "-" }}
               </span>
-              <span class="Itbms-quantity-unit">units</span>
+              <span class="Itbms-quantity-unit"> units</span>
             </p>
           </div>
         </div>
@@ -116,7 +116,7 @@
         <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
           <h2 class="text-xl font-bold text-red-600 mb-2">Item Not Found</h2>
           <p class="Itbms-message text-gray-700 mb-4">
-            The requested sale item does not exist or has been removed.
+            The requested sale item does not exist.
           </p>
           <button @click="goBack"
             class="Itbms-button px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
