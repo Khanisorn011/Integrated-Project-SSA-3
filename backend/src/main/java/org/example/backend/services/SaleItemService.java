@@ -18,7 +18,7 @@ public class SaleItemService {
     }
 
     public List<SaleItemBase> getAllByCreateTime() {
-        return saleItemBaseRepository.findAllByOrderByCreatedOnAsc();
+        return saleItemBaseRepository.findAllByOrderByCreatedOnAscIdAsc();
     }
 
     public SaleItemBase getById(int id) {
