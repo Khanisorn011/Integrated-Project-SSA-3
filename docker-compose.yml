@@ -50,6 +50,18 @@ services:
     networks:
       - Integrate_Network
 
+  cypress:
+    image: cypress/included:14.3.2
+    container_name: cypress
+    working_dir: /e2e
+    volumes:
+      - ./frontend:/e2e
+    entrypoint: ["sh", "-c","sleep 60 && npx cypress run"]
+    environment:
+      - CYPRESS_baseUrl=http://ip24ssa3.sit.kmutt.ac.th
+    networks:
+      - Integrate_Network
+
 volumes:
   mysql_data:
 
