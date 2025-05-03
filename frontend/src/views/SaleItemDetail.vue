@@ -70,7 +70,7 @@
               <span class="itbms-screenSizeInch" :class="{ 'text-gray-400': !product.screenSizeInch }">
                 {{ product.screenSizeInch || "-" }}
               </span>
-              <span class="itbms-screenSizeInch-unit" v-if="product.screenSizeInch"> inch</span>
+              <span class="itbms-screenSizeInch-unit" v-if="product.screenSizeInch">Inches</span>
             </p>
 
             <!-- Storage -->
@@ -110,22 +110,6 @@
       Product not found.
     </div>
 
-    <!-- 404 Modal -->
-    <transition name="fade">
-      <div v-if="showErrorModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
-        <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
-          <h2 class="text-xl font-bold text-red-600 mb-2">Item Not Found</h2>
-          <p class="Itbms-message text-gray-700 mb-4">
-            The requested sale item does not exist.
-          </p>
-          <button @click="goBack"
-            class="Itbms-button px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">
-            ok
-          </button>
-        </div>
-      </div>
-    </transition>
-
     <Footer />
   </div>
 </template>
@@ -136,28 +120,22 @@ import { useRoute, useRouter } from "vue-router";
 import { fetchProductById } from "../libs/fetchProduct.js";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
-import { useImageStore } from '../stores/imageStore.js'
+import { useStateStore } from '../stores/stateStore.js'
 
 const route = useRoute();
 const router = useRouter();
 
 const product = ref(null);
-const showErrorModal = ref(false);
-const imageStore = useImageStore()
-const { getImageUrl } = imageStore
+const stateStore = useStateStore()
+const { getImageUrl , setErrorModal } = stateStore
 
-
-function goBack() {
-  router.push("/sale-items");
-}
 
 onMounted(async () => {
-  console.log(getImageUrl);
-
   try {
     product.value = await fetchProductById(route.params.id);
   } catch (error) {
-    showErrorModal.value = true;
+    setErrorModal()
+    router.push('/sale-items');
   }
 });
 </script>
