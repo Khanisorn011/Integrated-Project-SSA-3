@@ -19,32 +19,32 @@
       <!-- Product Info -->
       <div class="text-sm leading-snug space-y-1">
         <p
-          class="Itbms-brand font-bold"
+          class="itbms-brand font-bold"
           :class="{ 'text-gray-400': !product.brandName?.trim() }"
         >
           {{ product.brandName || "-" }}
         </p>
         <p
-          class="Itbms-model"
+          class="itbms-model"
           :class="{ 'text-gray-400': !product.model?.trim() }"
         >
           {{ product.model || "-" }}
         </p>
         <p>
           <span
-            class="Itbms-ramGb"
+            class="itbms-ramGb"
             :class="{ 'text-gray-400': !product.ramGb?.toString().trim() }"
           >
             {{ product.ramGb || "-" }}
           </span>
           /
           <span
-            class="Itbms-storageGb"
+            class="itbms-storageGb"
             :class="{ 'text-gray-400': !product.storageGb?.toString().trim() }"
           >
             {{ product.storageGb || "-" }}
           </span>
-          <span class="Itbms-storageGb-unit">GB</span>
+          <span class="itbms-storageGb-unit">GB</span>
         </p>
         <p
           class="Itbms-color"
@@ -56,8 +56,8 @@
 
       <!-- Price -->
       <p class="text-lg font-semibold mt-3">
-        <span class="Itbms-price-unit">Baht</span>
-        <span class="Itbms-price pl-1.5">
+        <span class="itbms-price-unit">Baht</span>
+        <span class="itbms-price pl-1.5">
           {{ product.price?.toLocaleString?.() || "-" }}
         </span>
       </p>
