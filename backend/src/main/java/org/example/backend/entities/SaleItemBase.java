@@ -13,7 +13,7 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "SALE_ITEM_BASE")
+@Table(name = "sale_item_base")
 public class SaleItemBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -50,7 +50,7 @@ public class SaleItemBase {
     @Column(name = "storageGb")
     private Integer storageGb;
 
-    @Column(name = "screenSizeInch", precision = 10, scale = 1)
+    @Column(name = "screenSizeInch", precision = 4, scale = 1)
     private BigDecimal screenSizeInch;
 
     @Lob
