@@ -28,7 +28,7 @@ public class SaleItemController {
     @Autowired
     private ListMapper listMapper;
 
-    @GetMapping("/v1/sales-items")
+    @GetMapping("/v1/sale-items")
     public ResponseEntity<List<SaleItemDTO>> getSalesItems() {
         List<SaleItemBase> items = saleItemService.getAllByCreateTime();
         List<SaleItemDTO> dto = listMapper.mapList(items, SaleItemDTO.class, modelMapper);
@@ -36,7 +36,7 @@ public class SaleItemController {
         return ResponseEntity.ok(dto);
     }
 
-    @GetMapping("/v1/sales-items/{id}")
+    @GetMapping("/v1/sale-items/{id}")
     public ResponseEntity<SaleItemDetailDTO> getSaleItemById(@PathVariable Integer id) {
         return ResponseEntity.ok(modelMapper.map(saleItemService.getById(id), SaleItemDetailDTO.class));
     }
