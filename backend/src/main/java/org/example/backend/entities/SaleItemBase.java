@@ -50,7 +50,7 @@ public class SaleItemBase {
     @Column(name = "storageGb")
     private Integer storageGb;
 
-    @Column(name = "screenSizeInch", precision = 10, scale = 1)
+    @Column(name = "screenSizeInch", precision = 4, scale = 1)
     private BigDecimal screenSizeInch;
 
     @Lob
