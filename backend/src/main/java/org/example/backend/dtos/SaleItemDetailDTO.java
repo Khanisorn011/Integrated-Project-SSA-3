@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Getter
 @Setter
@@ -19,5 +20,14 @@ public class SaleItemDetailDTO {
     private Integer quantity;
     private Integer storageGb;
     private String color;
+
+//    @JsonProperty("screenSizeInch")
+//    public BigDecimal getScreenSizeInchRounded() {
+//        if (screenSizeInch == null) {
+//            return null;
+//        }
+//        return screenSizeInch.setScale(1, RoundingMode.HALF_UP);
+//    }
 }
+
 
