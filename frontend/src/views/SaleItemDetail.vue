@@ -19,6 +19,7 @@
           {{ product.storageGb }}{{ product.storageGbUnit }} {{ product.color }}
         </span>
       </nav>
+
       <div class="flex flex-col md:flex-row gap-10">
         <!-- Product Images -->
         <div class="md:w-1/2 w-full">
@@ -54,113 +55,53 @@
           </p>
 
           <div class="grid grid-cols-2 gap-y-3 gap-x-4 mt-6 text-sm">
-            <!-- Brand -->
-            <p>
-              <strong>Brand: </strong>
-              <span
-                class="itbms-brand"
-                :class="{ 'text-gray-400': !product.brandName?.trim() }"
-              >
-                {{ product.brandName || "-" }}
-              </span>
-            </p>
-
-            <!-- Model -->
-            <p>
-              <strong>Model: </strong>
-              <span
-                class="itbms-model"
-                :class="{ 'text-gray-400': !product.model?.trim() }"
-              >
-                {{ product.model || "-" }}
-              </span>
-            </p>
-
-            <!-- RAM -->
-            <p>
-              <strong>RAM: </strong>
-              <span
-                class="itbms-ramGb"
-                :class="{ 'text-gray-400': !product.ramGb }"
-              >
-                {{ product.ramGb || "-" }}
-              </span>
-              <span class="itbms-ramGb-unit" v-if="product.ramGb">GB</span>
-            </p>
-
-            <!-- Screen Size -->
-            <p>
-              <strong>Screen Size: </strong>
-              <span
-                class="itbms-screenSizeInch"
-                :class="{ 'text-gray-400': !product.screenSizeInch }"
-              >
-                {{
-                  product.screenSizeInch
-                    ? Number(product.screenSizeInch).toFixed(1)
-                    : "-"
-                }}
-              </span>
-
-              <span
-                class="itbms-screenSizeInch-unit"
-                v-if="product.screenSizeInch"
-                >Inches</span
-              >
-            </p>
-
-            <!-- Storage -->
-            <p>
-              <strong>Storage: </strong>
-              <span
-                class="itbms-storageGb"
-                :class="{ 'text-gray-400': !product.storageGb }"
-              >
-                {{ product.storageGb || "-" }}
-              </span>
-              <span class="itbms-storageGb-unit">
-                {{ product.storageGb ? product.storageGbUnit || "GB" : "" }}
-              </span>
-            </p>
-
-            <!-- Color -->
-            <p>
-              <strong>Color: </strong>
-              <span
-                class="itbms-color"
-                :class="{ 'text-gray-400': !product.color?.trim() }"
-              >
-                {{ product.color || "-" }}
-              </span>
-            </p>
-
-            <!-- Quantity -->
-            <p>
-              <strong>Available Quantity: </strong>
-              <span
-                class="itbms-quantity"
-                :class="{ 'text-gray-400': !product.quantity }"
-              >
-                {{ product.quantity || "-" }}
-              </span>
-              <span class="itbms-quantity-unit"> units</span>
-            </p>
+            <p><strong>Brand: </strong><span class="itbms-brand" :class="{ 'text-gray-400': !product.brandName?.trim() }">{{ product.brandName || "-" }}</span></p>
+            <p><strong>Model: </strong><span class="itbms-model" :class="{ 'text-gray-400': !product.model?.trim() }">{{ product.model || "-" }}</span></p>
+            <p><strong>RAM: </strong><span class="itbms-ramGb" :class="{ 'text-gray-400': !product.ramGb }">{{ product.ramGb || "-" }}</span><span class="itbms-ramGb-unit" v-if="product.ramGb">GB</span></p>
+            <p><strong>Screen Size: </strong><span class="itbms-screenSizeInch" :class="{ 'text-gray-400': !product.screenSizeInch }">{{ product.screenSizeInch ? Number(product.screenSizeInch).toFixed(1) : "-" }}</span><span class="itbms-screenSizeInch-unit" v-if="product.screenSizeInch">Inches</span></p>
+            <p><strong>Storage: </strong><span class="itbms-storageGb" :class="{ 'text-gray-400': !product.storageGb }">{{ product.storageGb || "-" }}</span><span class="itbms-storageGb-unit">{{ product.storageGb ? product.storageGbUnit || "GB" : "" }}</span></p>
+            <p><strong>Color: </strong><span class="itbms-color" :class="{ 'text-gray-400': !product.color?.trim() }">{{ product.color || "-" }}</span></p>
+            <p><strong>Available Quantity: </strong><span class="itbms-quantity" :class="{ 'text-gray-400': !product.quantity }">{{ product.quantity || "-" }}</span><span class="itbms-quantity-unit"> units</span></p>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Not Found fallback (not used, fallback now uses modal) -->
+    <!-- Fallback when product is not found -->
     <div v-else class="text-center text-red-500 py-16 text-lg">
       Product not found.
     </div>
+
+    <!-- Error Modal -->
+    <transition name="fade">
+      <div
+        v-if="showErrorModal"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
+      >
+        <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
+          <h2 class="text-xl font-bold text-red-600 mb-2">Item Not Found</h2>
+          <p class="itbms-message text-gray-700 mb-4">
+            The requested sale item does not exist.
+          </p>
+          <p class="text-sm text-gray-500 mb-4">
+            Redirecting in {{ secondsLeft }} seconds...
+          </p>
+          <button
+            @click="goBack"
+            class="itbms-button px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            OK
+          </button>
+        </div>
+      </div>
+    </transition>
 
     <Footer />
   </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from "vue";
+import { ref, onMounted, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { fetchProductById } from "../libs/fetchProduct.js";
 import Header from "../components/Header.vue";
@@ -169,17 +110,40 @@ import { useStateStore } from "../stores/stateStore.js";
 
 const route = useRoute();
 const router = useRouter();
-
 const product = ref(null);
+const showErrorModal = ref(false);
+
+const timeoutRef = ref(null);
+const secondsLeft = ref(3);
+const countdownInterval = ref(null);
+
 const stateStore = useStateStore();
-const { getImageUrl, setErrorModal } = stateStore;
+const { getImageUrl } = stateStore;
+
+const goBack = () => {
+  if (timeoutRef.value) clearTimeout(timeoutRef.value);
+  if (countdownInterval.value) clearInterval(countdownInterval.value);
+  router.push("/sale-items");
+};
+
+watch(showErrorModal, (newVal) => {
+  if (newVal) {
+    countdownInterval.value = setInterval(() => {
+      if (secondsLeft.value > 0) {
+        secondsLeft.value -= 1;
+      }
+    }, 1000);
+  }
+});
 
 onMounted(async () => {
   try {
     product.value = await fetchProductById(route.params.id);
   } catch (error) {
-    setErrorModal();
-    router.push("/sale-items");
+    showErrorModal.value = true;
+    timeoutRef.value = setTimeout(() => {
+      router.push("/sale-items");
+    }, 3000);
   }
 });
 </script>
@@ -189,7 +153,6 @@ onMounted(async () => {
 .fade-leave-active {
   transition: opacity 0.3s ease;
 }
-
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
