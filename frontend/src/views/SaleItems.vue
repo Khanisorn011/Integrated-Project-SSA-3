@@ -12,19 +12,30 @@
       </section>
 
       <!-- View Mode Buttons -->
-      <div class="flex justify-end gap-3 px-6 mb-6">
-        <button @click="viewMode = 'gallery'" :class="[
-          'px-4 py-2 rounded-lg transition',
-          viewMode === 'gallery' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'
-        ]">
-          Gallery View
-        </button>
-        <button @click="viewMode = 'list'" :class="[
-          'px-4 py-2 rounded-lg transition',
-          viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'
-        ]">
-          List View
-        </button>
+      <div class="flex justify-between items-center px-6 mb-6 ">
+        <div>
+          <select v-model="selectedBrand" class="px-4 py-2 rounded-lg bg-gray-700 text-gray-300 focus:outline-none">
+            <option value="all">All Brands</option>
+            <option v-for="(brand, index) in brands" :key="brand.id || index" :value="brand.name">
+              {{ brand.name }}
+            </option>
+          </select>
+        </div>
+
+        <div class="flex gap-3">
+          <button @click="viewMode = 'gallery'" :class="[
+            'px-4 py-2 rounded-lg transition',
+            viewMode === 'gallery' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'
+          ]">
+            Gallery View
+          </button>
+          <button @click="viewMode = 'list'" :class="[
+            'px-4 py-2 rounded-lg transition',
+            viewMode === 'list' ? 'bg-blue-600 text-white' : 'bg-gray-700 text-gray-300'
+          ]">
+            List View
+          </button>
+        </div>
       </div>
 
       <!-- Empty State -->
@@ -35,13 +46,13 @@
       <!-- Gallery View -->
       <main v-if="viewMode === 'gallery'"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
-        <ProductCard class="itbms-row" v-for="(product, index) in sortedProducts" :key="product.id || index" :product="product"
-          :imageUrl="imageArray[index % imageArray.length]?.url" />
+        <ProductCard class="itbms-row" v-for="(product, index) in filteredProducts" :key="product.id || index"
+          :product="product" :imageUrl="imageArray[index % imageArray.length]?.url" />
       </main>
 
       <!-- List View -->
       <main v-else class="space-y-6 px-6 pb-16">
-        <div v-for="(product, index) in sortedProducts" :key="product.id || index"
+        <div v-for="(product, index) in filteredProducts" :key="product.id || index"
           class="flex items-center gap-6 p-5 bg-white rounded-2xl shadow-lg border border-gray-200">
           <!-- Image -->
           <img :src="imageArray[index % imageArray.length]?.url" alt="product image"
@@ -95,28 +106,42 @@
 </template>
 
 <script setup>
-import { onMounted, computed, ref} from 'vue'
+import { onMounted, computed, ref } from 'vue'
 import { storeToRefs } from 'pinia'
 import { fetchProducts } from '../libs/fetchProduct.js'
+import { fetchBrands } from "../libs/fetchBrand.js"
 import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
 import ProductCard from '../components/ProductCard.vue'
 import images from '../data/image.json'
 
 const products = ref([])
+const brands = ref([])
 const viewMode = ref('gallery')
 const imageArray = images
+const selectedBrand = ref('all')
 
 const sortedProducts = computed(() =>
   [...products.value].sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime))
 )
+const uniqueBrands = computed(() => {
+  return [...new Set(sortedProducts.value.map(p => p.brandName))].sort()
+})
 
 onMounted(async () => {
   try {
     products.value = await fetchProducts()
+    brands.value = await fetchBrands()
   } catch (err) {
     console.error("Failed to load products:", err)
   }
 })
-</script>
 
+const filteredProducts = computed(() => {
+  if (selectedBrand.value === 'all') {
+    return sortedProducts.value
+  }
+  return sortedProducts.value.filter(p => p.brandName === selectedBrand.value)
+})
+
+</script>
