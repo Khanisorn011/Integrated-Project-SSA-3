@@ -17,7 +17,7 @@ import java.time.Instant;
 public class SaleItemBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false,updatable = false, insertable = false)
     private Integer id;
 
     @NotNull
@@ -57,14 +57,12 @@ public class SaleItemBase {
     @Column(name = "color")
     private String color;
 
-    @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "createdOn", nullable = false)
+    @Column(name = "createOn", nullable = false, updatable = false, insertable = false)
     private Instant createdOn;
 
-    @NotNull
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "updatedOn", nullable = false)
+    @Column(name = "updatedOn", nullable = false, updatable = false, insertable = false)
     private Instant updatedOn;
 
 }
