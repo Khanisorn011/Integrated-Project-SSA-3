@@ -1,4 +1,27 @@
 services:
+  mysql:
+    image: mysql:latest
+    container_name: database
+    environment:
+       MYSQL_ROOT_PASSWORD: rootpassword
+       MYSQL_DATABASE: integrateDatabase
+       LANG: th_TH.UTF-8
+       LC_ALL: th_TH.UTF-8
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-prootpassword"]
+      interval: 10s
+      timeout: 5s
+      start_period: 5s
+      retries: 5
+    networks:
+      - Integrate_Network
+
   backend:
     image: openjdk:21-jdk
     container_name: back
@@ -16,24 +39,14 @@ services:
       - SPRING_DATASOURCE_USERNAME=root
       - SPRING_DATASOURCE_PASSWORD=rootpassword
     depends_on:
-      - mysql
-    networks:
-      - Integrate_Network
-
-  mysql:
-    image: mysql:latest
-    container_name: database
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: integrateDatabase
-      LANG: th_TH.UTF-8
-      LC_ALL: th_TH.UTF-8
-    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
-    volumes:
-      - mysql_data:/var/lib/mysql
-      - ./database/init.sql:/docker-entrypoint-initdb.d/init.sql
-    ports:
-      - "3306:3306"
+      mysql:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080"]
+      interval: 10s
+      timeout: 5s
+      start_period: 5s
+      retries: 5
     networks:
       - Integrate_Network
 
@@ -56,9 +69,12 @@ services:
     working_dir: /e2e
     volumes:
       - ./frontend:/e2e
-    entrypoint: ["sh", "-c","sleep 60 && npx cypress run"]
+    entrypoint: ["sh", "-c", "sleep 10 && npx cypress run"]
     environment:
       - CYPRESS_baseUrl=http://ip24ssa3.sit.kmutt.ac.th
+    depends_on:
+      backend:
+        condition: service_healthy
     networks:
       - Integrate_Network
 
@@ -67,3 +83,4 @@ volumes:
 
 networks:
   Integrate_Network:
+
