@@ -15,4 +15,8 @@ public class BrandBaseService {
     public List<BrandBase> getAllBrands() {
         return BrandBaseRepository.findAllByOrderByCreatedOnAscIdAsc();
     }
+
+    public BrandBase getBrandByName(String name) {
+        return BrandBaseRepository.findByName(name);
+    }
 }

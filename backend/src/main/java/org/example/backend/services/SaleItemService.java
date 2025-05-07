@@ -26,4 +26,8 @@ public class SaleItemService {
                 () -> new SaleItemNotFoundException("SaleItem not found for this id :: " + id)
         );
     }
+
+    public SaleItemBase createSaleItem(SaleItemBase saleItemBase){
+        return saleItemBaseRepository.save(saleItemBase);
+    }
 }
