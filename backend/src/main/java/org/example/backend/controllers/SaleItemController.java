@@ -1,5 +1,6 @@
 package org.example.backend.controllers;
 
+import org.example.backend.dtos.SaleItemCreateDTO;
 import org.example.backend.dtos.SaleItemDTO;
 import org.example.backend.dtos.SaleItemDetailDTO;
 import org.example.backend.entities.SaleItemBase;
@@ -41,18 +42,16 @@ public class SaleItemController {
     public ResponseEntity<SaleItemDetailDTO> getSaleItemById(@PathVariable Integer id) {
         return ResponseEntity.ok(modelMapper.map(saleItemService.getById(id), SaleItemDetailDTO.class));
     }
+
     @PostMapping("/v1/sale-items")
-    public ResponseEntity<SaleItemDetailDTO> createSaleItem(@RequestBody SaleItemDetailDTO dto){
-        SaleItemBase saleItemBase = new SaleItemBase();
-        saleItemBase.setModel(dto.getModel());
-        saleItemBase.setPrice(dto.getPrice());
-        saleItemBase.setDescription(dto.getDescription());
-        saleItemBase.setQuantity(dto.getQuantity());
-        saleItemBase.setRamGb(dto.getRamGb());
-        saleItemBase.setScreenSizeInch(dto.getScreenSizeInch());
-        saleItemBase.setStorageGb(dto.getStorageGb());
-        saleItemBase.setColor(dto.getColor());
-        saleItemBase.setBrand(brandBaseService.getBrandByName(dto.getBrandName()));
-        return ResponseEntity.status(HttpStatus.CREATED).body(dto);
+    public ResponseEntity<SaleItemDetailDTO> createSaleItem(@RequestBody SaleItemCreateDTO dto){
+
+        SaleItemBase saleItemBase = modelMapper.map(dto, SaleItemBase.class);
+        saleItemBase.setBrand(brandBaseService.getById(dto.getBrand().getId()));
+        SaleItemBase saved = saleItemService.createSaleItem(saleItemBase);
+        SaleItemDetailDTO responseDto = modelMapper.map(saved,SaleItemDetailDTO.class);
+        responseDto.setBrandName(saved.getBrand().getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
+
 }
