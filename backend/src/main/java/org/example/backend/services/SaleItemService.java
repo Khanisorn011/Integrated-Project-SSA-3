@@ -1,5 +1,6 @@
 package org.example.backend.services;
 
+import jakarta.persistence.EntityManager;
 import org.example.backend.entities.SaleItemBase;
 import org.example.backend.exceptions.SaleItemNotFoundException;
 import org.example.backend.repositories.SaleItemBaseRepository;
@@ -31,9 +32,12 @@ public class SaleItemService {
         return saleItemBaseRepository.save(saleItemBase);
     }
 
-    public SaleItemBase updateSaleItem(SaleItemBase saleItemBase){
-        return saleItemBaseRepository.save(saleItemBase);
+    public SaleItemBase updateSaleItem(SaleItemBase saleItemBase) {
+        SaleItemBase saved = saleItemBaseRepository.save(saleItemBase);
+        return saleItemBaseRepository.findById(saved.getId()).orElseThrow();  // Query ฐานข้อมูลใหม่เพื่อดึง entity ที่อัปเดตแล้ว
     }
+
+
     public void deleteById(int id) {
         SaleItemBase saleItem = getById(id);
         saleItemBaseRepository.delete(saleItem);
