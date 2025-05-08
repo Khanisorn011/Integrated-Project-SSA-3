@@ -35,9 +35,9 @@
                       <input v-model="form.price" type="number" step="0.01" min="0" placeholder="Price" class="input" required />
                       <input v-model="form.description" type="text" placeholder="Description" class="input" required />
                       <input v-model="form.quantity" type="number" min="0" placeholder="Quantity" class="input" required />
-                      <input v-model="form.ram" type="number" min="0" placeholder="RAM (Optional)" class="input" />
-                      <input v-model="form.screenSize" type="number" step="0.01" min="0" placeholder="Screen Size (Optional)" class="input" />
-                      <input v-model="form.storage" type="number" min="0" placeholder="Storage (Optional)" class="input" />
+                      <input v-model="form.ram" type="number" min="0" max="32" placeholder="RAM (Optional)" class="input" />
+                      <input v-model="form.screenSize" type="number" step="0.01" min="0" max="10" placeholder="Screen Size (Optional)" class="input" />
+                      <input v-model="form.storage" type="number" min="0" max="512" placeholder="Storage (Optional)" class="input" />
                       <input v-model="form.color" type="text" placeholder="Color (Optional)" class="input" />
                     </div>
 
@@ -52,8 +52,6 @@
                         Cancel
                       </button>
                     </div>
-
-                    <p v-if="message" class="text-green-700 mt-2">{{ message }}</p>
                   </form>
                 </div>
               </div>
@@ -87,6 +85,17 @@
       <div v-if="products.length === 0" class="text-center text-gray-300 text-xl py-10">
         no sale item
       </div>
+
+      <div v-if="showSuccessModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full">
+    <h3 class="text-xl font-bold text-green-600 mb-4">Success!</h3>
+    <p class="text-gray-700 mb-6">The sale item has been added successfully.</p>
+    <button @click="showSuccessModal = false"
+      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+      OK
+    </button>
+  </div>
+</div>
 
       <!-- Gallery View -->
       <main v-if="viewMode === 'gallery'"
@@ -180,10 +189,13 @@ const form = ref({
 })
 
 
-
+const showSuccessModal = ref(false)
 const cancelForm = () => {
   showForm.value = false
-  message.value = ''
+  resetForm()
+}
+
+const resetForm = () => {
   form.value = {
     brandId: '',
     brand: '',
@@ -196,6 +208,7 @@ const cancelForm = () => {
     color: '',
     quantity: '',
   }
+  message.value = ''
 }
 
 const sortedProducts = computed(() =>
@@ -238,6 +251,8 @@ const handleSubmit = async () => {
       message.value = 'The sale item has been successfully added'
       showForm.value = false
       products.value = await fetchProducts()
+      showSuccessModal.value = true
+      resetForm()
     } else {
       console.error('Failed to add sale item. Status:', response.status)
     }
