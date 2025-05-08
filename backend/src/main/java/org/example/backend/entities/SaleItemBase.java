@@ -58,7 +58,7 @@ public class SaleItemBase {
     private String color;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Column(name = "createOn", nullable = false, updatable = false, insertable = false)
+    @Column(name = "createdOn", nullable = false, updatable = false, insertable = false)
     private Instant createdOn;
 
     @ColumnDefault("CURRENT_TIMESTAMP")

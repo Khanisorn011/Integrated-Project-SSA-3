@@ -54,4 +54,48 @@ public class SaleItemController {
         return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
     }
 
+    @PutMapping("/v1/sale-items/{id}")
+    public ResponseEntity<SaleItemDetailDTO> updateSaleItem(@PathVariable Integer id, @RequestBody SaleItemCreateDTO dto) {
+//        SaleItemBase existingItem = saleItemService.getById(id);
+//
+//        existingItem.setModel(dto.getModel());
+//        existingItem.setDescription(dto.getDescription());
+//        existingItem.setPrice(dto.getPrice());
+//        existingItem.setRamGb(dto.getRamGb());
+//        existingItem.setScreenSizeInch(dto.getScreenSizeInch());
+//        existingItem.setQuantity(dto.getQuantity());
+//        existingItem.setStorageGb(dto.getStorageGb());
+//        existingItem.setColor(dto.getColor());
+//
+//        existingItem.setBrand(brandBaseService.getById(dto.getBrand().getId()));
+//
+//        SaleItemBase updated = saleItemService.updateSaleItem(existingItem);
+//
+//        SaleItemDetailDTO responseDto = modelMapper.map(updated, SaleItemDetailDTO.class);
+//        responseDto.setBrandName(updated.getBrand().getName());
+//
+//        return ResponseEntity.ok(responseDto);
+        SaleItemBase existingItem = saleItemService.getById(id);
+
+        modelMapper.typeMap(SaleItemCreateDTO.class, SaleItemBase.class)
+                .addMappings(mapper -> mapper.skip(SaleItemBase::setId));
+
+        modelMapper.map(dto,existingItem);
+
+        existingItem.setBrand(brandBaseService.getById(dto.getBrand().getId()));
+
+        SaleItemBase saved = saleItemService.updateSaleItem(existingItem);
+
+        SaleItemDetailDTO responseDto = modelMapper.map(saved, SaleItemDetailDTO.class);
+
+        responseDto.setBrandName(saved.getBrand().getName());
+
+        return ResponseEntity.ok(responseDto);
+    }
+
+    @DeleteMapping("/v1/sale-items/{id}")
+    public ResponseEntity<Void> deleteSaleItem(@PathVariable Integer id) {
+        saleItemService.deleteById(id);
+        return ResponseEntity.noContent().build();
+    }
 }

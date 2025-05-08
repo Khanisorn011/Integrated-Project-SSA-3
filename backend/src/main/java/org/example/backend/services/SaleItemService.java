@@ -30,4 +30,12 @@ public class SaleItemService {
     public SaleItemBase createSaleItem(SaleItemBase saleItemBase){
         return saleItemBaseRepository.save(saleItemBase);
     }
+
+    public SaleItemBase updateSaleItem(SaleItemBase saleItemBase){
+        return saleItemBaseRepository.save(saleItemBase);
+    }
+    public void deleteById(int id) {
+        SaleItemBase saleItem = getById(id);
+        saleItemBaseRepository.delete(saleItem);
+    }
 }
