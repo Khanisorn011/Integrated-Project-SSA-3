@@ -10,9 +10,14 @@ import java.util.List;
 @Service
 public class BrandBaseService {
     @Autowired
-    private BrandBaseRepository BrandBaseRepository;
+    private BrandBaseRepository brandBaseRepository;
 
     public List<BrandBase> getAllBrands() {
-        return BrandBaseRepository.findAllByOrderByCreatedOnAscIdAsc();
+        return brandBaseRepository.findAllByOrderByCreatedOnAscIdAsc();
+    }
+
+    public BrandBase getById(int id) {
+        return brandBaseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + id));
     }
 }

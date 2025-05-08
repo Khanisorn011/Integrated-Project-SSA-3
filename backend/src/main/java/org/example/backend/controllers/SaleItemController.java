@@ -1,24 +1,24 @@
 package org.example.backend.controllers;
 
+import org.example.backend.dtos.SaleItemCreateDTO;
 import org.example.backend.dtos.SaleItemDTO;
 import org.example.backend.dtos.SaleItemDetailDTO;
 import org.example.backend.entities.SaleItemBase;
+import org.example.backend.services.BrandBaseService;
 import org.example.backend.services.SaleItemService;
 import org.example.backend.utils.ListMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = {
-    "http://ip24ssa3.sit.kmutt.ac.th",
-    "http://ip24ssa3.sit.kmutt.ac.th:5173"
-})
 @RestController
 @RequestMapping("/itb-mshop")
+@CrossOrigin(origins = "http://localhost:5173")
 
 public class SaleItemController {
     @Autowired
@@ -27,6 +27,8 @@ public class SaleItemController {
     private ModelMapper modelMapper;
     @Autowired
     private ListMapper listMapper;
+    @Autowired
+    private BrandBaseService brandBaseService;
 
     @GetMapping("/v1/sale-items")
     public ResponseEntity<List<SaleItemDTO>> getSalesItems() {
@@ -40,4 +42,16 @@ public class SaleItemController {
     public ResponseEntity<SaleItemDetailDTO> getSaleItemById(@PathVariable Integer id) {
         return ResponseEntity.ok(modelMapper.map(saleItemService.getById(id), SaleItemDetailDTO.class));
     }
+
+    @PostMapping("/v1/sale-items")
+    public ResponseEntity<SaleItemDetailDTO> createSaleItem(@RequestBody SaleItemCreateDTO dto){
+
+        SaleItemBase saleItemBase = modelMapper.map(dto, SaleItemBase.class);
+        saleItemBase.setBrand(brandBaseService.getById(dto.getBrand().getId()));
+        SaleItemBase saved = saleItemService.createSaleItem(saleItemBase);
+        SaleItemDetailDTO responseDto = modelMapper.map(saved,SaleItemDetailDTO.class);
+        responseDto.setBrandName(saved.getBrand().getName());
+        return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
+    }
+
 }
