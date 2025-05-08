@@ -34,7 +34,7 @@ public class SaleItemService {
 
     public SaleItemBase updateSaleItem(SaleItemBase saleItemBase) {
         SaleItemBase saved = saleItemBaseRepository.save(saleItemBase);
-        return saleItemBaseRepository.findById(saved.getId()).orElseThrow();  // Query ฐานข้อมูลใหม่เพื่อดึง entity ที่อัปเดตแล้ว
+        return saved;
     }
 
 
