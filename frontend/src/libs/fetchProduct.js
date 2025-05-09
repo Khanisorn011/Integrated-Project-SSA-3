@@ -47,5 +47,15 @@ async function fetchProducts() {
       console.error('Error during fetch:', error);
     }
   }
+  async function deleteProduct(id) {
+    try {
+      const response = await fetch(`http://localhost:8080/itb-mshop/v1/sale-items/${id}`, {
+        method: 'DELETE'
+      });
+      return response;
+    } catch (error) {
+      console.error('Error during delete:', error);
+    }
+  }
 
-  export {fetchProducts,fetchProductById,postProduct,editProduct}
+  export {fetchProducts,fetchProductById,postProduct,editProduct, deleteProduct}
