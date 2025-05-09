@@ -169,9 +169,9 @@ import ProductCard from '../components/ProductCard.vue'
 import images from '../data/image.json'
 
 const products = ref([])
-const brands = ref([])
 const viewMode = ref('gallery')
 const imageArray = images
+const brands = ref([])
 const selectedBrand = ref('all')
 const showForm = ref(false)
 const message = ref('')

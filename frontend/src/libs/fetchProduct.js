@@ -33,4 +33,19 @@ async function fetchProducts() {
     }
   }
 
-  export {fetchProducts,fetchProductById,postProduct}
+  async function editProduct(id,payload) {
+    try{
+      const response = await fetch(`http://localhost:8080/itb-mshop/v1/sale-items/${id}`,{
+        method: 'PUT',
+        headers: {
+          'Content-Type' : 'application/json'
+        },
+        body: JSON.stringify(payload)
+      })
+      return response
+    } catch (error){
+      console.error('Error during fetch:', error);
+    }
+  }
+
+  export {fetchProducts,fetchProductById,postProduct,editProduct}

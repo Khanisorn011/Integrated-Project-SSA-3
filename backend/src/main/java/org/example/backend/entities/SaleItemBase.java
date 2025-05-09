@@ -6,6 +6,8 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.Generated;
+import org.hibernate.annotations.GenerationTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -17,7 +19,6 @@ import java.time.Instant;
 @Setter
 @Entity
 @Table(name = "sale_item_base")
-@EntityListeners(AuditingEntityListener.class)
 public class SaleItemBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,12 +63,12 @@ public class SaleItemBase {
     private String color;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @CreatedDate
+    @Generated(GenerationTime.ALWAYS)
     @Column(name = "createdOn", nullable = false, updatable = false, insertable = false)
     private Instant createdOn;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @LastModifiedDate
+    @Generated(GenerationTime.ALWAYS)
     @Column(name = "updatedOn", nullable = false, updatable = false, insertable = false)
     private Instant updatedOn;
 
