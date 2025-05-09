@@ -55,13 +55,91 @@
           </p>
 
           <div class="grid grid-cols-2 gap-y-3 gap-x-4 mt-6 text-sm">
-            <p><strong>Brand: </strong><span class="itbms-brand" :class="{ 'text-gray-400': !product.brandName?.trim() }">{{ product.brandName || "-" }}</span></p>
-            <p><strong>Model: </strong><span class="itbms-model" :class="{ 'text-gray-400': !product.model?.trim() }">{{ product.model || "-" }}</span></p>
-            <p><strong>RAM: </strong><span class="itbms-ramGb" :class="{ 'text-gray-400': !product.ramGb }">{{ product.ramGb || "-" }}</span><span class="itbms-ramGb-unit" v-if="product.ramGb">GB</span></p>
-            <p><strong>Screen Size: </strong><span class="itbms-screenSizeInch" :class="{ 'text-gray-400': !product.screenSizeInch }">{{ product.screenSizeInch ? Number(product.screenSizeInch).toFixed(1) : "-" }}</span><span class="itbms-screenSizeInch-unit" v-if="product.screenSizeInch">Inches</span></p>
-            <p><strong>Storage: </strong><span class="itbms-storageGb" :class="{ 'text-gray-400': !product.storageGb }">{{ product.storageGb || "-" }}</span><span class="itbms-storageGb-unit">{{ product.storageGb ? product.storageGbUnit || "GB" : "" }}</span></p>
-            <p><strong>Color: </strong><span class="itbms-color" :class="{ 'text-gray-400': !product.color?.trim() }">{{ product.color || "-" }}</span></p>
-            <p><strong>Available Quantity: </strong><span class="itbms-quantity" :class="{ 'text-gray-400': !product.quantity }">{{ product.quantity || "-" }}</span><span class="itbms-quantity-unit"> units</span></p>
+            <p>
+              <strong>Brand: </strong
+              ><span
+                class="itbms-brand"
+                :class="{ 'text-gray-400': !product.brandName?.trim() }"
+                >{{ product.brandName || "-" }}</span
+              >
+            </p>
+            <p>
+              <strong>Model: </strong
+              ><span
+                class="itbms-model"
+                :class="{ 'text-gray-400': !product.model?.trim() }"
+                >{{ product.model || "-" }}</span
+              >
+            </p>
+            <p>
+              <strong>RAM: </strong
+              ><span
+                class="itbms-ramGb"
+                :class="{ 'text-gray-400': !product.ramGb }"
+                >{{ product.ramGb || "-" }}</span
+              ><span class="itbms-ramGb-unit" v-if="product.ramGb">GB</span>
+            </p>
+            <p>
+              <strong>Screen Size: </strong
+              ><span
+                class="itbms-screenSizeInch"
+                :class="{ 'text-gray-400': !product.screenSizeInch }"
+                >{{
+                  product.screenSizeInch
+                    ? Number(product.screenSizeInch).toFixed(1)
+                    : "-"
+                }}</span
+              ><span
+                class="itbms-screenSizeInch-unit"
+                v-if="product.screenSizeInch"
+                >Inches</span
+              >
+            </p>
+            <p>
+              <strong>Storage: </strong
+              ><span
+                class="itbms-storageGb"
+                :class="{ 'text-gray-400': !product.storageGb }"
+                >{{ product.storageGb || "-" }}</span
+              ><span class="itbms-storageGb-unit">{{
+                product.storageGb ? product.storageGbUnit || "GB" : ""
+              }}</span>
+            </p>
+            <p>
+              <strong>Color: </strong
+              ><span
+                class="itbms-color"
+                :class="{ 'text-gray-400': !product.color?.trim() }"
+                >{{ product.color || "-" }}</span
+              >
+            </p>
+            <p>
+              <strong>Available Quantity: </strong
+              ><span
+                class="itbms-quantity"
+                :class="{ 'text-gray-400': !product.quantity }"
+                >{{ product.quantity || "-" }}</span
+              ><span class="itbms-quantity-unit"> units</span>
+            </p>
+          </div>
+
+          <!-- Edit / Delete Buttons -->
+          <div class="flex gap-4 mt-6">
+            <!-- Edit Button -->
+            <button
+              @click="editProduct"
+              class="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 transition font-medium"
+            >
+              Edit
+            </button>
+
+            <!-- Delete Button -->
+            <button
+              @click="deleteProduct"
+              class="px-4 py-2 rounded-md border border-red-300 bg-white text-red-600 hover:bg-red-50 transition font-medium"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>
@@ -125,6 +203,10 @@ const goBack = () => {
   if (countdownInterval.value) clearInterval(countdownInterval.value);
   router.push("/sale-items");
 };
+
+const editProduct = () => {
+  router.push({name:'EditSaleItemDetail'})
+}
 
 watch(showErrorModal, (newVal) => {
   if (newVal) {
