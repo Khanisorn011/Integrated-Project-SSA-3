@@ -67,8 +67,10 @@
 
 <script setup>
 import {useStateStore} from '../stores/stateStore.js'
+
 const stateStore = useStateStore()
 const {setImageUrl} = stateStore
+
 const props = defineProps({
   product: {
     type: Object,

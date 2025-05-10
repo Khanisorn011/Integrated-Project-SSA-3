@@ -1,61 +1,88 @@
 async function fetchProducts() {
-    try {
-      const res = await fetch('http://localhost:8080/itb-mshop/v1/sale-items')
-      const data = await res.json()
-      return data
-    } catch (err) {
-      throw err 
-    }
+  try {
+    const res = await fetch("http://localhost:8080/itb-mshop/v1/sale-items");
+    const data = await res.json();
+    return data;
+  } catch (error) {
+    throw error;
   }
+}
 
-  async function fetchProductById(id) {
-    try {
-      const res = await fetch(`http://localhost:8080/itb-mshop/v1/sale-items/${id}`)
-      const data = await res.json()
-      return data
-    } catch (err) {     
-      throw err
+async function fetchProductById(id) {
+  try {
+    const res = await fetch(
+      `http://localhost:8080/itb-mshop/v1/sale-items/${id}`
+    );
+    const data = await res.json();
+
+    if (!res.ok) {
+      throw new Error(`แก้ไขสินค้าไม่สำเร็จ (HTTP ${res.status})`);
     }
-  }
 
-  async function postProduct(payload) {
-    try {
-      const response = await fetch('http://localhost:8080/itb-mshop/v1/sale-items', {
-        method: 'POST',
+    return data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function postProduct(payload) {
+  try {
+    const response = await fetch(
+      "http://localhost:8080/itb-mshop/v1/sale-items",
+      {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
-      })
-      return response
-    } catch (error) {
-      console.error('Error during fetch:', error);
-    }
+        body: JSON.stringify(payload),
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
   }
+}
 
-  async function editProduct(id,payload) {
-    try{
-      const response = await fetch(`http://localhost:8080/itb-mshop/v1/sale-items/${id}`,{
-        method: 'PUT',
+async function editProduct(id, payload) {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/itb-mshop/v1/sale-items/${id}`,
+      {
+        method: "PUT",
         headers: {
-          'Content-Type' : 'application/json'
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(payload)
-      })
-      return response
-    } catch (error){
-      console.error('Error during fetch:', error);
-    }
-  }
-  async function deleteProduct(id) {
-    try {
-      const response = await fetch(`http://localhost:8080/itb-mshop/v1/sale-items/${id}`, {
-        method: 'DELETE'
-      });
-      return response;
-    } catch (error) {
-      console.error('Error during delete:', error);
-    }
-  }
+        body: JSON.stringify(payload),
+      }
+    );
 
-  export {fetchProducts,fetchProductById,postProduct,editProduct, deleteProduct}
+    if (!response.ok) {
+      throw new Error(`แก้ไขสินค้าไม่สำเร็จ (HTTP ${response.status})`);
+    }
+
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+async function deleteProduct(id) {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/itb-mshop/v1/sale-items/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+    return response;
+  } catch (error) {
+    throw error;
+  }
+}
+
+export {
+  fetchProducts,
+  fetchProductById,
+  postProduct,
+  editProduct,
+  deleteProduct,
+};

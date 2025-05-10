@@ -83,10 +83,19 @@ import { postProduct } from '../libs/fetchProduct.js'
 import { fetchBrands } from "../libs/fetchBrand.js"
 import { useStateStore } from "../stores/stateStore.js";
 
+
+
+// get Image from store
 const stateStore = useStateStore();
 const { getImageUrl } = stateStore;
+
+// router
 const router = useRouter()
+
+// all brand
 const brands = ref([])
+
+// form data
 const form = ref({
     brandId: '',
     brandName: '',
@@ -100,12 +109,6 @@ const form = ref({
     description: '',
 })
 
-const trim = (field) => {
-    if (form.value[field]) {
-        form.value[field] = form.value[field].trim();
-    }
-};
-
 onMounted(async () => {
     try {
         brands.value = await fetchBrands()
@@ -114,6 +117,14 @@ onMounted(async () => {
     }
 })
 
+//trim value in form
+const trim = (field) => {
+    if (form.value[field]) {
+        form.value[field] = form.value[field].trim();
+    }
+};
+
+// submit 
 const submitting = ref(false);
 const handleSubmit = async () => {
     if (submitting.value) return
@@ -146,11 +157,14 @@ const handleSubmit = async () => {
     }
     submitting.value = false;
 }
+
+// set brand value to form
 watch(() => form.value.brandId, (selectedId) => {
     const selected = brands.value.find(b => b.id === selectedId)
     form.value.brandName = selected ? selected.name : ''
 })
 
+// check if require input have data => can submit
 const isFormValid = computed(() =>
     form.value.brandId && form.value.model && form.value.price !== null &&
     form.value.quantity !== null && form.value.description.trim() !== ''
