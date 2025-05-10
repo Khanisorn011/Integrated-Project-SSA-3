@@ -1,12 +1,10 @@
 package org.example.backend.services;
 
-import jakarta.persistence.EntityManager;
 import org.example.backend.entities.SaleItemBase;
 import org.example.backend.exceptions.SaleItemNotFoundException;
 import org.example.backend.repositories.SaleItemBaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
