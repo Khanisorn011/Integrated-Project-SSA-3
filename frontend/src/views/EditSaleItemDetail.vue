@@ -11,10 +11,10 @@
           Home
         </router-link>
         <span>›</span>
-        <span class="font-semibold text-gray-900">
+        <router-link :to="`/sale-items/${route.params.id}`" class="font-semibold text-gray-900">
           {{ form.brandName }} {{ form.model }} {{ form.ramGb }}GB/
           {{ form.storageGb }}GB {{ form.color }}
-        </span>
+        </router-link>
       </nav>
 
       <div class="flex flex-col lg:flex-row gap-12">
@@ -239,7 +239,7 @@ const saveProduct = async () => {
   }
 };
 
-// Cancel edit
+// cancel edit
 const cancelEdit = () => {
   router.go(-1);
 };

@@ -125,18 +125,27 @@ import images from '../data/image.json'
 import { fetchBrands } from "../libs/fetchBrand.js"
 import { fetchProducts } from '../libs/fetchProduct.js'
 
+// products 
 const products = ref([])
+// choose view mode
 const viewMode = ref('gallery')
+// images phone
 const imageArray = images
+// all brands
 const brands = ref([])
+// select brand to filter
 const selectedBrand = ref('all')
+//router
 const route = useRoute()
 const added = computed(() => route.query.added === 'true')
 const deleted = computed(() => route.query.deleted === 'true')
+
+//sort sale item by created time
 const sortedProducts = computed(() =>
   [...products.value].sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime))
 )
 
+// fetch products , brands
 onMounted(async () => {
   try {
     products.value = await fetchProducts()
@@ -146,6 +155,7 @@ onMounted(async () => {
   }
 })
 
+// filter products by brand
 const filteredProducts = computed(() => {
   if (selectedBrand.value === 'all') {
     return sortedProducts.value
