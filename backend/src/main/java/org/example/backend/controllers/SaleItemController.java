@@ -58,14 +58,11 @@ public class SaleItemController {
     public ResponseEntity<SaleItemDetailDTO> updateSaleItem(@PathVariable Integer id, @RequestBody SaleItemCreateDTO dto) {
         SaleItemBase existingItem = saleItemService.getById(id);
 
-        modelMapper.typeMap(SaleItemCreateDTO.class, SaleItemBase.class)
-                .addMappings(mapper -> mapper.skip(SaleItemBase::setId));
+        SaleItemBase saleItemBase = modelMapper.map(dto, SaleItemBase.class);
+        saleItemBase.setId(existingItem.getId());
+        saleItemBase.setBrand(brandBaseService.getById(dto.getBrand().getId()));
 
-        modelMapper.map(dto,existingItem);
-
-        existingItem.setBrand(brandBaseService.getById(dto.getBrand().getId()));
-
-        SaleItemBase saved = saleItemService.updateSaleItem(existingItem);
+        SaleItemBase saved = saleItemService.updateSaleItem(saleItemBase);
 
         SaleItemDetailDTO responseDto = modelMapper.map(saved, SaleItemDetailDTO.class);
 
