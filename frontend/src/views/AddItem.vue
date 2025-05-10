@@ -155,6 +155,4 @@ const isFormValid = computed(() =>
     form.value.brandId && form.value.model && form.value.price !== null &&
     form.value.quantity !== null && form.value.description.trim() !== ''
 )
-
-
 </script>
