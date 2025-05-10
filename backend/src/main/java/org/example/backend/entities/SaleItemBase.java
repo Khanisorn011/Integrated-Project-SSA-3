@@ -64,12 +64,10 @@ public class SaleItemBase {
     private String color;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Generated(GenerationTime.ALWAYS)
     @Column(name = "createdOn", nullable = false, updatable = false, insertable = false)
     private Instant createdOn;
 
     @ColumnDefault("CURRENT_TIMESTAMP")
-    @Generated(GenerationTime.ALWAYS)
     @Column(name = "updatedOn", nullable = false, updatable = false, insertable = false)
     private Instant updatedOn;
 
