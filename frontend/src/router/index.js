@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import AddItem from "../views/AddItem.vue"
 import SaleItems from "../views/SaleItems.vue"
 import SaleItemDetail from "../views/SaleItemDetail.vue"
 import EditSaleItemDetail from "../views/EditSaleItemDetail.vue"
@@ -16,6 +17,11 @@ const router = createRouter({
       path: "/sale-items",
       name: "sale-items",
       component: SaleItems
+    },
+    {
+      path: "/sale-items/add",
+      name: "AddItem",
+      component: AddItem
     },
     {
       path: "/sale-items/:id",

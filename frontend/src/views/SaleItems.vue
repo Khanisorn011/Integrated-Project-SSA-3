@@ -1,6 +1,7 @@
 <template>
   <div class="sale-items">
-    <div class="bg-gradient-to-br from-zinc-900 to-black text-white min-h-screen font-[Poppins]">
+    <div class="bg-gradient-to-br from-zinc-900 to-white text-white min-h-screen font-[Poppins]">
+
       <!-- Header -->
       <Header />
 
@@ -10,53 +11,19 @@
         <p class="text-gray-400 text-lg">เลือกชมมือถือ พร้อมดีลพิเศษสำหรับคุณ</p>
       </section>
 
+      <div v-if="added" class=" bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded mb-4 ml-2 mr-2">
+        <strong>Success:</strong> <span class="itbms-message"> The sale item has been successfully added.</span>
+      </div>
+      <div v-if="deleted" class=" bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded mb-4 ml-2 mr-2">
+        <strong>deleted:</strong> <span class="itbms-message"> The sale item has been deleted.</span>
+      </div>
+
       <!-- View Mode Buttons -->
       <div class="flex justify-between items-center px-6 mb-6 ">
-        <div class="flex justify-between items-center px-6 mb-6 flex-wrap gap-4">
-          <div class="flex items-center gap-4 flex-wrap">
-            <button @click="showForm = true" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-              Add Sale Item
-            </button>
-            <div v-if="showForm" class="mt-4 bg-gray-100 p-6 rounded shadow">
-              <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <!-- Modal Content -->
-                <div class="bg-white text-black rounded-lg shadow-xl w-full max-w-3xl p-8 relative">
-                  <h2 class="text-2xl font-semibold mb-6">Add Sale Item</h2>
-
-                  <form @submit.prevent="handleSubmit" class="space-y-4">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <select v-model="form.brandId" class="input bg-white text-black" required>
-                        <option value="" disabled>Select a brand</option>
-                        <option v-for="(brand, index) in brands" :key="brand.id || index" :value="brand.id">
-                          {{ brand.name }}
-                        </option>
-                      </select>
-                      <input v-model="form.model" type="text" placeholder="Model" class="input" required />
-                      <input v-model="form.price" type="number" step="0.01" min="0" placeholder="Price" class="input" required />
-                      <input v-model="form.description" type="text" placeholder="Description" class="input" required />
-                      <input v-model="form.quantity" type="number" min="0" placeholder="Quantity" class="input" required />
-                      <input v-model="form.ram" type="number" min="0" max="32" placeholder="RAM (Optional)" class="input" />
-                      <input v-model="form.screenSize" type="number" step="0.01" min="0" max="10" placeholder="Screen Size (Optional)" class="input" />
-                      <input v-model="form.storage" type="number" min="0" max="512" placeholder="Storage (Optional)" class="input" />
-                      <input v-model="form.color" type="text" placeholder="Color (Optional)" class="input" />
-                    </div>
-
-                    <div class="flex justify-end gap-4 mt-4">
-                      <button type="submit"
-                        class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700 disabled:opacity-50"
-                        :disabled="!isFormValid" >
-                        Save
-                      </button>
-                      <button @click="cancelForm" type="button"
-                        class="bg-gray-400 text-white px-4 py-2 rounded hover:bg-gray-500">
-                        Cancel
-                      </button>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            </div>
-          </div>
+        <div class="flex items-center gap-4">
+          <router-link to="/sale-items/add" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+            Add Sale Item
+          </router-link>
           <select v-model="selectedBrand" class="px-4 py-2 rounded-lg bg-gray-700 text-gray-300 focus:outline-none">
             <option value="all">All Brands</option>
             <option v-for="(brand, index) in brands" :key="brand.id || index" :value="brand.name">
@@ -85,17 +52,6 @@
       <div v-if="products.length === 0" class="text-center text-gray-300 text-xl py-10">
         no sale item
       </div>
-
-      <div v-if="showSuccessModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-  <div class="bg-white p-6 rounded-lg shadow-lg text-center max-w-sm w-full">
-    <h3 class="text-xl font-bold text-green-600 mb-4">Success!</h3>
-    <p class="text-gray-700 mb-6">The sale item has been added successfully.</p>
-    <button @click="showSuccessModal = false"
-      class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
-      OK
-    </button>
-  </div>
-</div>
 
       <!-- Gallery View -->
       <main v-if="viewMode === 'gallery'"
@@ -160,107 +116,26 @@
 </template>
 
 <script setup>
-import { onMounted, computed, ref, watch } from 'vue'
-import { fetchProducts, postProduct } from '../libs/fetchProduct.js'
-import { fetchBrands } from "../libs/fetchBrand.js"
-import Header from '../components/Header.vue'
+import { computed, onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 import Footer from '../components/Footer.vue'
+import Header from '../components/Header.vue'
 import ProductCard from '../components/ProductCard.vue'
 import images from '../data/image.json'
+import { fetchBrands } from "../libs/fetchBrand.js"
+import { fetchProducts } from '../libs/fetchProduct.js'
 
 const products = ref([])
 const viewMode = ref('gallery')
 const imageArray = images
 const brands = ref([])
 const selectedBrand = ref('all')
-const showForm = ref(false)
-const message = ref('')
-const form = ref({
-  brandId: '',
-  brand: '',
-  model: '',
-  price: '',
-  description: '',
-  ram: '',
-  screenSize: '',
-  storage: '',
-  color: '',
-  quantity: '',
-})
-
-
-const showSuccessModal = ref(false)
-const cancelForm = () => {
-  showForm.value = false
-  resetForm()
-}
-
-const resetForm = () => {
-  form.value = {
-    brandId: '',
-    brand: '',
-    model: '',
-    price: '',
-    description: '',
-    ram: '',
-    screenSize: '',
-    storage: '',
-    color: '',
-    quantity: '',
-  }
-  message.value = ''
-}
-
+const route = useRoute()
+const added = computed(() => route.query.added === 'true')
+const deleted = computed(() => route.query.deleted === 'true')
 const sortedProducts = computed(() =>
   [...products.value].sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime))
 )
-
-const isFormValid = computed(() => {
-  const price = Number(form.value.price)
-  const quantity = Number(form.value.quantity)
-
-  return (
-    form.value.brandId &&
-    form.value.model.trim() &&
-    form.value.description.trim() &&
-    !isNaN(price) && price >= 0 &&
-    !isNaN(quantity) && quantity >= 0
-  )
-})
-
-const handleSubmit = async () => {
-  const selectedBrand = brands.value.find(b => b.id === form.value.brandId)
-  const payload = {
-    model: form.value.model.trim(),
-    description: form.value.description.trim(),
-    price: Number(form.value.price),
-    quantity: Number(form.value.quantity),
-    color: form.value.color.trim() || undefined,
-    ramGb: form.value.ram ? Number(form.value.ram) : undefined,
-    screenSizeInch: form.value.screenSize ? Number(form.value.screenSize) : undefined,
-    storageGb: form.value.storage ? Number(form.value.storage) : undefined,
-    brand: {
-      id: selectedBrand?.id,
-      name: selectedBrand?.name,
-    },
-  }
-
-  try {
-    const response = await postProduct(payload)
-    if (response.status === 201) {
-      message.value = 'The sale item has been successfully added'
-      showForm.value = false
-      products.value = await fetchProducts()
-      showSuccessModal.value = true
-      resetForm()
-    } else {
-      console.error('Failed to add sale item. Status:', response.status)
-    }
-  } catch (error) {
-    console.error('Error during fetch:', error)
-  }
-  
-}
 
 onMounted(async () => {
   try {
@@ -276,11 +151,6 @@ const filteredProducts = computed(() => {
     return sortedProducts.value
   }
   return sortedProducts.value.filter(p => p.brandName === selectedBrand.value)
-})
-
-watch(() => form.value.brandId, (selectedId) => {
-  const selected = brands.value.find(b => b.id === selectedId)
-  form.value.brand = selected ? selected.name : ''
 })
 
 </script>
