@@ -27,17 +27,11 @@ const router = createRouter({
       path: "/sale-items/:id",
       name: "SaleItemDetail",
       component: SaleItemDetail,
-      props: route => ({
-        imageUrl: route.state?.imageUrl || ''
-      })
     },
     {
       path: "/sale-items/:id/edit",
       name: "EditSaleItemDetail",
       component: EditSaleItemDetail,
-      props: route => ({
-        imageUrl: route.state?.imageUrl || ''
-      })
     }
   ],
 });

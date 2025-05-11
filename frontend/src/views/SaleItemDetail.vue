@@ -97,7 +97,7 @@
       </div>
     </div>
 
-    <!-- Fallback when product is not found -->
+    <!-- product is not found -->
     <div v-else class="text-center text-red-500 py-16 text-lg">
       Product not found.
     </div>
@@ -121,6 +121,7 @@
       </div>
     </transition>
     <transition name="fade">
+      
       <div v-if="showConfirmModal" class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
         <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
           <h2 class="text-xl font-bold text-gray-800 mb-4">
@@ -155,37 +156,27 @@ import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";
 
+// router
 const route = useRoute();
 const router = useRouter();
+
+// product info
 const product = ref(null);
+
+//error modal
 const showErrorModal = ref(false);
-const showSuccessModal = ref(false)
+
+//timing redirect after modal
 const timeoutRef = ref(null);
 const secondsLeft = ref(3);
 const countdownInterval = ref(null);
 
+//imageStore
 const stateStore = useStateStore();
 const { getImageUrl } = stateStore;
+
+// confirm to delete
 const showConfirmModal = ref(false)
-const goBack = () => {
-  if (timeoutRef.value) clearTimeout(timeoutRef.value);
-  if (countdownInterval.value) clearInterval(countdownInterval.value);
-  router.push("/sale-items")
-}
-
-const editProduct = () => {
-  router.push({ name: 'EditSaleItemDetail' })
-}
-
-watch(showErrorModal, (newVal) => {
-  if (newVal && !countdownInterval.value) {
-    countdownInterval.value = setInterval(() => {
-      if (secondsLeft.value > 0) {
-        secondsLeft.value -= 1
-      }
-    }, 1000)
-  }
-})
 
 onMounted(async () => {
   try {
@@ -198,19 +189,35 @@ onMounted(async () => {
   }
 })
 
-const props = defineProps({
-  id: {
-    type: String,
-    required: true
+// go back
+const goBack = () => {
+  if (timeoutRef.value) clearTimeout(timeoutRef.value);
+  if (countdownInterval.value) clearInterval(countdownInterval.value);
+  router.push("/sale-items")
+}
+
+// go edit page
+const editProduct = () => {
+  router.push({ name: 'EditSaleItemDetail' })
+}
+
+// start count timer redirect
+watch(showErrorModal, (newVal) => {
+  if (newVal && !countdownInterval.value) {
+    countdownInterval.value = setInterval(() => {
+      if (secondsLeft.value > 0) {
+        secondsLeft.value -= 1
+      }
+    }, 1000)
   }
 })
 
+// confirm delete
 const confirmDeleteProduct = async () => {
   try {
     const res = await deleteProduct(route.params.id)
     if (res.ok) {
       showConfirmModal.value = false
-      showSuccessModal.value = true
       router.push({ path: "/sale-items", query: { deleted: "true" } })
     } else if (res.status === 404) {
       showConfirmModal.value = false;
@@ -236,6 +243,7 @@ const confirmDeleteProduct = async () => {
   }
 }
 
+// show delete confirm modal
 const deleteProductHandler = () => {
   showConfirmModal.value = true
 }

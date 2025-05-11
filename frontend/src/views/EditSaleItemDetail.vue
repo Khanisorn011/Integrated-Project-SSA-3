@@ -11,12 +11,7 @@
           Home
         </router-link>
         <span>›</span>
-        <!-- Guard to prevent null-access -->
-        <router-link
-          v-if="form.brandName"
-          :to="`/sale-items/${route.params.id}`"
-          class="font-semibold text-gray-900"
-        >
+        <router-link :to="`/sale-items/${route.params.id}`" class="font-semibold text-gray-900">
           {{ form.brandName }} {{ form.model }} {{ form.ramGb }}GB/
           {{ form.storageGb }}GB {{ form.color }}
         </router-link>
@@ -249,7 +244,23 @@ const saveProduct = async () => {
   }
 };
 
-const cancelEdit = () => router.back();
+
+// cancel edit
+const cancelEdit = () => {
+  router.go(-1);
+};
+
+// Watch for error modal to start countdown
+watch(showErrorModal, (v) => {
+  if (v) {
+    countdownInterval = setInterval(() => {
+      if (secondsLeft.value > 0) {
+        secondsLeft.value--;
+      }
+    }, 1000);
+  }
+});
+
 const goSaleItemList = () => {
   clearTimeout(timeoutRef); clearInterval(countdownInterval);
   router.push("/sale-items");

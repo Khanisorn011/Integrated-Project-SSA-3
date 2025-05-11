@@ -3,8 +3,8 @@ async function fetchProducts() {
     const res = await fetch("http://localhost:8080/itb-mshop/v1/sale-items");
     const data = await res.json();
     return data;
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -16,11 +16,12 @@ async function fetchProductById(id) {
     const data = await res.json();
 
     if (!res.ok) {
-      throw new Error(error);
+      throw new Error(`แก้ไขสินค้าไม่สำเร็จ (HTTP ${res.status})`);
     }
+
     return data;
-  } catch (err) {
-    throw err;
+  } catch (error) {
+    throw error;
   }
 }
 
@@ -38,7 +39,7 @@ async function postProduct(payload) {
     );
     return response;
   } catch (error) {
-    console.error("Error during fetch:", error);
+    throw error;
   }
 }
 
@@ -56,11 +57,12 @@ async function editProduct(id, payload) {
     );
 
     if (!response.ok) {
-      throw new Error(error);
+      throw new Error(`แก้ไขสินค้าไม่สำเร็จ (HTTP ${response.status})`);
     }
+
     return response;
   } catch (error) {
-    console.error("Error during fetch:", error);
+    throw error;
   }
 }
 async function deleteProduct(id) {
@@ -73,7 +75,7 @@ async function deleteProduct(id) {
     );
     return response;
   } catch (error) {
-    console.error("Error during delete:", error);
+    throw error;
   }
 }
 
