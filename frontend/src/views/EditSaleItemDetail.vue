@@ -110,8 +110,7 @@
               class="flex-1 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
               :disabled="!isFormModified"
               :class="!isFormModified ? 'disabled:opacity-50' : ''"
-              >
-              
+              >         
               Save
             </button>
             <button type="button" @click="cancelEdit"
@@ -221,7 +220,6 @@ onMounted(async () => {
 });
 
 const saveProduct = async () => {
-  if (!isFormModified.value) return;
   try {
     const matched = brands.value.find(b => b.name === form.brandName);
     const payload = {
@@ -230,14 +228,16 @@ const saveProduct = async () => {
       description: form.description,
       price: Number(form.price),
       ramGb: form.ramGb,
-      screenSizeInch: form.screenSizeInch,
+      screenSizeInch: Number(form.screenSizeInch),
       storageGb: form.storageGb,
       color: form.color,
       quantity: form.quantity,
     };
-    await editProduct(route.params.id, payload);
-    alert("The sale item has been updated.");
-    router.back();
+    console.log(payload);
+    const a = await editProduct(route.params.id, payload);
+    console.log(a);
+    
+    router.go(-1);
   } catch (err) {
     if (err.response?.status === 404) showErrorModal.value = true;
     else console.error(err);
