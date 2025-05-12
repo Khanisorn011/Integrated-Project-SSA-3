@@ -1,5 +1,6 @@
 <template>
   <header
+
     class="flex flex-col md:flex-row justify-between items-center px-6 py-4 bg-white sticky top-0 z-50 shadow-md border-b border-gray-200"
   >
     <!-- Logo (Click to go home) -->

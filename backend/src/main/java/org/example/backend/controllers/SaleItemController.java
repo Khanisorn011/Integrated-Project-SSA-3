@@ -3,6 +3,7 @@ package org.example.backend.controllers;
 import org.example.backend.dtos.SaleItemCreateDTO;
 import org.example.backend.dtos.SaleItemDTO;
 import org.example.backend.dtos.SaleItemDetailDTO;
+import org.example.backend.dtos.SaleItemEditDTO;
 import org.example.backend.entities.SaleItemBase;
 import org.example.backend.services.BrandBaseService;
 import org.example.backend.services.SaleItemService;
@@ -55,7 +56,7 @@ public class SaleItemController {
     }
 
     @PutMapping("/v1/sale-items/{id}")
-    public ResponseEntity<SaleItemDetailDTO> updateSaleItem(@PathVariable Integer id, @RequestBody SaleItemCreateDTO dto) {
+    public ResponseEntity<SaleItemDetailDTO> updateSaleItem(@PathVariable Integer id, @RequestBody SaleItemEditDTO dto) {
         SaleItemBase existingItem = saleItemService.getById(id);
 
         SaleItemBase saleItemBase = modelMapper.map(dto, SaleItemBase.class);
@@ -67,7 +68,6 @@ public class SaleItemController {
         SaleItemDetailDTO responseDto = modelMapper.map(saved, SaleItemDetailDTO.class);
 
         responseDto.setBrandName(saved.getBrand().getName());
-
         return ResponseEntity.ok(responseDto);
     }
 
