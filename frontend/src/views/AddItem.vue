@@ -43,6 +43,7 @@
               <select v-model="form.brandId" 
                 class="itbms-brand w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
                  required>
+                <option value="" disabled>Select a brand</option>
                 <option v-for="(brand, index) in brands" :key="brand.id || index" :value="brand.id">
                   {{ brand.name }}
                 </option>
