@@ -2,6 +2,22 @@
   <div>
     <Header />
 
+    <!-- Alerts -->
+    <div class="px-6 max-w-4xl mx-auto">
+      <div
+        v-if="updated"
+        class="bg-red-50 border-l-4 border-orange-500 text-orange-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102"
+      >
+        <div class="flex items-center">
+          <span class="text-orange-500 font-bold mr-2">✕</span>
+          <strong>Updated:</strong>
+          <span class="itbms-message ml-2"
+            >The sale item has been updated.</span
+          >
+        </div>
+      </div>
+    </div>
+
     <!-- Product Detail -->
     <div
       v-if="product"
@@ -10,10 +26,11 @@
       <nav class="text-xl text-gray-700 px-1 pt-6 max-w-6xl mx-auto">
         <router-link
           to="/sale-items"
-          class="font-medium text-blue-600 hover:underline"
+          class="itbms-home-button font-medium text-blue-600 hover:underline"
         >
-          Home <span> ></span>
+          Home
         </router-link>
+        <span> ></span>
         <span v-if="product" class="ml-2 text-black font-medium">
           {{ product.brandName }} {{ product.model }} {{ product.ramGb }}/
           {{ product.storageGb }}{{ product.storageGbUnit }} {{ product.color }}
@@ -55,19 +72,97 @@
           </p>
 
           <div class="grid grid-cols-2 gap-y-3 gap-x-4 mt-6 text-sm">
-            <p><strong>Brand: </strong><span class="itbms-brand" :class="{ 'text-gray-400': !product.brandName?.trim() }">{{ product.brandName || "-" }}</span></p>
-            <p><strong>Model: </strong><span class="itbms-model" :class="{ 'text-gray-400': !product.model?.trim() }">{{ product.model || "-" }}</span></p>
-            <p><strong>RAM: </strong><span class="itbms-ramGb" :class="{ 'text-gray-400': !product.ramGb }">{{ product.ramGb || "-" }}</span><span class="itbms-ramGb-unit" v-if="product.ramGb">GB</span></p>
-            <p><strong>Screen Size: </strong><span class="itbms-screenSizeInch" :class="{ 'text-gray-400': !product.screenSizeInch }">{{ product.screenSizeInch ? Number(product.screenSizeInch).toFixed(1) : "-" }}</span><span class="itbms-screenSizeInch-unit" v-if="product.screenSizeInch">Inches</span></p>
-            <p><strong>Storage: </strong><span class="itbms-storageGb" :class="{ 'text-gray-400': !product.storageGb }">{{ product.storageGb || "-" }}</span><span class="itbms-storageGb-unit">{{ product.storageGb ? product.storageGbUnit || "GB" : "" }}</span></p>
-            <p><strong>Color: </strong><span class="itbms-color" :class="{ 'text-gray-400': !product.color?.trim() }">{{ product.color || "-" }}</span></p>
-            <p><strong>Available Quantity: </strong><span class="itbms-quantity" :class="{ 'text-gray-400': !product.quantity }">{{ product.quantity || "-" }}</span><span class="itbms-quantity-unit"> units</span></p>
+            <p>
+              <strong>Brand: </strong
+              ><span
+                class="itbms-brand"
+                :class="{ 'text-gray-400': !product.brandName?.trim() }"
+                >{{ product.brandName || "-" }}</span
+              >
+            </p>
+            <p>
+              <strong>Model: </strong
+              ><span
+                class="itbms-model"
+                :class="{ 'text-gray-400': !product.model?.trim() }"
+                >{{ product.model || "-" }}</span
+              >
+            </p>
+            <p>
+              <strong>RAM: </strong
+              ><span
+                class="itbms-ramGb"
+                :class="{ 'text-gray-400': !product.ramGb }"
+                >{{ product.ramGb || "-" }}</span
+              ><span class="itbms-ramGb-unit" v-if="product.ramGb">GB</span>
+            </p>
+            <p>
+              <strong>Screen Size: </strong
+              ><span
+                class="itbms-screenSizeInch"
+                :class="{ 'text-gray-400': !product.screenSizeInch }"
+                >{{
+                  product.screenSizeInch
+                    ? Number(product.screenSizeInch).toFixed(1)
+                    : "-"
+                }}</span
+              ><span
+                class="itbms-screenSizeInch-unit"
+                v-if="product.screenSizeInch"
+                >Inches</span
+              >
+            </p>
+            <p>
+              <strong>Storage: </strong
+              ><span
+                class="itbms-storageGb"
+                :class="{ 'text-gray-400': !product.storageGb }"
+                >{{ product.storageGb || "-" }}</span
+              ><span class="itbms-storageGb-unit">{{
+                product.storageGb ? product.storageGbUnit || "GB" : ""
+              }}</span>
+            </p>
+            <p>
+              <strong>Color: </strong
+              ><span
+                class="itbms-color"
+                :class="{ 'text-gray-400': !product.color?.trim() }"
+                >{{ product.color || "-" }}</span
+              >
+            </p>
+            <p>
+              <strong>Available Quantity: </strong
+              ><span
+                class="itbms-quantity"
+                :class="{ 'text-gray-400': !product.quantity }"
+                >{{ product.quantity || "-" }}</span
+              ><span class="itbms-quantity-unit"> units</span>
+            </p>
+          </div>
+
+          <!-- Edit / Delete Buttons -->
+          <div class="flex gap-4 mt-6">
+            <!-- Edit Button -->
+            <button
+              @click="editProduct"
+              class="itbms-edit-button px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 transition font-medium"
+            >
+              Edit
+            </button>
+
+            <!-- Delete Button -->
+            <button
+              @click="deleteProductHandler"
+              class="itbms-delete-button px-4 py-2 rounded-md border border-red-300 bg-white text-red-600 hover:bg-red-50 transition font-medium"
+            >
+              Delete
+            </button>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- Fallback when product is not found -->
+    <!-- product is not found -->
     <div v-else class="text-center text-red-500 py-16 text-lg">
       Product not found.
     </div>
@@ -95,45 +190,69 @@
         </div>
       </div>
     </transition>
+    <transition name="fade">
+      <div
+        v-if="showConfirmModal"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
+      >
+        <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">Confirm Deletion</h2>
+          <p class="itbms-message text-gray-700 mb-6">
+            Do you want to delete this sale item?
+          </p>
+          <div class="flex justify-center gap-4">
+            <button
+              @click="confirmDeleteProduct"
+              class="itbms-confirm-button px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            >
+              Confirm
+            </button>
+            <button
+              @click="showConfirmModal = false"
+              class="itbms-cancel-button px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
 
     <Footer />
   </div>
 </template>
 
 <script setup>
-import { ref, onMounted, watch } from "vue";
+import { ref, onMounted, watch , computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { fetchProductById } from "../libs/fetchProduct.js";
+import { fetchProductById, deleteProduct } from "../libs/fetchProduct.js";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";
 
+// router
 const route = useRoute();
 const router = useRouter();
+
+// product info
 const product = ref(null);
+
+//error modal
 const showErrorModal = ref(false);
+
+//timing redirect after modal
 const timeoutRef = ref(null);
 const secondsLeft = ref(3);
 const countdownInterval = ref(null);
 
+//imageStore
 const stateStore = useStateStore();
 const { getImageUrl } = stateStore;
 
-const goBack = () => {
-  if (timeoutRef.value) clearTimeout(timeoutRef.value);
-  if (countdownInterval.value) clearInterval(countdownInterval.value);
-  router.push("/sale-items");
-};
+// confirm to delete
+const showConfirmModal = ref(false);
 
-watch(showErrorModal, (newVal) => {
-  if (newVal) {
-    countdownInterval.value = setInterval(() => {
-      if (secondsLeft.value > 0) {
-        secondsLeft.value -= 1;
-      }
-    }, 1000);
-  }
-});
+const updated = computed(() => route.query.updated === "true");
 
 onMounted(async () => {
   try {
@@ -145,6 +264,65 @@ onMounted(async () => {
     }, 3000);
   }
 });
+
+// go back
+const goBack = () => {
+  if (timeoutRef.value) clearTimeout(timeoutRef.value);
+  if (countdownInterval.value) clearInterval(countdownInterval.value);
+  router.push("/sale-items");
+};
+
+// go edit page
+const editProduct = () => {
+  router.push({ name: "EditSaleItemDetail" });
+};
+
+// start count timer redirect
+watch(showErrorModal, (newVal) => {
+  if (newVal && !countdownInterval.value) {
+    countdownInterval.value = setInterval(() => {
+      if (secondsLeft.value > 0) {
+        secondsLeft.value -= 1;
+      }
+    }, 1000);
+  }
+});
+
+// confirm delete
+const confirmDeleteProduct = async () => {
+  try {
+    const res = await deleteProduct(route.params.id);
+    if (res.ok) {
+      showConfirmModal.value = false;
+      router.push({ path: "/sale-items", query: { deleted: "true" } });
+    } else if (res.status === 404) {
+      showConfirmModal.value = false;
+      showErrorModal.value = true;
+      secondsLeft.value = 3;
+
+      countdownInterval.value = setInterval(() => {
+        if (secondsLeft.value > 0) {
+          secondsLeft.value -= 1;
+        } else {
+          clearInterval(countdownInterval.value);
+        }
+      }, 1000);
+
+      timeoutRef.value = setTimeout(() => {
+        router.push("/sale-items");
+      }, 3000);
+    } else {
+      console.error("Delete failed with status:", res.status);
+    }
+  } catch (err) {
+    console.error("Error:", err);
+  }
+};
+
+// show delete confirm modal
+const deleteProductHandler = () => {
+  showConfirmModal.value = true;
+};
 </script>
 
 <style scoped>

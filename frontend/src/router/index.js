@@ -1,5 +1,9 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import AddItem from "../views/AddItem.vue"
+import SaleItems from "../views/SaleItems.vue"
+import SaleItemDetail from "../views/SaleItemDetail.vue"
+import EditSaleItemDetail from "../views/EditSaleItemDetail.vue"
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -12,17 +16,23 @@ const router = createRouter({
     {
       path: "/sale-items",
       name: "sale-items",
-
-      component: () => import("../views/SaleItems.vue"),
+      component: SaleItems
+    },
+    {
+      path: "/sale-items/add",
+      name: "AddItem",
+      component: AddItem
     },
     {
       path: "/sale-items/:id",
       name: "SaleItemDetail",
-      component: () => import("../views/SaleItemDetail.vue"),
-      props: route => ({
-        imageUrl: route.state?.imageUrl || ''
-      })
+      component: SaleItemDetail,
     },
+    {
+      path: "/sale-items/:id/edit",
+      name: "EditSaleItemDetail",
+      component: EditSaleItemDetail,
+    }
   ],
 });
 

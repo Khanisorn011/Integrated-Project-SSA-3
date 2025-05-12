@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.time.Instant;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -44,5 +46,8 @@ public class BrandBase {
     @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updatedOn", nullable = false)
     private Instant updatedOn;
+
+    @OneToMany(mappedBy = "brand")
+    private Set<SaleItemBase> saleItemBases = new LinkedHashSet<>();
 
 }

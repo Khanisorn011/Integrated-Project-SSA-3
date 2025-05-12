@@ -8,7 +8,7 @@
     class="block"
   >
     <div
-      class="bg-white text-black rounded-xl shadow-md p-4 hover:-translate-y-1 transition-transform w-full max-w-xs mx-auto min-h-[350px] flex flex-col justify-between"
+      class="bg-white text-black rounded-xl shadow-md p-4 hover:-translate-y-1 transition-transform w-full max-w-xs mx-auto min-h-[350px] flex flex-col justify-between "
     >
       <!-- Image -->
       <div
@@ -67,8 +67,10 @@
 
 <script setup>
 import {useStateStore} from '../stores/stateStore.js'
+
 const stateStore = useStateStore()
 const {setImageUrl} = stateStore
+
 const props = defineProps({
   product: {
     type: Object,
