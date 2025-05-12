@@ -1,6 +1,6 @@
 async function fetchProducts() {
     try {
-      const res = await fetch('http://localhost:8080/itb-mshop/v1/sale-items')
+      const res = await fetch('http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items')
       const data = await res.json()
       return data
     } catch (err) {
@@ -10,7 +10,7 @@ async function fetchProducts() {
 
   async function fetchProductById(id) {
     try {
-      const res = await fetch(`http://localhost:8080/itb-mshop/v1/sale-items/${id}`)
+      const res = await fetch(`http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items/${id}`)
       const data = await res.json()
       return data
     } catch (err) {     
@@ -20,7 +20,7 @@ async function fetchProducts() {
 
   async function postProduct(payload) {
     try {
-      const response = await fetch('http://localhost:8080/itb-mshop/v1/sale-items', {
+      const response = await fetch('http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
