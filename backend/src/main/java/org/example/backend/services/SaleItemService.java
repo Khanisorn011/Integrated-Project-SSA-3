@@ -33,8 +33,12 @@ public class SaleItemService {
         );
     }
 
+    @Transactional
     public SaleItemBase createSaleItem(SaleItemBase saleItemBase){
-        return saleItemBaseRepository.save(saleItemBase);
+        SaleItemBase created = saleItemBaseRepository.save(saleItemBase);
+        em.flush();
+        em.refresh(created);
+        return created;
     }
 
     @Transactional
