@@ -23,7 +23,7 @@ import java.time.Instant;
 public class SaleItemBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false,updatable = false, insertable = false)
+    @Column(name = "id", nullable = false)
     private Integer id;
 
     @NotNull
