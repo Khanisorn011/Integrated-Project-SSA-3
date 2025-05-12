@@ -359,7 +359,7 @@ const handleSubmit = async () => {
     console.error(error);
     alert("An error occurred.");
   }
-
   submitting.value = false;
 };
+
 </script>
