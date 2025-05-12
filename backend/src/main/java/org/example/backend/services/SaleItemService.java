@@ -40,6 +40,7 @@ public class SaleItemService {
     @Transactional
     public SaleItemBase updateSaleItem(SaleItemBase saleItemBase) {
         SaleItemBase saved = saleItemBaseRepository.save(saleItemBase);
+        em.flush();
         em.refresh(saved);
         return saved;
     }
