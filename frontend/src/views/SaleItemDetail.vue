@@ -5,9 +5,10 @@
     <!-- Product Detail -->
     <div v-if="product" class="bg-white text-black px-6 py-10 mx-auto max-w-6xl rounded-3xl shadow-xl mt-6 space-y-6">
       <nav class="text-xl text-gray-700 px-1 pt-6 max-w-6xl mx-auto">
-        <router-link to="/sale-items" class="font-medium text-blue-600 hover:underline">
-          Home <span> ></span>
+        <router-link to="/sale-items" class="itbms-home-button font-medium text-blue-600 hover:underline">
+          Home 
         </router-link>
+        <span> ></span>
         <span v-if="product" class="ml-2 text-black font-medium">
           {{ product.brandName }} {{ product.model }} {{ product.ramGb }}/
           {{ product.storageGb }}{{ product.storageGbUnit }} {{ product.color }}
@@ -83,13 +84,13 @@
           <div class="flex gap-4 mt-6">
             <!-- Edit Button -->
             <button @click="editProduct"
-              class="px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 transition font-medium">
+              class="itbms-edit-button px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 transition font-medium">
               Edit
             </button>
 
             <!-- Delete Button -->
             <button @click="deleteProductHandler"
-              class="px-4 py-2 rounded-md border border-red-300 bg-white text-red-600 hover:bg-red-50 transition font-medium">
+              class="itbms-delete-button px-4 py-2 rounded-md border border-red-300 bg-white text-red-600 hover:bg-red-50 transition font-medium">
               Delete
             </button>
           </div>
