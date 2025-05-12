@@ -25,13 +25,19 @@
             <strong>Deleted:</strong> <span class="itbms-message ml-2">The sale item has been deleted.</span>
           </div>
         </div>
+            <div v-if="updated" class="bg-red-50 border-l-4 border-orange-500 text-orange-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102">
+          <div class="flex items-center">
+            <span class="text-orange-500 font-bold mr-2">✕</span>
+            <strong>Updated:</strong> <span class="itbms-message ml-2">The sale item has been updated.</span>
+          </div>
+        </div>
       </div>
 
       <!-- Controls Bar -->
       <div class="max-w-7xl mx-auto px-6 mb-8">
         <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg border border-gray-700/50">
           <div class="flex items-center gap-4 w-full sm:w-auto">
-            <router-link to="/sale-items/add" class=" itbms-sale-item-add bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2.5 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-md flex items-center gap-2 whitespace-nowrap">          
+            <router-link to="/sale-items/add" class="itbms-sale-item-add bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2.5 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-md flex items-center gap-2 whitespace-nowrap">          
               Add Sale Item
             </router-link>
             <div class="relative w-full sm:w-auto">

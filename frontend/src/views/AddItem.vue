@@ -40,10 +40,9 @@
                 <label class="text-gray-700 font-medium">Brand</label>
                 <span class="text-red-500 text-sm font-medium">Required*</span>
               </div>
-              <select v-model="form.brandId" ref="brandSelect"
+              <select v-model="form.brandId" 
                 class="itbms-brand w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
-                @keydown.enter.prevent="focusNext('model')" required>
-                <option value="" disabled>Select a brand</option>
+                 required>
                 <option v-for="(brand, index) in brands" :key="brand.id || index" :value="brand.id">
                   {{ brand.name }}
                 </option>
@@ -54,7 +53,7 @@
               <label class="text-gray-700 font-medium block mb-1">Model <span class="text-red-500">*</span></label>
               <input ref="model" @blur="trim('model')" v-model="form.model" type="text" placeholder="Enter model name"
                 class="itbms-model w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
-                @keydown.enter.prevent="focusNext('price')" />
+              />
             </div>
 
             <!-- Price + Quantity -->
@@ -64,7 +63,7 @@
                 <div class="relative">
                   <input ref="price" v-model.number="form.price" type="number" placeholder="0"
                     class="itbms-price w-full border border-gray-300 p-3 pl-16 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
-                    @keydown.enter.prevent="focusNext('quantity')" />
+                    />
                   <div class="absolute inset-y-0 left-0 flex items-center px-3 pointer-events-none bg-gray-100 rounded-l-lg border-r border-gray-300 text-gray-700 font-medium">
                     Baht
                   </div>
@@ -74,7 +73,7 @@
                 <label class="text-gray-700 font-medium block mb-1">Quantity <span class="text-red-500">*</span></label>
                 <input ref="quantity" v-model="form.quantity" type="number" placeholder="0"
                   class="itbms-quantity w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
-                  @keydown.enter.prevent="focusNext('description')" />
+                   />
               </div>
             </div>
 
@@ -95,7 +94,7 @@
                   <div class="relative">
                     <input ref="ramGb" v-model="form.ramGb" type="number" placeholder="0"
                       class="itbms-ramGb w-full border border-gray-300 p-3 pl-12 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
-                      @keydown.enter.prevent="focusNext('screenSizeInch')" />
+                      />
                     <div class="absolute inset-y-0 left-0 flex items-center px-3 pointer-events-none text-gray-500 font-medium">GB</div>
                   </div>
                 </div>
@@ -104,7 +103,7 @@
                   <div class="relative">
                     <input ref="screenSizeInch" v-model="form.screenSizeInch" type="number" step="0.1" placeholder="0.0"
                       class="itbms-screenSizeInch w-full border border-gray-300 p-3 pl-16 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
-                      @keydown.enter.prevent="focusNext('storageGb')" />
+                      />
                     <div class="absolute inset-y-0 left-0 flex items-center px-2 pointer-events-none text-gray-500 font-medium">inches</div>
                   </div>
                 </div>
@@ -113,7 +112,7 @@
                   <div class="relative">
                     <input ref="storageGb" v-model="form.storageGb" type="number" placeholder="0"
                       class="itbms-storageGb w-full border border-gray-300 p-3 pl-12 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
-                      @keydown.enter.prevent="focusNext('color')" />
+                     />
                     <div class="absolute inset-y-0 left-0 flex items-center px-3 pointer-events-none text-gray-500 font-medium">GB</div>
                   </div>
                 </div>
@@ -121,7 +120,7 @@
                   <label class="text-gray-600 text-sm block mb-1">Color</label>
                   <input ref="color" v-model="form.color" type="text" placeholder="Enter color"
                     class="itbms-color w-full border border-gray-300 p-3 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
-                    @keydown.enter.prevent="focusNext('submitButton')" />
+                   />
                 </div>
               </div>
             </div>
@@ -189,9 +188,7 @@ onMounted(async () => {
   try {
     brands.value = await fetchBrands()
     brands.value.sort((a, b) => a.name.localeCompare(b.name))
-    setTimeout(() => {
-      brandSelect.value?.focus()
-    }, 0)
+
   } catch (err) {
     console.error("Failed to load brands", err)
   }
