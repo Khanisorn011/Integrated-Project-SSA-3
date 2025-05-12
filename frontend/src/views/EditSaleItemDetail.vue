@@ -237,7 +237,7 @@ const saveProduct = async () => {
     const a = await editProduct(route.params.id, payload);
     console.log(a);
     
-    router.go(-1);
+    router.push({ path: `/sale-items/${route.params.id}`, query: { updated: 'true' } });
   } catch (err) {
     if (err.response?.status === 404) showErrorModal.value = true;
     else console.error(err);
