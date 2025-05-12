@@ -23,13 +23,5 @@ public class SaleItemDetailDTO {
     private String color;
     private Instant createdOn;
     private Instant updatedOn;
-
-//    @JsonProperty("screenSizeInch")
-//    public BigDecimal getScreenSizeInchRounded() {
-//        if (screenSizeInch == null) {
-//            return null;
-//        }
-//        return screenSizeInch.setScale(1, RoundingMode.HALF_UP);
-//    }
 }
 

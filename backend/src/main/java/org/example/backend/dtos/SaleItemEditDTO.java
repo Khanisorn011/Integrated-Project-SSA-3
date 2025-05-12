@@ -1,19 +1,13 @@
 package org.example.backend.dtos;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.Min;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
-
-import lombok.Getter;
-import lombok.Setter;
 
 @Getter
 @Setter
-public class SaleItemCreateDTO {
+public class SaleItemEditDTO {
     private Integer id;
     private String model;
     private BrandBaseDTO brand;
@@ -27,21 +21,21 @@ public class SaleItemCreateDTO {
 
 
     public void setId(Integer id) {
-        this.id =  null;
+        this.id =  id;
     }
-
     public void setModel(String model) {
         this.model = model != null ? model.trim() : null;
-    }
-
-    public void setDescription(String description) {
-        this.description = description != null ? description.trim() : null;
     }
 
     public void setColor(String color) {
         String colorValue = (color != null && !color.trim().isEmpty()) ? color.trim() : null;
         this.color = colorValue;
     }
+
+    public void setDescription(String description) {
+        this.description = description != null ? description.trim() : null;
+    }
+
     public void setQuantity(Integer quantity) {
         this.quantity = (quantity != null && quantity >= 0) ? quantity : 1;
     }
