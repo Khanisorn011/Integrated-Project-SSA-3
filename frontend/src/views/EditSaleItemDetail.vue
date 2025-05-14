@@ -176,7 +176,7 @@ const form = reactive({
   screenSizeInch: 0,
   storageGb: 0,
   color: "",
-  quantity: 0,
+  quantity: null,
 });
 
 // original snapshot for change detection
