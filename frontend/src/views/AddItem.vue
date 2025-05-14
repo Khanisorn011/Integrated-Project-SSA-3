@@ -123,7 +123,7 @@
                   ref="quantity"
                   v-model="form.quantity"
                   type="number"
-                  placeholder="0"
+                  placeholder="1"
                   class="itbms-quantity w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
                 />
               </div>
@@ -335,7 +335,7 @@ const handleSubmit = async () => {
     model: form.value.model.trim(),
     description: form.value.description.trim(),
     price: Number(form.value.price),
-    quantity: Number(form.value.quantity),
+    quantity: form.value.quantity,
     color: form.value.color?.trim() || undefined,
     ramGb: form.value.ramGb ? Number(form.value.ramGb) : undefined,
     screenSizeInch: form.value.screenSizeInch
