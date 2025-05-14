@@ -19,4 +19,5 @@ public class GlobalExceptionController {
         );
         return ResponseEntity.status(myErrorResponse.getStatus()).body(myErrorResponse);
     }
+
 }
