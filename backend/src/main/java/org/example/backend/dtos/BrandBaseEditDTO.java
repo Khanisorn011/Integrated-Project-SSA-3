@@ -15,12 +15,12 @@ public class BrandBaseEditDTO {
         this.id = id;
     }
     public void setName(String name) {
-        this.name = name != null ? name.trim() : null;
+        this.name = name != null && name != "" ? name.trim() : null;
     }
     public void setWebsiteUrl(String websiteUrl) {
-        this.websiteUrl = websiteUrl != null ? websiteUrl.trim() : null;
+        this.websiteUrl = websiteUrl != null && websiteUrl != "" ? websiteUrl.trim() : null;
     }
     public void setCountryOfOrigin(String countryOfOrigin) {
-        this.countryOfOrigin = countryOfOrigin != null ? countryOfOrigin.trim() : null;
+        this.countryOfOrigin = countryOfOrigin != null && countryOfOrigin != ""  ? countryOfOrigin.trim() : null;
     }
 }
