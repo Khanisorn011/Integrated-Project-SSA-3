@@ -69,6 +69,7 @@
               class="itbms-save-button flex-1 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
               :disabled="!isFormModified"
               :class="!isFormModified ? 'disabled:opacity-50' : ''"
+              @click="saveBrand"
               >         
               Save
             </button>
@@ -106,7 +107,7 @@
 import { ref, reactive, onMounted, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { fetchProductById, editProduct } from "../libs/fetchProduct.js";
-import { fetchBrands , fetchBrandById } from '../libs/fetchBrand.js'
+import { fetchBrands , fetchBrandById , editBrand} from '../libs/fetchBrand.js'
 
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
@@ -148,14 +149,19 @@ const handleEnter = (index) => {
 
 onMounted(async () => {
   try {
-    const data = await fetchProductById(route.params.id);
+    const data = await fetchBrandById(route.params.id);
     brand.value = data;
+    console.log(brand.value);
+    console.log(brand.value.name);
+    
     Object.assign(form, {
-         name: data.name,
-         websiteUrl : data.websiteUrl,
-         countryOfOrigin:  data.countryOfOrigin,
-         isActive : data.isActive
+         name: brand.value.name,
+         websiteUrl : brand.value.websiteUrl,
+         countryOfOrigin:  brand.value.countryOfOrigin,
+         isActive : brand.value.isActive
     });
+    console.log(form);
+    
     originData.value = { ...form };
     console.log("test");
     
@@ -169,21 +175,17 @@ onMounted(async () => {
 const saveBrand = async () => {
   try {
     const payload = {
-      brand: { id: matched.id, name: matched.name },
-      model: form.model,
-      description: form.description,
-      price: Number(form.price),
-      ramGb: form.ramGb,
-      screenSizeInch: Number(form.screenSizeInch),
-      storageGb: form.storageGb,
-      color: form.color,
-      quantity: form.quantity,
+     id : route.params.id,
+     name: form.name,
+     websiteUrl : form.websiteUrl,
+     countryOfOrigin: form.countryOfOrigin,
+     isActive : form.isActive
     };
     console.log(payload);
-    const a = await editProduct(route.params.id, payload);
+    const a = await editBrand(route.params.id, payload);
     console.log(a);
     
-    router.push({ path: `/sale-items/${route.params.id}`, query: { updated: 'true' } });
+    router.push({ path: `/brands`, query: { updated: 'true' } });
   } catch (err) {
     if (err.response?.status === 404) showErrorModal.value = true;
     else console.error(err);
