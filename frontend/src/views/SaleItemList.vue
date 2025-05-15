@@ -22,7 +22,7 @@
           </router-link>
 
           <!-- Manage Brand -->
-          <router-link to="/" class="itbms-manage-brand bg-gradient-to-r from-purple-600 to-purple-700 text-white px-5 py-2.5 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-md flex items-center gap-2 whitespace-nowrap">
+          <router-link to="/brands" class="itbms-manage-brand bg-gradient-to-r from-purple-600 to-purple-700 text-white px-5 py-2.5 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-md flex items-center gap-2 whitespace-nowrap">
             Manage Brand
           </router-link>
 
