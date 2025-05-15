@@ -45,6 +45,12 @@ const router = createRouter({
       name: "Brand",
       component: Brand,
     }
+    ,
+    {
+      path: '/sale-items/list',
+      name: 'SaleItemList',
+      component: () => import('../views/SaleItemList.vue')
+    },
   ],
 });
 
