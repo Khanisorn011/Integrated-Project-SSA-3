@@ -33,6 +33,12 @@ const router = createRouter({
       name: "EditSaleItemDetail",
       component: EditSaleItemDetail,
     }
+    ,
+    {
+      path: '/sale-items/list',
+      name: 'SaleItemList',
+      component: () => import('../views/SaleItemList.vue')
+    },
   ],
 });
 
