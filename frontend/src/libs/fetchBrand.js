@@ -18,6 +18,20 @@ async function fetchBrandById(id) {
     }
 }
 
+async function editBrand(id , payload){
+    try{
+        const res = await fetch(`http://localhost:8080/itb-mshop/v1/brands/${id}`,{
+            method : "PUT",
+            headers : {
+                "Content-Type" : "application/json"
+            } ,
+            body : JSON.stringify(payload)
+        })
+    }catch(err){
+        throw err
+    }
+}
+
 async function deleteBrandById(id){
     try{
         const res = await fetch(`http://localhost:8080/itb-mshop/v1/brands/${id}`,{
@@ -29,4 +43,4 @@ async function deleteBrandById(id){
 }
 
 
-export { fetchBrands , fetchBrandById , deleteBrandById }
+export { fetchBrands , fetchBrandById , editBrand , deleteBrandById }

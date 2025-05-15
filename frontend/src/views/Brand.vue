@@ -63,7 +63,7 @@
                     <router-link :to="`/brands/${brand.id}/edit`"  class="bg-gray-200 text-gray-700 px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors">
                       Edit
                     </router-link>
-                    <button @click="showConfirmModal = !showConfirmModal" class="bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors">
+                    <button @click="displayConfirmModal" class="bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors">
                       Delete
                     </button>
                   </div>
@@ -141,8 +141,13 @@ onMounted(async () => {
 //delete brand confirm modal
 const showConfirmModal = ref(false)
 
+const displayConfirmModal = () => {
+  showConfirmModal.value = !showConfirmModal.value
+}
+
 const confirmDeleteProduct = () => {
   deleteBrandById(route.params.id)
   showConfirmModal = !showConfirmModal
 }
+
 </script>
