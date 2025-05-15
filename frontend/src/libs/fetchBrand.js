@@ -7,4 +7,16 @@ async function fetchBrands() {
         throw err
     }
 }
-export { fetchBrands }
+
+async function fetchBrandById(id) {
+    try {
+        const res = await fetch(`http://localhost:8080/itb-mshop/v1/brands/${id}`)
+        const data = await res.json()
+        return data
+    } catch (err) {
+        throw err
+    }
+}
+
+
+export { fetchBrands , fetchBrandById }

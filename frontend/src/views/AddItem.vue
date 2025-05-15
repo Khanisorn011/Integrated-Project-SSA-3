@@ -114,19 +114,7 @@
                     Baht
                   </div>
                 </div>
-              </div>
-              <div>
-                <label class="text-gray-700 font-medium block mb-1"
-                  >Quantity <span class="text-red-500">*</span></label
-                >
-                <input
-                  ref="quantity"
-                  v-model="form.quantity"
-                  type="number"
-                  placeholder="1"
-                  class="itbms-quantity w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
-                />
-              </div>
+              </div>        
             </div>
 
             <!-- Description -->
@@ -217,6 +205,18 @@
                     type="text"
                     placeholder="Enter color"
                     class="itbms-color w-full border border-gray-300 p-3 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
+                  />
+                </div>
+
+                   <div>
+                  <label class="text-gray-600 text-sm block mb-1">Quantity</label>
+                  
+                  <input
+                    ref="quantity"
+                    v-model="form.quantity"
+                    type="number"
+                    placeholder="1"
+                    class="itbms-quantity w-full	border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
                   />
                 </div>
               </div>
