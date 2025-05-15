@@ -18,5 +18,15 @@ async function fetchBrandById(id) {
     }
 }
 
+async function deleteBrandById(id){
+    try{
+        const res = await fetch(`http://localhost:8080/itb-mshop/v1/brands/${id}`,{
+            method : "DELETE"
+        });
+    }catch (err){
+        throw err
+    }
+}
 
-export { fetchBrands , fetchBrandById }
+
+export { fetchBrands , fetchBrandById , deleteBrandById }

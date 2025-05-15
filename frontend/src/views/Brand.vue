@@ -63,7 +63,7 @@
                     <router-link :to="`/brands/${brand.id}/edit`"  class="bg-gray-200 text-gray-700 px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors">
                       Edit
                     </router-link>
-                    <button @click="deleteBrand()" class="bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors">
+                    <button @click="showConfirmModal = !showConfirmModal" class="bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors">
                       Delete
                     </button>
                   </div>
@@ -75,6 +75,35 @@
       </div>
     </main>
 
+    <!-- Delete modal confirm-->
+        <transition name="fade">
+      <div
+        v-if="showConfirmModal"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
+      >
+        <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">Confirm Deletion</h2>
+          <p class="itbms-message text-gray-700 mb-6">
+            Do you want to delete this sale item?
+          </p>
+          <div class="flex justify-center gap-4">
+            <button
+              @click="confirmDeleteProduct"
+              class="itbms-confirm-button px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+            >
+              Confirm
+            </button>
+            <button
+              @click="showConfirmModal = false"
+              class="itbms-cancel-button px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
     <Footer></Footer>
   </div>
 </template>
@@ -82,7 +111,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { fetchBrands } from "../libs/fetchBrand.js"
+import { fetchBrands , deleteBrandById } from "../libs/fetchBrand.js"
 import Footer from "../components/Footer.vue"
 import Header from "../components/Header.vue"
 
@@ -109,8 +138,11 @@ onMounted(async () => {
   }
 })
 
-//delete Brand
-const deleteBrand = () => {
+//delete brand confirm modal
+const showConfirmModal = ref(false)
 
+const confirmDeleteProduct = () => {
+  deleteBrandById(route.params.id)
+  showConfirmModal = !showConfirmModal
 }
 </script>
