@@ -5,14 +5,14 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class BrandBaseCreateDTO {
+public class BrandBaseEditDTO {
     private Integer id;
     private String name;
     private String websiteUrl;
     private String countryOfOrigin;
     private Boolean isActive;
     public void setId(Integer id) {
-        this.id =  null;
+        this.id = id;
     }
     public void setName(String name) {
         this.name = name != null ? name.trim() : null;
@@ -24,4 +24,3 @@ public class BrandBaseCreateDTO {
         this.countryOfOrigin = countryOfOrigin != null ? countryOfOrigin.trim() : null;
     }
 }
-

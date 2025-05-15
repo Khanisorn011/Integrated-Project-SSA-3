@@ -3,6 +3,7 @@ package org.example.backend.services;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.example.backend.entities.BrandBase;
+import org.example.backend.entities.SaleItemBase;
 import org.example.backend.repositories.BrandBaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,5 +37,13 @@ public class BrandBaseService {
     }
     public boolean existsByNameIgnoreCase(String name) {
         return brandBaseRepository.existsByNameIgnoreCase(name);
+    }
+
+    @Transactional
+    public BrandBase updateBrand(BrandBase brandBase) {
+        BrandBase saved =  brandBaseRepository.save(brandBase);
+        em.flush();
+        em.refresh(saved);
+        return saved;
     }
 }
