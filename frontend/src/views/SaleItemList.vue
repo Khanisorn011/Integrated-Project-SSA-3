@@ -56,8 +56,7 @@
 
     <!-- Empty State -->
     <div v-if="filteredProducts.length === 0" class="text-center text-gray-300 py-24">
-      <h3 class="text-2xl font-semibold mb-2">ไม่พบรายการโทรศัพท์</h3>
-      <p class="text-gray-400">เริ่มต้นด้วยการเพิ่มสินค้าด้านบน</p>
+      <h3 class="text-2xl font-semibold mb-2">no sale item</h3>
     </div>
 
     <!-- Sale Item Table View -->
