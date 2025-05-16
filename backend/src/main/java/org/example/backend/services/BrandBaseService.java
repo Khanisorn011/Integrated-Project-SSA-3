@@ -24,8 +24,7 @@ public class BrandBaseService {
     }
 
     public BrandBase getById(int id) {
-        return brandBaseRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + id));
+        return brandBaseRepository.findById(id).orElseThrow(() -> new RuntimeException("Brand not found with id: " + id));
     }
 
     @Transactional

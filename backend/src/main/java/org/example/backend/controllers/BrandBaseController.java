@@ -4,6 +4,7 @@ import org.example.backend.dtos.*;
 import org.example.backend.entities.BrandBase;
 import org.example.backend.entities.SaleItemBase;
 import org.example.backend.services.BrandBaseService;
+import org.example.backend.services.SaleItemService;
 import org.example.backend.utils.ListMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,8 @@ import java.util.List;
 public class BrandBaseController {
     @Autowired
     private BrandBaseService brandBaseService;
+    @Autowired
+    private SaleItemService saleItemService;
     @Autowired
     private ListMapper listMapper;
     @Autowired
@@ -42,6 +45,7 @@ public class BrandBaseController {
             }
             BrandDetailDTO responseDto = modelMapper.map(brand, BrandDetailDTO.class);
             responseDto.setName(brand.getName());
+            responseDto.setNoOfSaleItems(saleItemService.getAllByBrandId(brand.getId()).size());
             return ResponseEntity.ok(responseDto);
         } catch (Exception e) {
             e.printStackTrace();

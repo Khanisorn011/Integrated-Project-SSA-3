@@ -14,6 +14,7 @@ public class BrandDetailDTO {
     private String websiteUrl;
     private String countryOfOrigin;
     private Boolean isActive;
+    private Integer noOfSaleItems;
     private Instant createdOn;
     private Instant updatedOn;
 }

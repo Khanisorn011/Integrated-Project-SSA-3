@@ -54,4 +54,8 @@ public class SaleItemService {
         SaleItemBase saleItem = getById(id);
         saleItemBaseRepository.delete(saleItem);
     }
+
+    public List<SaleItemBase> getAllByBrandId(int brandId) {
+        return saleItemBaseRepository.findAllByBrandId(brandId);
+    }
 }
