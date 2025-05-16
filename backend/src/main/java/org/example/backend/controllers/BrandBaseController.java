@@ -29,7 +29,7 @@ public class BrandBaseController {
     @GetMapping("/v1/brands")
     public ResponseEntity<List<BrandBaseDTO>> getAllBrands() {
         List<BrandBase> brands = brandBaseService.getAllBrands();
-        List<BrandBaseDTO> brandsDTO = listMapper.mapList(brands , BrandBaseDTO.class, modelMapper);
+        List<BrandBaseDTO> brandsDTO = listMapper.mapList(brands, BrandBaseDTO.class, modelMapper);
         return ResponseEntity.ok(brandsDTO);
     }
 
@@ -48,6 +48,7 @@ public class BrandBaseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
     @PostMapping("/v1/brands")
     public ResponseEntity<BrandDetailDTO> createBrand(@RequestBody BrandBaseCreateDTO dto) {
         try {
@@ -67,6 +68,7 @@ public class BrandBaseController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
     @PutMapping("/v1/brands/{id}")
     public ResponseEntity<BrandDetailDTO> updateBrand(@PathVariable Integer id, @RequestBody BrandBaseEditDTO dto) {
         try {
@@ -93,6 +95,38 @@ public class BrandBaseController {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
             }
             e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @DeleteMapping("/v1/brands/{id}")
+    public ResponseEntity<Void> deleteBrand(@PathVariable Integer id) {
+        try {
+            brandBaseService.deleteBrandById(id);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("not found")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            } else if (e.getMessage().contains("sale item")) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            }
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PatchMapping("/v1/brands/{id}/softDelete")
+    public ResponseEntity<Void> softDeleteBrand(@PathVariable Integer id) {
+        try {
+            BrandBase brand = brandBaseService.getById(id);
+            if (brand == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
+            brand.setIsActive(false);
+            brandBaseService.updateBrand(brand);
+            return ResponseEntity.noContent().build();
+        } catch (RuntimeException e) {
+            if (e.getMessage().contains("not found")) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+            }
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
