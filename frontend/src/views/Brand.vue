@@ -29,9 +29,9 @@
             <strong>Deleted:</strong> <span class="ml-2">The brand has been deleted.</span>
           </div>
         </div>
-        <div v-if="updated" class="bg-orange-50 border-l-4 border-orange-500 text-orange-700 p-4 rounded-lg shadow-md">
+        <div v-if="updated" class="bg-orange-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md">
           <div class="flex items-center">
-            <span class="text-orange-500 font-bold mr-2">✓</span>
+            <span class="text-green-500 font-bold mr-2">✓</span>
             <strong>Updated:</strong> <span class="ml-2">The brand has been updated.</span>
           </div>
         </div>
@@ -64,7 +64,7 @@
                     <router-link :to="`/brands/${brand.id}/edit`"  class="itbms-edit-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors">
                       Edit
                     </router-link>
-                    <button @click="displayConfirmModal" class="itbms-delete-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors">
+                    <button @click="displayConfirmModal(brand.id)" class="itbms-delete-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors">
                       Delete
                     </button>
                   </div>
@@ -121,13 +121,9 @@ const brands = ref([])
 
 // router
 const route = useRoute()
-const addedQuery = ref(route.query.added)
-const deletedQuery = ref(route.query.deleted)
-const updatedQuery = ref(route.query.updated)
-
-const added = computed(() => addedQuery.value === true)
-const deleted = computed(() => deletedQuery.value === true)
-const updated = computed(() => updatedQuery.value === true)
+const added = computed(() => route.query.added === 'true')
+const deleted = ref(false)
+const updated = computed(() => route.query.updated === 'true')
 
 // fetch brands
 onMounted(async () => {
@@ -142,13 +138,20 @@ onMounted(async () => {
 //delete brand confirm modal
 const showConfirmModal = ref(false)
 
-const displayConfirmModal = () => {
+const displayConfirmModal = (brandId) => {
+  brandIdToDelete.value = brandId
   showConfirmModal.value = !showConfirmModal.value
 }
 
-const confirmDeleteProduct = () => {
-  deleteBrandById(route.params.id)
+const brandIdToDelete = ref(null)
+const confirmDeleteProduct = async () => {
+  try{
+  await deleteBrandById(brandIdToDelete.value)
   showConfirmModal.value = !showConfirmModal.value
+  deleted.value = true
+  } catch (error) {
+  console.log(error);
+  }
 }
 
 </script>

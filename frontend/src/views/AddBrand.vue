@@ -134,9 +134,7 @@ const handleEnter = (index) => {
 
 const isFormValid = computed(() => {
   return (
-    form.name.trim() !== '' &&
-    form.websiteUrl.trim() !== '' &&
-    form.countryOfOrigin.trim() !== ''
+    form.name.trim() !== '' 
   );
 });
 
@@ -156,7 +154,7 @@ const saveBrand = async () => {
   try {
     const res = await AddBrand(payload);
     if (res) {
-      router.push({ path: '/brands', query: { brandAdded: 'true' } });
+      router.push({ path: '/brands', query: { added : 'true' } });
     } else {
       alert('Failed to add brand.');
     }
