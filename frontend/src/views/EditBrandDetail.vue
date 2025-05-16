@@ -84,7 +84,7 @@
 
     <!-- Fallback -->
     <div v-else class="text-center text-red-500 py-16 text-lg">
-      Product not found.
+      Brand not found.
     </div>
 
     <!-- Error Modal -->
@@ -106,8 +106,7 @@
 <script setup>
 import { ref, reactive, onMounted, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { fetchProductById, editProduct } from "../libs/fetchProduct.js";
-import { fetchBrands , fetchBrandById , editBrand} from '../libs/fetchBrand.js'
+import { fetchBrandById , editBrand} from '../libs/fetchBrand.js'
 
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
