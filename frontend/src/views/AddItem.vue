@@ -69,6 +69,8 @@
                 v-model="form.brandId"
                 class="itbms-brand w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
                 required
+                :ref="el => inputRefs[0] = el"
+                @keydown.enter.prevent="handleEnter(0)"
               >
                 <option
                   v-for="(brand, index) in brands"
@@ -85,13 +87,15 @@
                 >Model <span class="text-red-500">*</span></label
               >
               <input
-                ref="model"
                 @blur="trim('model')"
                 v-model="form.model"
                 type="text"
                 placeholder="Enter model name"
                 class="itbms-model w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
-              />
+                maxlength="60"
+                :ref="el => inputRefs[1] =el"
+                @keydown.enter.prevent="handleEnter(1)"
+                />
             </div>
 
             <!-- Price + Quantity -->
@@ -102,12 +106,13 @@
                 >
                 <div class="relative">
                   <input
-                    ref="price"
                     v-model.number="form.price"
                     type="number"
                     placeholder="0"
                     class="itbms-price w-full border border-gray-300 p-3 pl-16 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
-                  />
+                    :ref="el => inputRefs[2] = el"
+                    @keydown.enter.prevent="handleEnter(2)"
+                    />
                   <div
                     class="absolute inset-y-0 left-0 flex items-center px-3 pointer-events-none bg-gray-100 rounded-l-lg border-r border-gray-300 text-gray-700 font-medium"
                   >
@@ -123,13 +128,13 @@
                 >Description <span class="text-red-500">*</span></label
               >
               <textarea
-                ref="description"
                 v-model="form.description"
                 placeholder="Enter product description"
                 class="itbms-description w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
                 rows="3"
                 @blur="trim('description')"
-                @keydown.enter.prevent="focusNext('ramGb')"
+                :ref="el => inputRefs[3] = el"
+                @keydown.enter.prevent="handleEnter(3)"
               ></textarea>
             </div>
 
@@ -145,12 +150,13 @@
                   <label class="text-gray-600 text-sm block mb-1">RAM</label>
                   <div class="relative">
                     <input
-                      ref="ramGb"
                       v-model="form.ramGb"
                       type="number"
                       placeholder="0"
                       class="itbms-ramGb w-full border border-gray-300 p-3 pl-12 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
-                    />
+                      :ref="el => inputRefs[4] = el"
+                      @keydown.enter.prevent="handleEnter(4)"
+                      />
                     <div
                       class="absolute inset-y-0 left-0 flex items-center px-3 pointer-events-none text-gray-500 font-medium"
                     >
@@ -164,13 +170,14 @@
                   >
                   <div class="relative">
                     <input
-                      ref="screenSizeInch"
                       v-model="form.screenSizeInch"
                       type="number"
                       step="0.1"
                       placeholder="0.0"
                       class="itbms-screenSizeInch w-full border border-gray-300 p-3 pl-16 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
-                    />
+                      :ref="el => inputRefs[5] = el"
+                      @keydown.enter.prevent="handleEnter(5)"
+                      />
                     <div
                       class="absolute inset-y-0 left-0 flex items-center px-2 pointer-events-none text-gray-500 font-medium"
                     >
@@ -184,12 +191,13 @@
                   >
                   <div class="relative">
                     <input
-                      ref="storageGb"
                       v-model="form.storageGb"
                       type="number"
                       placeholder="0"
                       class="itbms-storageGb w-full border border-gray-300 p-3 pl-12 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
-                    />
+                      :ref="el = inputRefs[6] = el"
+                      @keydown.enter.prevent="handleEnter(6)"
+                      />
                     <div
                       class="absolute inset-y-0 left-0 flex items-center px-3 pointer-events-none text-gray-500 font-medium"
                     >
@@ -200,24 +208,26 @@
                 <div>
                   <label class="text-gray-600 text-sm block mb-1">Color</label>
                   <input
-                    ref="color"
                     v-model="form.color"
                     type="text"
                     placeholder="Enter color"
                     class="itbms-color w-full border border-gray-300 p-3 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
-                  />
+                    :ref="el => inputRefs[7] = el"
+                    @keydown.enter.prevent="handleEnter(7)"
+                    />
                 </div>
 
                    <div>
                   <label class="text-gray-600 text-sm block mb-1">Quantity</label>
                   
                   <input
-                    ref="quantity"
                     v-model="form.quantity"
                     type="number"
                     placeholder="1"
                     class="itbms-quantity w-full	border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
-                  />
+                    :ref="el => inputRefs[8] = el"
+                    @keydown.enter.prevent="handleEnter(8)"
+                    />
                 </div>
               </div>
             </div>
@@ -264,6 +274,7 @@ import Footer from "../components/Footer.vue";
 import { postProduct } from "../libs/fetchProduct.js";
 import { fetchBrands } from "../libs/fetchBrand.js";
 import { useStateStore } from "../stores/stateStore.js";
+import input from "daisyui/components/input";
 
 // get Image from store
 const stateStore = useStateStore();
@@ -288,6 +299,13 @@ const form = ref({
   quantity: null,
   description: "",
 });
+
+const inputRefs = ref([])
+
+const handleEnter = (index) => {
+  const nextInput = inputRefs.value[index+1]
+  if (nextInput) nextInput.focus();
+}
 
 onMounted(async () => {
   try {
@@ -336,11 +354,11 @@ const handleSubmit = async () => {
     description: form.value.description.trim(),
     price: Number(form.value.price),
     quantity: form.value.quantity,
-    color: form.value.color?.trim() || undefined,
-    ramGb: form.value.ramGb ? Number(form.value.ramGb) : undefined,
+    color: form.value.color?.trim() || null,
+    ramGb: form.value.ramGb ? Number(form.value.ramGb) : null,
     screenSizeInch: form.value.screenSizeInch
       ? Number(form.value.screenSizeInch)
-      : undefined,
+      : null,
     storageGb: form.value.storageGb ? Number(form.value.storageGb) : undefined,
     brand: {
       id: form.value.brandId,

@@ -5,10 +5,9 @@
 
     <div class="bg-white border-b border-gray-200 pt-8 pb-6 px-6 flex justify-between items-center">
       <div class="flex items-center space-x-4">
-        <button href="#" class="text-blue-500 hover:text-blue-700 transition-colors">Home</button>
-        <span class="text-gray-700 font-medium">Brands</span>
+        <router-link to="/sale-items/list" class="text-blue-500 hover:text-blue-700 transition-colors">Sale Item List</router-link>
       </div>
-      <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
+      <button class="itbms-add-button bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
         <router-link to="/brands/add">
           Add Brand
         </router-link>
@@ -30,9 +29,9 @@
             <strong>Deleted:</strong> <span class="ml-2">The brand has been deleted.</span>
           </div>
         </div>
-        <div v-if="updated" class="bg-orange-50 border-l-4 border-orange-500 text-orange-700 p-4 rounded-lg shadow-md">
+        <div v-if="updated" class="bg-orange-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md">
           <div class="flex items-center">
-            <span class="text-orange-500 font-bold mr-2">✓</span>
+            <span class="text-green-500 font-bold mr-2">✓</span>
             <strong>Updated:</strong> <span class="ml-2">The brand has been updated.</span>
           </div>
         </div>
@@ -57,15 +56,15 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="brand in brands" :key="brand.id" class="border-b border-gray-200">
+              <tr v-for="brand in brands" :key="brand.id" class="itbms-row border-b border-gray-200">
                 <td class="py-3 px-6">{{ brand.id || '-' }}</td>
                 <td class="py-3 px-6">{{ brand.name || '-' }}</td>
                 <td class="py-3 pl-6">
                   <div class="inline-flex">
-                    <router-link :to="`/brands/${brand.id}/edit`"  class="bg-gray-200 text-gray-700 px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors">
+                    <router-link :to="`/brands/${brand.id}/edit`"  class="itbms-edit-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors">
                       Edit
                     </router-link>
-                    <button @click="displayConfirmModal" class="bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors">
+                    <button @click="displayConfirmModal(brand.id)" class="itbms-delete-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors">
                       Delete
                     </button>
                   </div>
@@ -86,7 +85,7 @@
         <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
           <h2 class="text-xl font-bold text-gray-800 mb-4">Confirm Deletion</h2>
           <p class="itbms-message text-gray-700 mb-6">
-            Do you want to delete this sale item?
+            Do you want to delete Nothing brand?
           </p>
           <div class="flex justify-center gap-4">
             <button
@@ -122,13 +121,9 @@ const brands = ref([])
 
 // router
 const route = useRoute()
-const addedQuery = ref(route.query.added)
-const deletedQuery = ref(route.query.deleted)
-const updatedQuery = ref(route.query.updated)
-
-const added = computed(() => addedQuery.value === true)
-const deleted = computed(() => deletedQuery.value === true)
-const updated = computed(() => updatedQuery.value === true)
+const added = computed(() => route.query.added === 'true')
+const deleted = ref(false)
+const updated = computed(() => route.query.updated === 'true')
 
 // fetch brands
 onMounted(async () => {
@@ -143,13 +138,20 @@ onMounted(async () => {
 //delete brand confirm modal
 const showConfirmModal = ref(false)
 
-const displayConfirmModal = () => {
+const displayConfirmModal = (brandId) => {
+  brandIdToDelete.value = brandId
   showConfirmModal.value = !showConfirmModal.value
 }
 
-const confirmDeleteProduct = () => {
-  deleteBrandById(route.params.id)
+const brandIdToDelete = ref(null)
+const confirmDeleteProduct = async () => {
+  try{
+  await deleteBrandById(brandIdToDelete.value)
   showConfirmModal.value = !showConfirmModal.value
+  deleted.value = true
+  } catch (error) {
+  console.log(error);
+  }
 }
 
 </script>
