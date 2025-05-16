@@ -5,11 +5,13 @@
     <div class="bg-white text-gray-800 px-8 py-12 mx-auto max-w-5xl rounded-3xl shadow-2xl mt-10 space-y-8">
       <!-- Breadcrumb -->
       <nav class="flex items-center space-x-2 text-sm text-gray-500">
-        <router-link to="/sale-items" class="font-medium text-blue-600 hover:underline">
-          Home
+        <router-link to="/sale-items/list" class="itbms-item-list font-medium text-blue-600 hover:underline">
+          Sale Item List
         </router-link>
-        <span>›</span>
-        <span class="font-semibold text-gray-900">Add New Brand</span>
+         <span> > </span>
+        <router-link to="/brands" class="itbms-manage-brand text-blue-500 hover:text-blue-700 transition-colors">Brand List</router-link>
+        <span> > </span>
+        <b>New Brand</b>
       </nav>
 
       <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">Add New Brand</h1>
@@ -26,7 +28,7 @@
             type="text"
             placeholder="Brand Name"
             required
-            class="w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-300"
+            class="itbms-name w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-300"
             :ref="el => inputRefs[0] = el"
             @keydown.enter.prevent="handleEnter(0)"
             @blur="trimField('name')"
@@ -42,7 +44,7 @@
               v-model="form.websiteUrl"
               type="url"
               placeholder="https://example.com"
-              class="w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              class="itbms-websiteUrl w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
               :ref="el => inputRefs[1] = el"
               @keydown.enter.prevent="handleEnter(1)"
               @blur="trimField('websiteUrl')"
@@ -55,7 +57,7 @@
               v-model="form.countryOfOrigin"
               type="text"
               placeholder="e.g., Japan"
-              class="w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              class="itbms-countryOfOrigin w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
               :ref="el => inputRefs[2] = el"
               @keydown.enter.prevent="handleEnter(2)"
               @blur="trimField('countryOfOrigin')"
@@ -66,7 +68,7 @@
             <select
               id="isActive"
               v-model="form.isActive"
-              class="w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              class="itbms-isActive w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
               :ref="el => inputRefs[3] = el"
               @keydown.enter.prevent="handleEnter(3)"
             >
@@ -80,16 +82,16 @@
         <div class="flex gap-4 pt-4">
           <button
             type="submit"
-            class="flex-1 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+            class="itbms-save-button flex-1 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
             :disabled="!isFormValid || submitting"
             :class="!isFormValid || submitting ? 'opacity-50 cursor-not-allowed' : ''"
           >
-            Save Brand
+            Save
           </button>
           <button
             type="button"
             @click="cancelAdd"
-            class="flex-1 py-3 rounded-xl border border-red-400 text-red-600 font-medium hover:bg-red-50 transition"
+            class="itbms-cancel-button flex-1 py-3 rounded-xl border border-red-400 text-red-600 font-medium hover:bg-red-50 transition"
           >
             Cancel
           </button>
