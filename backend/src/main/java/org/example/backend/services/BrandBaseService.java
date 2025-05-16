@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import org.example.backend.entities.BrandBase;
 import org.example.backend.entities.SaleItemBase;
+import org.example.backend.exceptions.BrandNotFoundException;
 import org.example.backend.repositories.BrandBaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -24,7 +25,7 @@ public class BrandBaseService {
     }
 
     public BrandBase getById(int id) {
-        return brandBaseRepository.findById(id).orElseThrow(() -> new RuntimeException("Brand not found with id: " + id));
+        return brandBaseRepository.findById(id).orElseThrow(() -> new BrandNotFoundException("Brand not found with id: " + id));
     }
 
     @Transactional
