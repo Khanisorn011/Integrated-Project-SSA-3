@@ -46,4 +46,13 @@ public class BrandBaseService {
         em.refresh(saved);
         return saved;
     }
+
+    public void deleteBrandById(int id) {
+        BrandBase brand = brandBaseRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Brand not found with id: " + id));
+        if (!brand.getSaleItemBases().isEmpty()) {
+            throw new IllegalStateException("Brand has sale item(s) and cannot be deleted.");
+        }
+        brandBaseRepository.delete(brand);
+    }
 }
