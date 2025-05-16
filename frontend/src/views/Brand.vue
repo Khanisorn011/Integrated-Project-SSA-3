@@ -8,8 +8,10 @@
         <button href="#" class="text-blue-500 hover:text-blue-700 transition-colors">Home</button>
         <span class="text-gray-700 font-medium">Brands</span>
       </div>
-      <button href="#" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
-        Add Brand
+      <button class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
+        <router-link to="/brands/add">
+          Add Brand
+        </router-link>
       </button>
     </div>
 
