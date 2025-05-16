@@ -65,16 +65,7 @@
           </div>
           <div>
             <label for="isActive" class="block text-sm font-medium mb-1 text-gray-700">Active Status</label>
-            <select
-              id="isActive"
-              v-model="form.isActive"
-              class="itbms-isActive w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              :ref="el => inputRefs[3] = el"
-              @keydown.enter.prevent="handleEnter(3)"
-            >
-              <option :value="true">true</option>
-              <option :value="false">false</option>
-            </select>
+            <input type="checkbox" class="toggle" v-model="form.isActive" @click="form.isActive = !form.isActive" />
           </div>
         </div>
 

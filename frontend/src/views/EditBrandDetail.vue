@@ -53,13 +53,10 @@
                 :ref="el => inputRefs[3] = el" @keydown.enter.prevent="handleEnter(3)" @blur="trimField('countryOfOrigin')"/>
             </div>
             <div>
-              <label class="block text-sm font-medium mb-1">IsActive</label>
-              <select v-model="form.isActive" 
-                class="itbms-storageGb w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                :ref="el => inputRefs[4] = el" @keydown.enter.prevent="handleEnter(4)" >
-                    <option :value = true>true</option>
-                    <option :value = false>false</option>
-                </select>
+            <div>
+            <label for="isActive" class="block text-sm font-medium mb-1 text-gray-700">Active Status</label>
+            <input type="checkbox" class="toggle" v-model="form.isActive" @click="form.isActive = !form.isActive" />
+          </div>
             </div>        
           </div>
 

@@ -64,7 +64,7 @@
                     <router-link :to="`/brands/${brand.id}/edit`"  class="itbms-edit-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors">
                       Edit
                     </router-link>
-                    <button @click="displayConfirmModal(brand.id)" class="itbms-delete-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors">
+                    <button @click="displayModal(brand.id)" class="itbms-delete-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors">
                       Delete
                     </button>
                   </div>
@@ -105,6 +105,30 @@
       </div>
     </transition>
 
+        <!-- brand have item modal -->
+        <transition name="fade">
+      <div
+        v-if="showHaveItemInBrandModal"
+        class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
+      >
+        <div class="bg-white p-6 rounded-xl shadow-lg max-w-96 text-center">
+          <h2 class="text-xl font-bold text-gray-800 mb-4">Delete {{ chooseBrand.name }} is not allow.</h2>
+          <p class="itbms-message text-gray-700 mb-6">
+            There are sale items with does not send request to BE and returns to the brand list page.
+          </p>
+          <div class="flex justify-center gap-4">
+
+            <button
+              @click="showHaveItemInBrandModal = false"
+              class="itbms-cancel-button px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
+            >
+              Cancel
+            </button>
+          </div>
+        </div>
+      </div>
+    </transition>
+
     <Footer></Footer>
   </div>
 </template>
@@ -112,7 +136,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
-import { fetchBrands , deleteBrandById } from "../libs/fetchBrand.js"
+import { fetchBrands , deleteBrandById, fetchBrandById } from "../libs/fetchBrand.js"
 import Footer from "../components/Footer.vue"
 import Header from "../components/Header.vue"
 
@@ -138,16 +162,30 @@ onMounted(async () => {
 //delete brand confirm modal
 const showConfirmModal = ref(false)
 
-const displayConfirmModal = (brandId) => {
-  brandIdToDelete.value = brandId
-  showConfirmModal.value = !showConfirmModal.value
-}
+//have item in brand modal
+const showHaveItemInBrandModal = ref(false)
 
 const brandIdToDelete = ref(null)
+const chooseBrand = ref(null)
+const displayModal = async (brandId) => {
+  brandIdToDelete.value = brandId
+  chooseBrand.value = await fetchBrandById(brandIdToDelete.value)
+  console.log(chooseBrand.value.noOfSaleItems);
+  
+  if (chooseBrand.value.noOfSaleItems > 0) {
+     showHaveItemInBrandModal.value = !showHaveItemInBrandModal.value
+  }else{
+     showConfirmModal.value = !showConfirmModal.value
+  }
+
+}
+
+
+
 const confirmDeleteProduct = async () => {
   try{
   await deleteBrandById(brandIdToDelete.value)
-  showConfirmModal.value = !showConfirmModal.value
+  brands.value = await fetchBrands()
   deleted.value = true
   } catch (error) {
   console.log(error);
