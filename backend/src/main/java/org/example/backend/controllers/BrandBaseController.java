@@ -38,19 +38,11 @@ public class BrandBaseController {
 
     @GetMapping("/v1/brands/{id}")
     public ResponseEntity<BrandDetailDTO> getBrandById(@PathVariable Integer id) {
-        try {
             BrandBase brand = brandBaseService.getById(id);
-            if (brand == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
             BrandDetailDTO responseDto = modelMapper.map(brand, BrandDetailDTO.class);
             responseDto.setName(brand.getName());
             responseDto.setNoOfSaleItems(saleItemService.getAllByBrandId(brand.getId()).size());
             return ResponseEntity.ok(responseDto);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @PostMapping("/v1/brands")
