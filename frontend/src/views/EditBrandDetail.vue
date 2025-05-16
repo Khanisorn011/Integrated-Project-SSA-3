@@ -28,7 +28,7 @@
         </div>
 
         <!-- Right: Form -->
-        <form @submit.prevent="saveProduct" class="lg:w-1/2 w-full space-y-6">
+        <form @submit.prevent="saveBrand" class="lg:w-1/2 w-full space-y-6">
 
           <!-- Model -->
           <div class="space-y-1">
@@ -144,7 +144,7 @@ const trimField = (key) => {
 const handleEnter = (index) => {
   const next = inputRefs.value[index + 1];
   if (next) next.focus();
-  else saveProduct();
+  else saveBrand();
 };
 
 onMounted(async () => {

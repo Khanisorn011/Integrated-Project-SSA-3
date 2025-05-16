@@ -147,7 +147,7 @@ const displayConfirmModal = () => {
 
 const confirmDeleteProduct = () => {
   deleteBrandById(route.params.id)
-  showConfirmModal = !showConfirmModal
+  showConfirmModal.value = !showConfirmModal.value
 }
 
 </script>
