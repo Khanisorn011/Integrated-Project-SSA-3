@@ -23,4 +23,7 @@ public class BrandBaseEditDTO {
     public void setCountryOfOrigin(String countryOfOrigin) {
         this.countryOfOrigin = countryOfOrigin != null && countryOfOrigin != ""  ? countryOfOrigin.trim() : null;
     }
+    public void setIsActive(Boolean isActive) {
+        this.isActive = (isActive != null) ? isActive : true;
+    }
 }

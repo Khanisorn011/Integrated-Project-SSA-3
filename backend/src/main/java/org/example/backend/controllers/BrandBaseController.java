@@ -3,6 +3,10 @@ package org.example.backend.controllers;
 import org.example.backend.dtos.*;
 import org.example.backend.entities.BrandBase;
 import org.example.backend.entities.SaleItemBase;
+import org.example.backend.exceptions.BrandNotFoundException;
+import org.example.backend.exceptions.DuplicateBrandException;
+import org.example.backend.exceptions.InvalidBrandException;
+import org.example.backend.exceptions.ServerException;
 import org.example.backend.services.BrandBaseService;
 import org.example.backend.services.SaleItemService;
 import org.example.backend.utils.ListMapper;
@@ -47,33 +51,26 @@ public class BrandBaseController {
 
     @PostMapping("/v1/brands")
     public ResponseEntity<BrandDetailDTO> createBrand(@RequestBody BrandBaseCreateDTO dto) {
-        try {
             if (dto.getName() == null || dto.getName().trim().isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                throw new InvalidBrandException("Brand name is required.");
             }
             if (brandBaseService.existsByNameIgnoreCase(dto.getName().trim())) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                throw new DuplicateBrandException("Brand name already exists.");
             }
             BrandBase brandBase = modelMapper.map(dto, BrandBase.class);
             BrandBase saved = brandBaseService.createBrand(brandBase);
             BrandDetailDTO responseDto = modelMapper.map(saved, BrandDetailDTO.class);
             return ResponseEntity.status(HttpStatus.CREATED).body(responseDto);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @PutMapping("/v1/brands/{id}")
     public ResponseEntity<BrandDetailDTO> updateBrand(@PathVariable Integer id, @RequestBody BrandBaseEditDTO dto) {
-        try {
             BrandBase existingItem = brandBaseService.getById(id);
             if (existingItem == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+                throw new BrandNotFoundException("brand not found");
             }
             if (dto.getName() == null || dto.getName().trim().isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+                throw new InvalidBrandException("Brand name is required.");
             }
             String trimmedName = dto.getName().trim();
             if (!existingItem.getName().equalsIgnoreCase(trimmedName) &&
@@ -85,29 +82,18 @@ public class BrandBaseController {
             BrandBase updated = brandBaseService.updateBrand(existingItem);
             BrandDetailDTO responseDto = modelMapper.map(updated, BrandDetailDTO.class);
             responseDto.setName(updated.getName());
+            responseDto.setNoOfSaleItems(saleItemService.getAllByBrandId(existingItem.getId()).size());
             return ResponseEntity.ok(responseDto);
-        } catch (Exception e) {
-            if (e.getMessage().contains("Brand not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-            e.printStackTrace();
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
 
     @DeleteMapping("/v1/brands/{id}")
     public ResponseEntity<Void> deleteBrand(@PathVariable Integer id) {
-        try {
+            BrandBase existingItem = brandBaseService.getById(id);
+            if (existingItem == null) {
+                throw new BrandNotFoundException("brand not found");
+            }
             brandBaseService.deleteBrandById(id);
             return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            if (e.getMessage().contains("not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            } else if (e.getMessage().contains("sale item")) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
-            }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
     }
     @PatchMapping("/v1/brands/{id}/softDelete")
     public ResponseEntity<Void> softDeleteBrand(@PathVariable Integer id) {

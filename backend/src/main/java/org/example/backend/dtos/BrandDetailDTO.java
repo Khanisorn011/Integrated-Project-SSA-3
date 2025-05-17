@@ -17,4 +17,10 @@ public class BrandDetailDTO {
     private Integer noOfSaleItems;
     private Instant createdOn;
     private Instant updatedOn;
+
+    public void setNoOfSaleItems(Integer noOfSaleItems) {
+        this.noOfSaleItems = (noOfSaleItems != null && noOfSaleItems > 0) ? noOfSaleItems : 0;
+    }
 }
+
+
