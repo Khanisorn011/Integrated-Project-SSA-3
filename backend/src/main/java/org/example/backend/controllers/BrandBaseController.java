@@ -72,10 +72,8 @@ public class BrandBaseController {
             if (dto.getName() == null || dto.getName().trim().isEmpty()) {
                 throw new InvalidBrandException("Brand name is required.");
             }
-            String trimmedName = dto.getName().trim();
-            if (!existingItem.getName().equalsIgnoreCase(trimmedName) &&
-                    brandBaseService.existsByNameIgnoreCase(trimmedName)) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+            if (brandBaseService.existsByNameIgnoreCase(dto.getName().trim()) && !(existingItem.getName().equalsIgnoreCase(dto.getName()))) {
+                throw new DuplicateBrandException("Brand name already exists.");
             }
             modelMapper.map(dto, existingItem);
             existingItem.setId(id);
@@ -95,21 +93,22 @@ public class BrandBaseController {
             brandBaseService.deleteBrandById(id);
             return ResponseEntity.noContent().build();
     }
-    @PatchMapping("/v1/brands/{id}/softDelete")
-    public ResponseEntity<Void> softDeleteBrand(@PathVariable Integer id) {
-        try {
-            BrandBase brand = brandBaseService.getById(id);
-            if (brand == null) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-            brand.setIsActive(false);
-            brandBaseService.updateBrand(brand);
-            return ResponseEntity.noContent().build();
-        } catch (RuntimeException e) {
-            if (e.getMessage().contains("not found")) {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-            }
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
+
+//    @PatchMapping("/v1/brands/{id}/softDelete")
+//    public ResponseEntity<Void> softDeleteBrand(@PathVariable Integer id) {
+//        try {
+//            BrandBase brand = brandBaseService.getById(id);
+//            if (brand == null) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//            }
+//            brand.setIsActive(false);
+//            brandBaseService.updateBrand(brand);
+//            return ResponseEntity.noContent().build();
+//        } catch (RuntimeException e) {
+//            if (e.getMessage().contains("not found")) {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+//            }
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+//        }
+//    }
 }
