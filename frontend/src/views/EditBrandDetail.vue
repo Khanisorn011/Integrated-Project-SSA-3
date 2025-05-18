@@ -5,15 +5,15 @@
     <!-- Product Detail -->
     <div v-if="brand"
       class="bg-white text-gray-800 px-8 py-12 mx-auto max-w-5xl rounded-3xl shadow-2xl mt-10 space-y-8">
-      <!-- Breadcrumb -->
+     <!-- Breadcrumb -->
       <nav class="flex items-center space-x-2 text-sm text-gray-500">
-        <router-link to="/sale-items" class="itbms-home-button font-medium text-blue-600 hover:underline">
-          Home
+        <router-link to="/sale-items/list" class="itbms-item-list font-medium text-blue-600 hover:underline">
+          Sale Item List
         </router-link>
-        <span>›</span>
-        <router-link :to="`/sale-items/${route.params.id}`" class="itbms-back-button font-semibold text-gray-900">
-          {{ brand.name || "brand-name" }} 
-        </router-link>
+         <span> > </span>
+        <router-link to="/brands" class="itbms-manage-brand text-blue-500 hover:text-blue-700 transition-colors">Brand List</router-link>
+        <span> > </span>
+        <b>Edit Brand</b>
       </nav>
 
       <div class="flex flex-col lg:flex-row gap-12">
@@ -88,8 +88,8 @@
     <transition name="fade">
       <div v-if="showErrorModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
         <div class="bg-white p-6 rounded-2xl shadow-lg max-w-sm text-center">
-          <h2 class="text-xl font-bold text-red-600 mb-2">Item Not Found</h2>
-          <p class="mb-4 text-gray-700">The requested sale item does not exist.</p>
+          <h2 class="text-xl font-bold text-red-600 mb-2">Brand Not Found</h2>
+          <p class="mb-4 text-gray-700">The brand does not exist.</p>
           <p class="text-sm text-gray-500 mb-6">Redirecting in {{ secondsLeft }} seconds...</p>
           <button @click="goBrandList" class="px-6 py-2 rounded-xl bg-yellow-500 text-white font-medium hover:bg-yellow-600 transition">OK</button>
         </div>
@@ -163,7 +163,7 @@ onMounted(async () => {
     
   } catch (err) {
     showErrorModal.value = true;
-    timeoutRef = setTimeout(() => router.push("/sale-items"), 3000);
+    timeoutRef = setTimeout(() => router.push("/brands"), 3000);
     countdownInterval = setInterval(() => { if (secondsLeft.value > 0) secondsLeft.value--; }, 1000);
   }
 });

@@ -45,7 +45,7 @@ async function editBrand(id, payload) {
 
 async function deleteBrandById(id) {
   try {
-    await fetch(`http://localhost:8080/itb-mshop/v1/brands/${id}`, {
+    const res = await fetch(`http://localhost:8080/itb-mshop/v1/brands/${id}`, {
       method: "DELETE",
     });
 
