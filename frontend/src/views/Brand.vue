@@ -186,6 +186,7 @@ const confirmDeleteProduct = async () => {
   try{
   await deleteBrandById(brandIdToDelete.value)
   brands.value = await fetchBrands()
+  showConfirmModal.value = !showConfirmModal.value
   deleted.value = true
   } catch (error) {
   console.log(error);
