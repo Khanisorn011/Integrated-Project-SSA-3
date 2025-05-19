@@ -79,10 +79,10 @@
           </thead>
           <tbody>
             <tr v-for="(product, index) in filteredProducts" :key="product.id || index" class="itbms-row bg-gray-800/30 border-b border-gray-700 hover:bg-gray-700/40 transition-all duration-300">
-              <td class="px-4 py-2 text-center">{{ product.id }}</td>
+              <td class="px-4 py-2 itbms-id text-center">{{ product.id }}</td>
               <td class="px-4 py-2 itbms-brand text-center">{{ product.brandName }}</td>
               <td class="px-4 py-2 itbms-model ">{{ product.model }}</td>
-              <td class="px-4 py-2 itbms-ramGb text-center">{{ product.ramGb }} GB</td>
+              <td class="px-4 py-2 itbms-ramGb text-center">{{ product.ramGb || "-" }} GB</td>
               <td class="px-4 py-2 itbms-storageGb text-center">{{ product.storageGb }} GB</td>
               <td class="px-4 py-2 itbms-color text-center">{{ product.color || '-' }}</td>
               <td class="itbms-screenSizeInch text-center">{{ product.screenSizeInch ? Number(product.screenSizeInch).toFixed(1) : '-' }}</td>

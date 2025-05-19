@@ -34,7 +34,7 @@
           <div class="space-y-1">
             <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
             <input id="name" required v-model="form.name" type="text" placeholder="Name"
-              class="itbms-model w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-300"
+              class="itbms-name w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-300"
               :ref="el => inputRefs[1] = el" @keydown.enter.prevent="handleEnter(1)" @blur="trimField('name')" />
           </div>
 

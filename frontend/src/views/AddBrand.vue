@@ -65,7 +65,7 @@
           </div>
           <div>
             <label for="isActive" class="block text-sm font-medium mb-1 text-gray-700">Active Status</label>
-            <input type="checkbox" class="toggle" v-model="form.isActive" @click="form.isActive = !form.isActive" />
+            <input type="checkbox" class="itbms-isActive toggle" v-model="form.isActive" @click="form.isActive = !form.isActive" />
           </div>
         </div>
 
