@@ -179,7 +179,6 @@ const saveBrand = async () => {
     };
     console.log(payload);
     const a = await editBrand(route.params.id, payload);
-    console.log(a);
     
     router.push({ path: `/brands`, query: { updated: 'true' } });
   } catch (err) {

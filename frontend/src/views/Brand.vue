@@ -113,7 +113,7 @@
       >
         <div class="bg-white p-6 rounded-xl shadow-lg max-w-96 text-center">
           <p class="itbms-message text-gray-700 mb-6">
-            Delete {{ chooseBrand.name }} is not allowed. There are sle items with {{ chooseBrand.name }} brand.
+            Delete {{ chooseBrand.name }} is not allowed. There are sale items with {{ chooseBrand.name }} brand.
           </p>
           <div class="flex justify-center gap-4">
 
@@ -166,17 +166,29 @@ const showHaveItemInBrandModal = ref(false)
 
 const brandIdToDelete = ref(null)
 const chooseBrand = ref(null)
+
+
 const displayModal = async (brandId) => {
   brandIdToDelete.value = brandId
-  chooseBrand.value = await fetchBrandById(brandIdToDelete.value)
-  console.log(chooseBrand.value.noOfSaleItems);
-  
-  if (chooseBrand.value.noOfSaleItems > 0) {
-     showHaveItemInBrandModal.value = !showHaveItemInBrandModal.value
-  }else{
-     showConfirmModal.value = !showConfirmModal.value
-  }
 
+  try {
+    chooseBrand.value = brands.value.find((brand) => brand.id === brandIdToDelete.value)
+
+    if (!chooseBrand.value) {
+      alert("ไม่พบ brand ที่ต้องการลบ");
+      return
+    }
+
+    console.log(chooseBrand.value.noOfSaleItems);
+
+    if (chooseBrand.value.noOfSaleItems > 0) {
+      showHaveItemInBrandModal.value = true
+    } else {
+      showConfirmModal.value = true
+    }
+  } catch (error) {
+    console.error("เกิดข้อผิดพลาดตอนดึงข้อมูลแบรนด์:", error)
+  }
 }
 
 
