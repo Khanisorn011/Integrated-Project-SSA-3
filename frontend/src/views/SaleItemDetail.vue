@@ -6,10 +6,10 @@
     <div class="px-6 max-w-4xl mx-auto">
       <div
         v-if="updated"
-        class="bg-red-50 border-l-4 border-orange-500 text-orange-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102"
+        class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102"
       >
         <div class="flex items-center">
-          <span class="text-orange-500 font-bold mr-2">✕</span>
+          <span class="text-green-500 font-bold mr-2">✓</span>
           <strong>Updated:</strong>
           <span class="itbms-message ml-2"
             >The sale item has been updated.</span
@@ -135,7 +135,7 @@
               ><span
                 class="itbms-quantity"
                 :class="{ 'text-gray-400': !product.quantity }"
-                >{{ product.quantity || "-" }}</span
+                >{{ product.quantity }}</span
               ><span class="itbms-quantity-unit"> units</span>
             </p>
           </div>
@@ -190,6 +190,7 @@
         </div>
       </div>
     </transition>
+    
     <transition name="fade">
       <div
         v-if="showConfirmModal"

@@ -4,6 +4,10 @@ import AddItem from "../views/AddItem.vue"
 import SaleItems from "../views/SaleItems.vue"
 import SaleItemDetail from "../views/SaleItemDetail.vue"
 import EditSaleItemDetail from "../views/EditSaleItemDetail.vue"
+import EditBrandDetail from "../views/EditBrandDetail.vue";
+import Brand from "../views/Brand.vue";
+import SaleItemList from "../views/SaleItemList.vue";
+import AddBrand from "../views/AddBrand.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -32,6 +36,27 @@ const router = createRouter({
       path: "/sale-items/:id/edit",
       name: "EditSaleItemDetail",
       component: EditSaleItemDetail,
+    },
+    {
+      path: "/brands/:id/edit",
+      name: "EditBrandDetail",
+      component: EditBrandDetail,
+    },
+    {
+      path: "/brands",
+      name: "Brand",
+      component: Brand,
+    }
+    ,
+    {
+      path: '/sale-items/list',
+      name: 'SaleItemList',
+      component: SaleItemList
+    },
+    {
+      path: '/brands/add',
+      name: 'AddBrand',
+      component: AddBrand
     }
   ],
 });

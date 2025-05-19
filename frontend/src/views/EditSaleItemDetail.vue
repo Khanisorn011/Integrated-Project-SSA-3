@@ -36,7 +36,6 @@
             <select id="brandName" v-model="form.brandName"
               class="itbms-brand w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               :ref="el => inputRefs[0] = el" @keydown.enter.prevent="handleEnter(0)" @blur="trimField('brandName')">
-              <option value="" disabled>เลือกแบรนด์</option>
               <option v-for="brand in brands" :key="brand.id" :value="brand.name">
                 {{ brand.name }}
               </option>
@@ -176,7 +175,7 @@ const form = reactive({
   screenSizeInch: 0,
   storageGb: 0,
   color: "",
-  quantity: 0,
+  quantity: null,
 });
 
 // original snapshot for change detection

@@ -10,4 +10,6 @@ import java.util.List;
 public interface BrandBaseRepository extends JpaRepository<BrandBase, Integer> {
     List<BrandBase> findAllByOrderByCreatedOnAscIdAsc();
     BrandBase findByName(String name);
+    boolean existsByNameIgnoreCase(String name);
 }
+

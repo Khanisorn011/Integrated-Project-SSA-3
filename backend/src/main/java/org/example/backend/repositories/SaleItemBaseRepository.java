@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface SaleItemBaseRepository extends JpaRepository<SaleItemBase, Integer> {
     List<SaleItemBase> findAllByOrderByCreatedOnAscIdAsc();
+    List<SaleItemBase> findAllByBrandId(Integer brandId);
 }
+

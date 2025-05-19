@@ -16,8 +16,14 @@
 
         <!-- Link to sale-item pages -->
         <router-link to="/sale-items"
-          class="Itbms-shopnow inline-block bg-white text-black px-10 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-gray-200 transition-all duration-300">
+          class="itbms-shopnow inline-block bg-white text-black mx-2 px-10 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-gray-200 transition-all duration-300">
           SHOP NOW
+        </router-link>
+
+             <!-- Link to sale-item pages -->
+        <router-link to="/sale-items/list"
+          class="itbms-seller inline-block bg-white text-black mx-2 px-10 py-3 rounded-full font-semibold text-lg shadow-lg hover:bg-gray-200 transition-all duration-300">
+          SELLER
         </router-link>
       </section>
 
