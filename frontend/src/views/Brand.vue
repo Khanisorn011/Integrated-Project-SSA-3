@@ -85,7 +85,7 @@
         <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
           <h2 class="text-xl font-bold text-gray-800 mb-4">Confirm Deletion</h2>
           <p class="itbms-message text-gray-700 mb-6">
-            Do you want to delete Nothing brand?
+            Do you want to delete {{chooseBrand.name}} brand?
           </p>
           <div class="flex justify-center gap-4">
             <button
@@ -112,9 +112,8 @@
         class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
       >
         <div class="bg-white p-6 rounded-xl shadow-lg max-w-96 text-center">
-          <h2 class="text-xl font-bold text-gray-800 mb-4">Delete {{ chooseBrand.name }} is not allow.</h2>
           <p class="itbms-message text-gray-700 mb-6">
-            There are sale items with does not send request to BE and returns to the brand list page.
+            Delete {{ chooseBrand.name }} is not allowed. There are sle items with {{ chooseBrand.name }} brand.
           </p>
           <div class="flex justify-center gap-4">
 

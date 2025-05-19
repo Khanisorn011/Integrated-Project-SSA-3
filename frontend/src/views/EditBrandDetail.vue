@@ -43,19 +43,19 @@
             <div>
               <label class="block text-sm font-medium mb-1">WebsiteUrl</label>
               <input id="websiteUrl" v-model="form.websiteUrl" type="text"
-                class="itbms-ramGb w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                class="itbms-websiteUrl w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 :ref="el => inputRefs[2] = el" @keydown.enter.prevent="handleEnter(2)" @blur="trimField('websiteUrl')"/>
             </div>
             <div>
               <label class="block text-sm font-medium mb-1">CountryOfOrigin</label>
               <input id="countryOfOrigin" v-model="form.countryOfOrigin" type="text" step="0.1"
-                class="itbms-screenSizeInch w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                class="itbms-countryOfOrigin w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
                 :ref="el => inputRefs[3] = el" @keydown.enter.prevent="handleEnter(3)" @blur="trimField('countryOfOrigin')"/>
             </div>
             <div>
             <div>
             <label for="isActive" class="block text-sm font-medium mb-1 text-gray-700">Active Status</label>
-            <input type="checkbox" class="toggle" v-model="form.isActive" @click="form.isActive = !form.isActive" />
+            <input type="checkbox" class="itbms-isActive toggle" v-model="form.isActive" @click="form.isActive = !form.isActive" />
           </div>
             </div>        
           </div>

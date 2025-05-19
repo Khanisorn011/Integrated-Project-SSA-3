@@ -12,6 +12,24 @@
       </p>
     </section>
 
+        <!-- Alerts -->
+    <div class="px-6 max-w-4xl mx-auto">
+      <div v-if="added"
+        class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102">
+        <div class="flex items-center">
+          <span class="text-green-500 font-bold mr-2">✓</span>
+          <strong>Success:</strong> <span class="itbms-message ml-2">The sale item has been successfully added.</span>
+        </div>
+      </div>
+      <div v-if="deleted"
+        class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102">
+        <div class="flex items-center">
+          <span class="text-red-500 font-bold mr-2">✕</span>
+          <strong>Deleted:</strong> <span class="itbms-message ml-2">The sale item has been deleted.</span>
+        </div>
+      </div>
+    </div>
+
     <!-- Controls Bar -->
     <div class="max-w-7xl mx-auto px-6 mb-8">
       <div class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg border border-gray-700/50">
@@ -125,17 +143,25 @@
 <script setup>
 import { fetchProductById, deleteProduct } from "../libs/fetchProduct.js";
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRouter , useRoute } from 'vue-router'
 import Header from '../components/Header.vue'
 import Footer from '../components/Footer.vue'
 import { fetchBrands } from '../libs/fetchBrand'
 import { fetchProducts } from '../libs/fetchProduct'
+import images from "../data/image.json";
+
 
 
 const products = ref([])
 const brands = ref([])
 const selectedBrand = ref('all')
 const router = useRouter()
+
+//router
+const route = useRoute()
+const added = computed(() => route.query.added === 'true')
+const deleted = ref(false)
+
 
 onMounted(async () => {
   try {
@@ -187,6 +213,7 @@ const confirmDeleteProduct = async () => {
     if (res.ok) {
       showConfirmModal.value = false
       products.value = products.value.filter(p => p.id !== productToDeleteId.value)
+      deleted.value = true
     } else {
       console.error("Delete failed:", res.status)
       showConfirmModal.value = false
