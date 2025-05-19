@@ -151,7 +151,7 @@ const saveBrand = async () => {
     }
   } catch (error) {
     console.error(error);
-    alert('An error occurred while adding the brand.');
+    alert('Already has this brand name.');
   } finally {
     submitting.value = false;
   }

@@ -98,8 +98,8 @@
                       Edit
                     </router-link>
                     <button
-                      @click="displayModal(brand.id)"
                       class="itbms-delete-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors"
+                      @click="displayModal(brand.id)"
                     >
                       Delete
                     </button>
@@ -113,9 +113,8 @@
     </main>
 
     <!-- Delete modal confirm-->
-
     <div
-      v-if="showConfirmModal"
+      v-if="showConfirmModal && brandNotExist === false"
       class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
     >
       <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
@@ -150,7 +149,7 @@
         </p>
         <div class="flex justify-center gap-4">
           <button
-            @click="brandNotExist = false"
+            @click="showConfirmModal = false , updateBrand()"
             class="itbms-cancel-button px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
           >
             Cancel
@@ -226,25 +225,37 @@ const showHaveItemInBrandModal = ref(false);
 
 const brandIdToDelete = ref(null);
 const chooseBrand = ref(null);
+const checkItdeleted = ref(null);
 
 const brandNotExist = ref(false);
 
+const updateBrand = async () => {
+  brandNotExist.value = false
+  brands.value = await fetchBrands()
+}
+
+
+
+
 const displayModal = async (brandId) => {
   brandIdToDelete.value = brandId;
-  console.log(brandIdToDelete.value);
 
   try {
-    chooseBrand.value = brandsDetail.value.find(
-      (brand) => brand.id === brandIdToDelete.value
-    );
-    console.log(chooseBrand.value);
+    checkItdeleted.value = await fetchBrandById(brandId);
+  } catch {
+    brandNotExist.value = true;
+    return;
+  }
 
-if (!chooseBrand.value || Object.keys(chooseBrand.value).length === 0) {
-      brandNotExist.value = true;
-      return;
+  try {
+    const brand = brandsDetail.value.find(brand => brand.id === brandId);
+    chooseBrand.value = brand;
+
+    if (!brand) {
+      console.error("ไม่พบข้อมูลแบรนด์ใน brandsDetail");
     }
 
-    if (chooseBrand.value.noOfSaleItems > 0) {
+    if (brand.noOfSaleItems > 0) {
       showHaveItemInBrandModal.value = true;
     } else {
       showConfirmModal.value = true;
@@ -253,6 +264,7 @@ if (!chooseBrand.value || Object.keys(chooseBrand.value).length === 0) {
     console.error("เกิดข้อผิดพลาดตอนดึงข้อมูลแบรนด์:", error);
   }
 };
+
 
 const confirmDeleteProduct = async () => {
   try {
