@@ -19,20 +19,20 @@
       <div class="max-w-4xl mx-auto mb-6">
         <div v-if="added" class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md">
           <div class="flex items-center">
-            <span class="text-green-500 font-bold mr-2">✓</span>
-            <strong>Success:</strong> <span class="ml-2">The brand has been successfully added.</span>
+            <span class="itbms-message text-green-500 font-bold mr-2">✓</span>
+            <strong>Success:</strong> <span class="ml-2 itbms-message">The brand has been added.</span>
           </div>
         </div>
-        <div v-if="deleted" class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-md">
+        <div v-if="deleted" class=" bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-md">
           <div class="flex items-center">
             <span class="text-red-500 font-bold mr-2">✕</span>
-            <strong>Deleted:</strong> <span class="ml-2">The brand has been deleted.</span>
+            <strong>Deleted:</strong> <span class="ml-2 itbms-message">The brand has been deleted.</span>
           </div>
         </div>
         <div v-if="updated" class="bg-orange-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md">
           <div class="flex items-center">
             <span class="text-green-500 font-bold mr-2">✓</span>
-            <strong>Updated:</strong> <span class="ml-2">The brand has been updated.</span>
+            <strong>Updated:</strong> <span class="ml-2 itbms-message">The brand has been updated.</span>
           </div>
         </div>
       </div>
@@ -57,8 +57,8 @@
             </thead>
             <tbody>
               <tr v-for="brand in brands" :key="brand.id" class="itbms-row border-b border-gray-200">
-                <td class="py-3 px-6">{{ brand.id || '-' }}</td>
-                <td class="py-3 px-6">{{ brand.name || '-' }}</td>
+                <td class="py-3 px-6 itbms-id">{{ brand.id || '-' }}</td>
+                <td class="py-3 px-6 itbms-name">{{ brand.name }}</td>
                 <td class="py-3 pl-6">
                   <div class="inline-flex">
                     <router-link :to="`/brands/${brand.id}/edit`"  class="itbms-edit-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors">
