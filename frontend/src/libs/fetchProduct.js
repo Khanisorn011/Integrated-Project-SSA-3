@@ -1,17 +1,18 @@
 async function fetchProducts() {
-  try {
-    const res = await fetch("http://localhost:8080/itb-mshop/v1/sale-items");
-    const data = await res.json();
-    return data;
-  } catch (error) {
-    throw error;
+    try {
+      const res = await fetch('http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items')
+      const data = await res.json()
+      return data
+    } catch (err) {
+      throw err 
+    }
   }
-}
+
 
 async function fetchProductById(id) {
   try {
     const res = await fetch(
-      `http://localhost:8080/itb-mshop/v1/sale-items/${id}`
+      `http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items/${id}`
     );
     const data = await res.json();
 
@@ -28,7 +29,7 @@ async function fetchProductById(id) {
 async function postProduct(payload) {
   try {
     const response = await fetch(
-      "http://localhost:8080/itb-mshop/v1/sale-items",
+      "http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items",
       {
         method: "POST",
         headers: {
@@ -46,7 +47,7 @@ async function postProduct(payload) {
 async function editProduct(id, payload) {
   try {
     const response = await fetch(
-      `http://localhost:8080/itb-mshop/v1/sale-items/${id}`,
+      `http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items/${id}`,
       {
         method: "PUT",
         headers: {
@@ -65,10 +66,11 @@ async function editProduct(id, payload) {
     throw error;
   }
 }
+
 async function deleteProduct(id) {
   try {
     const response = await fetch(
-      `http://localhost:8080/itb-mshop/v1/sale-items/${id}`,
+      `http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items/${id}`,
       {
         method: "DELETE",
       }

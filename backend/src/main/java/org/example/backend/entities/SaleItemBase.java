@@ -20,11 +20,11 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "sale_item_base")
+@Table(name = "SALE_ITEM_BASE")
 public class SaleItemBase {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "id", nullable = false,updatable = false, insertable = false)
     private Integer id;
 
     @NotNull

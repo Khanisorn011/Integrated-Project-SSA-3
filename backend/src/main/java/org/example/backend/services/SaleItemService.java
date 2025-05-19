@@ -59,3 +59,4 @@ public class SaleItemService {
         return saleItemBaseRepository.findAllByBrandId(brandId);
     }
 }
+

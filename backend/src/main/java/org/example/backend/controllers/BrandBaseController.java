@@ -21,7 +21,10 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/itb-mshop")
-@CrossOrigin(origins = "http://localhost:5173")
+@CrossOrigin(origins = {
+    "http://ip24ssa3.sit.kmutt.ac.th",
+    "http://ip24ssa3.sit.kmutt.ac.th:5173"
+})
 
 public class BrandBaseController {
     @Autowired

@@ -73,5 +73,5 @@ async function AddBrand(payload) {
     throw err;
   }
 }
-
 export { fetchBrands, fetchBrandById, editBrand, deleteBrandById, AddBrand };
+

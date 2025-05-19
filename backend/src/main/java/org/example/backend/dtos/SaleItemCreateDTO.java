@@ -39,3 +39,4 @@ public class SaleItemCreateDTO {
         this.quantity = (quantity != null && quantity >= 0) ? quantity : 1;
     }
 }
+

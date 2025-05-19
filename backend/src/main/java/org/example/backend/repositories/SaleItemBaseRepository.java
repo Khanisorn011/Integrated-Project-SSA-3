@@ -9,3 +9,4 @@ public interface SaleItemBaseRepository extends JpaRepository<SaleItemBase, Inte
     List<SaleItemBase> findAllByOrderByCreatedOnAscIdAsc();
     List<SaleItemBase> findAllByBrandId(Integer brandId);
 }
+
