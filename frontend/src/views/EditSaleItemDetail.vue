@@ -147,7 +147,7 @@ import { ref, reactive, onMounted, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { fetchProductById, editProduct } from "../libs/fetchProduct.js";
 import { fetchBrands } from '../libs/fetchBrand.js'
-
+import Modal from "../components/Modal.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";

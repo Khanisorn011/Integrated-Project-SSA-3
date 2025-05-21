@@ -23,7 +23,7 @@
     <main class="container mx-auto py-6 px-4">
       <!-- Alerts -->
       <div class="max-w-4xl mx-auto mb-6">
-        <div
+        <!-- <div
           v-if="added"
           class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md"
         >
@@ -32,8 +32,15 @@
             <strong>Success:</strong>
             <span class="ml-2 itbms-message">The brand has been added.</span>
           </div>
-        </div>
-        <div
+        </div> -->
+        <Alert
+         v-if="added"
+         :message="'The brand has been added.'"
+         :state="'created'"
+        >
+        </Alert>
+
+        <!-- <div
           v-if="deleted"
           class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-md"
         >
@@ -42,8 +49,14 @@
             <strong>Deleted:</strong>
             <span class="ml-2 itbms-message">The brand has been deleted.</span>
           </div>
-        </div>
-        <div
+        </div> -->
+        <Alert
+         v-if="deleted"
+         :message="'The brand has been deleted.'"
+         :state="'error'"
+        >
+        </Alert>
+        <!-- <div
           v-if="updated"
           class="bg-orange-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md"
         >
@@ -52,7 +65,13 @@
             <strong>Updated:</strong>
             <span class="ml-2 itbms-message">The brand has been updated.</span>
           </div>
-        </div>
+        </div> -->
+        <Alert
+         v-if="updated"
+         :message="'The brand has been updated.'"
+         :state="'updated'"
+        >
+        </Alert>
       </div>
 
       <!-- Empty State -->
@@ -112,7 +131,7 @@
     </main>
 
     <!-- Delete modal confirm-->
-    <div
+    <!-- <div
       v-if="showConfirmModal"
       class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
     >
@@ -140,9 +159,24 @@
           </button>
         </div>
       </div>
-    </div>
+    </div> -->
+    <Modal
+      v-if="showConfirmModal"
+      :title="'Confirm Deletion'"
+      :message="`Do you want to delete ${chooseBrand?.name} brand?`"
+      :confirmAction="confirmDeleteProduct"
+      :displayConfirm="true"
+      :closeAction="
+        () => {
+          brandNotExist = false;
+          updateBrand();
+          showConfirmModal = false;
+        }
+      "
+    >
+    </Modal>
 
-    <div
+    <!-- <div
       v-if="brandNotExist === true"
       class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
     >
@@ -159,8 +193,23 @@
           </button>
         </div>
       </div>
-    </div>
-    <div
+    </div> -->
+
+    <Modal
+      v-if="brandNotExist === true"
+      :title="'Brand not exist'"
+      :message="`An error has occurred, the brand does not exist.`"
+      :displayConfirm="false"
+      :closeAction="
+        () => {
+          brandNotExist = false;
+          updateBrand();
+        }
+      "
+    >
+    </Modal>
+
+    <!-- <div
       v-if="showHaveItemInBrandModal === true"
       class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
     >
@@ -178,7 +227,20 @@
           </button>
         </div>
       </div>
-    </div>
+    </div> -->
+
+    <Modal
+      v-if="showHaveItemInBrandModal === true"
+      :title="'Have sale item in brand'"
+      :message="`Delete ${chooseBrand.name} is not allowed. There are sale items with ${chooseBrand.name} brand.`"
+      :displayConfirm="false"
+      :closeAction="
+        () => {
+          showHaveItemInBrandModal = false;
+        }
+      "
+    >
+    </Modal>
 
     <Footer></Footer>
   </div>
@@ -194,7 +256,8 @@ import {
 } from "../libs/fetchBrand.js";
 import Footer from "../components/Footer.vue";
 import Header from "../components/Header.vue";
-
+import Modal from "../components/Modal.vue";
+import Alert from "../components/Alert.vue";
 // brands
 const brands = ref([]);
 // const brandsDetail = ref([]);
@@ -265,7 +328,7 @@ const confirmDeleteProduct = async () => {
     const detail = await fetchBrandById(brandIdToDelete.value);
     if (detail.error) {
       brandNotExist.value = true;
-      return
+      return;
     }
     await deleteBrandById(brandIdToDelete.value);
     deleted.value = true;
