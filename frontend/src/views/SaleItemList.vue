@@ -18,7 +18,7 @@
 
     <!-- Alerts -->
     <div class="px-6 max-w-4xl mx-auto">
-      <div
+      <!-- <div
         v-if="added"
         class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102"
       >
@@ -29,8 +29,16 @@
             >The sale item has been successfully added.</span
           >
         </div>
-      </div>
-      <div
+      </div> -->
+
+      <Alert
+        v-if="added"
+        :message="'The sale item has been successfully added.'"
+        :state="'created'"
+      >
+      </Alert>
+
+      <!-- <div
         v-if="deleted"
         class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102"
       >
@@ -41,7 +49,14 @@
             >The sale item has been deleted.</span
           >
         </div>
-      </div>
+      </div> -->
+
+      <Alert
+        v-if="deleted"
+        :message="'The sale item has been deleted.'"
+        :state="'created'"
+      >
+      </Alert>
     </div>
 
     <!-- Controls Bar -->
@@ -181,7 +196,7 @@
     <Footer />
 
     <!-- Confirm Modal -->
-    <transition name="fade">
+    <!-- <transition name="fade">
       <div
         v-if="showConfirmModal"
         class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
@@ -209,10 +224,24 @@
           </div>
         </div>
       </div>
-    </transition>
+    </transition> -->
+
+    <Modal
+      v-if="showConfirmModal"
+      :title="'Confirm Deletion'"
+      :message="'Do you want to delete this sale item?'"
+      :displayConfirm="true"
+      :confirmAction="confirmDeleteItem"
+      :closeAction="
+        () => {
+          showConfirmModal = false;
+        }
+      "
+    >
+    </Modal>
 
     <!--Notfound Modal-->
-    <div
+    <!-- <div
       v-if="itemNotExist === true"
       class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
     >
@@ -229,7 +258,21 @@
           </button>
         </div>
       </div>
-    </div>
+    </div> -->
+
+    <Modal
+      v-if="itemNotExist === true"
+      :title="'Confirm Deletion'"
+      :message="'An error has occurred, the sale item does not exist.'"
+      :displayConfirm="true"
+      :confirmAction="confirmDeleteItem"
+      :closeAction="
+        () => {
+          (itemNotExist = false), updateItems();
+        }
+      "
+    >
+    </Modal>
   </div>
 </template>
 
@@ -241,6 +284,8 @@ import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { fetchBrands } from "../libs/fetchBrand";
 import { fetchProducts } from "../libs/fetchProduct";
+import Modal from "../components/Modal.vue";
+import Alert from "../components/Alert.vue";
 import images from "../data/image.json";
 
 const products = ref([]);
@@ -302,7 +347,7 @@ const confirmDeleteItem = async () => {
   try {
     const detail = await fetchProductById(productToDeleteId.value);
     console.log(detail);
-    
+
     if (detail.error) {
       itemNotExist.value = true;
       return;

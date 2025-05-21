@@ -3,7 +3,7 @@
     <Header />
 
     <!-- Alerts -->
-    <div class="px-6 max-w-4xl mx-auto">
+    <!-- <div class="px-6 max-w-4xl mx-auto">
       <div
         v-if="updated"
         class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102"
@@ -16,7 +16,14 @@
           >
         </div>
       </div>
-    </div>
+    </div> -->
+
+    <Alert
+      v-if="updated"
+      :message="'The sale item has been updated.'"
+      :state="'updated'"
+    >
+    </Alert>
 
     <!-- Product Detail -->
     <div
@@ -190,7 +197,7 @@
         </div>
       </div>
     </transition>
-    
+
     <transition name="fade">
       <div
         v-if="showConfirmModal"
@@ -224,12 +231,13 @@
 </template>
 
 <script setup>
-import { ref, onMounted, watch , computed } from "vue";
+import { ref, onMounted, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { fetchProductById, deleteProduct } from "../libs/fetchProduct.js";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";
+import Alert from "../components/Alert.vue";
 
 // router
 const route = useRoute();
@@ -336,4 +344,3 @@ const deleteProductHandler = () => {
   opacity: 0;
 }
 </style>
-

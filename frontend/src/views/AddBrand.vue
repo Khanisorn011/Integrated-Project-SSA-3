@@ -16,8 +16,8 @@
 
       <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">Add New Brand</h1>
 
-      <form @submit.prevent="saveBrand" class="space-y-6">
-        <!-- Name -->
+      <!-- <form @submit.prevent="saveBrand" class="space-y-6">
+         
         <div class="space-y-1">
           <label for="name" class="block text-sm font-medium text-gray-700">
             Name <span class="text-red-500">*</span>
@@ -35,7 +35,6 @@
           />
         </div>
 
-        <!-- Other Fields -->
         <div class="grid grid-cols-2 gap-6">
           <div>
             <label for="websiteUrl" class="block text-sm font-medium mb-1 text-gray-700">Website URL</label>
@@ -69,7 +68,6 @@
           </div>
         </div>
 
-        <!-- Buttons -->
         <div class="flex gap-4 pt-4">
           <button
             type="submit"
@@ -87,7 +85,8 @@
             Cancel
           </button>
         </div>
-      </form>
+      </form> -->
+    <BrandForm @payload="saveBrand" />
     </div>
 
     <Footer />
@@ -100,47 +99,49 @@ import { useRouter } from 'vue-router';
 import Header from '../components/Header.vue';
 import Footer from '../components/Footer.vue';
 import { AddBrand } from '../libs/fetchBrand.js';
+import BrandForm from '../components/BrandForm.vue'
 
 const router = useRouter();
 
-const form = reactive({
-  name: '',
-  websiteUrl: '',
-  countryOfOrigin: '',
-  isActive: true,
-});
+//MOVE TO BRANDFORM COMPONENT
+// const form = reactive({
+//   name: '',
+//   websiteUrl: '',
+//   countryOfOrigin: '',
+//   isActive: true,
+// });
 
-const inputRefs = ref([]);
-const submitting = ref(false);
+// const inputRefs = ref([]);
+// const submitting = ref(false);
 
-const trimField = (key) => {
-  if (typeof form[key] === 'string') form[key] = form[key].trim();
-};
+// const trimField = (key) => {
+//   if (typeof form[key] === 'string') form[key] = form[key].trim();
+// };
 
-const handleEnter = (index) => {
-  const nextInput = inputRefs.value[index + 1];
-  if (nextInput) nextInput.focus();
-  else saveBrand();
-};
+// const handleEnter = (index) => {
+//   const nextInput = inputRefs.value[index + 1];
+//   if (nextInput) nextInput.focus();
+//   else saveBrand();
+// };
 
-const isFormValid = computed(() => {
-  return (
-    form.name.trim() !== '' 
-  );
-});
+// const isFormValid = computed(() => {
+//   return (
+//     form.name.trim() !== '' 
+//   );
+// });
 
 
-const saveBrand = async () => {
-  if (submitting.value || !isFormValid.value) return;
+const saveBrand = async (payload) => {
+  // if (submitting.value || !isFormValid.value) return;
 
-  submitting.value = true;
+  // submitting.value = true;
 
-  const payload = {
-    name: form.name.trim(),
-    websiteUrl: form.websiteUrl.trim() || undefined,
-    countryOfOrigin: form.countryOfOrigin.trim() || undefined,
-    isActive: form.isActive,
-  };
+  // const payload = {
+  //   name: form.name.trim(),
+  //   websiteUrl: form.websiteUrl.trim() || undefined,
+  //   countryOfOrigin: form.countryOfOrigin.trim() || undefined,
+  //   isActive: form.isActive,
+  // };
 
   try {
     const res = await AddBrand(payload);
@@ -153,13 +154,13 @@ const saveBrand = async () => {
     console.error(error);
     alert('Already has this brand name.');
   } finally {
-    submitting.value = false;
+    // submitting.value = false;
   }
 };
 
-const cancelAdd = () => {
-  router.back();
-};
+// const cancelAdd = () => {
+//   router.back();
+// };
 </script>
 
 <style scoped>
