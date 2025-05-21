@@ -8,7 +8,7 @@ describe(`TC-FE-PBI8-DELETE-BRAND-4\n
 
     beforeEach(()=> {
         cy.visit(resource) ;
-        cy.wait(100) ;
+        cy.wait(1000) ;
     }) ;
 
     it(`Open the sale item list page at ${resource}`, () => {

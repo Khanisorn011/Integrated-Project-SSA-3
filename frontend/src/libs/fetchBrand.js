@@ -13,14 +13,14 @@ async function fetchBrandById(id) {
     const res = await fetch(`http://localhost:8080/itb-mshop/v1/brands/${id}`);
     const data = await res.json();
     console.log(data);
-    
+
     if (!res.ok) {
-      throw new Error(`fail to find brand by Id`);
+      throw new Error(`An error has occurred, the brand does not exist.`);
     }
 
     return data;
   } catch (err) {
-    throw err;
+    return { err };
   }
 }
 
@@ -75,4 +75,3 @@ async function AddBrand(payload) {
   }
 }
 export { fetchBrands, fetchBrandById, editBrand, deleteBrandById, AddBrand };
-
