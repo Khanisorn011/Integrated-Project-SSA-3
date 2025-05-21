@@ -109,7 +109,7 @@
               class="itbms-save-button flex-1 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
               :disabled="!isFormModified"
               :class="!isFormModified ? 'disabled:opacity-50' : ''"
-              >         
+              >
               Save
             </button>
             <button type="button" @click="cancelEdit"
@@ -235,7 +235,7 @@ const saveProduct = async () => {
     console.log(payload);
     const a = await editProduct(route.params.id, payload);
     console.log(a);
-    
+
     router.push({ path: `/sale-items/${route.params.id}`, query: { updated: 'true' } });
   } catch (err) {
     if (err.response?.status === 404) showErrorModal.value = true;

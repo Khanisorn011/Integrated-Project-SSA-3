@@ -77,7 +77,7 @@ async function deleteProduct(id) {
     );
     return response;
   } catch (error) {
-    throw error;
+    return {error}
   }
 }
 

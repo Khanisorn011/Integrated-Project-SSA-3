@@ -85,25 +85,24 @@
               <tr
                 v-for="brand in brands"
                 :key="brand.id"
-                class="itbms-row border-b border-gray-200"
+                class="itbms-row border-b border-gray-200 relative"
               >
                 <td class="py-3 px-6 itbms-id">{{ brand.id || "-" }}</td>
                 <td class="py-3 px-6 itbms-name">{{ brand.name }}</td>
-                <td class="py-3 pl-6">
-                  <div class="inline-flex">
-                    <router-link
-                      :to="`/brands/${brand.id}/edit`"
-                      class="itbms-edit-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors"
-                    >
-                      Edit
-                    </router-link>
-                    <button
-                      class="itbms-delete-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors"
-                      @click="displayModal(brand.id)"
-                    >
-                      Delete
-                    </button>
-                  </div>
+                <td class="py-3 pl-6 inline-flex">
+                  <div class="inline-flex"></div>
+                  <router-link
+                    :to="`/brands/${brand.id}/edit`"
+                    class="itbms-edit-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors"
+                  >
+                    Edit
+                  </router-link>
+                  <button
+                    class="itbms-delete-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors relative"
+                    @click="displayModal(brand.id)"
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             </tbody>
@@ -114,13 +113,13 @@
 
     <!-- Delete modal confirm-->
     <div
-      v-if="showConfirmModal && brandNotExist === false"
+      v-if="showConfirmModal"
       class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
     >
       <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
         <h2 class="text-xl font-bold text-gray-800 mb-4">Confirm Deletion</h2>
         <p class="itbms-message text-gray-700 mb-6">
-          Do you want to delete {{ chooseBrand.name }} brand?
+          Do you want to delete {{ chooseBrand?.name }} brand?
         </p>
         <div class="flex justify-center gap-4">
           <button
@@ -130,7 +129,11 @@
             Confirm
           </button>
           <button
-            @click="showConfirmModal = false"
+            @click="
+              brandNotExist = false;
+              updateBrand();
+              showConfirmModal = false;
+            "
             class="itbms-cancel-button px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
           >
             Cancel
@@ -149,7 +152,7 @@
         </p>
         <div class="flex justify-center gap-4">
           <button
-            @click="showConfirmModal = false , updateBrand()"
+            @click="(brandNotExist = false), updateBrand()"
             class="itbms-cancel-button px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
           >
             Cancel
@@ -194,7 +197,7 @@ import Header from "../components/Header.vue";
 
 // brands
 const brands = ref([]);
-const brandsDetail = ref([]);
+// const brandsDetail = ref([]);
 
 // router
 const route = useRoute();
@@ -208,10 +211,10 @@ onMounted(async () => {
     brands.value = await fetchBrands();
     console.log(brands.value);
 
-    for (let index = 0; index < brands.value.length; index++) {
-      const brand = await fetchBrandById(brands.value[index].id);
-      brandsDetail.value.push(brand);
-    }
+    // for (let index = 0; index < brands.value.length; index++) {
+    //   const brand = await fetchBrandById(brands.value[index].id);
+    //   brandsDetail.value.push(brand);
+    // }
   } catch (err) {
     console.error("Failed to load brands:", err);
   }
@@ -230,29 +233,21 @@ const checkItdeleted = ref(null);
 const brandNotExist = ref(false);
 
 const updateBrand = async () => {
-  brandNotExist.value = false
-  brands.value = await fetchBrands()
-}
-
-
-
+  brandNotExist.value = false;
+  brands.value = await fetchBrands();
+};
 
 const displayModal = async (brandId) => {
-  brandIdToDelete.value = brandId;
-
   try {
-    checkItdeleted.value = await fetchBrandById(brandId);
-  } catch {
-    brandNotExist.value = true;
-    return;
-  }
-
-  try {
-    const brand = brandsDetail.value.find(brand => brand.id === brandId);
+    brandIdToDelete.value = brandId;
+    const brand = brands.value.find((brand) => brand.id == brandId);
+    const detail = await fetchBrandById(brandId);
+    brand.noOfSaleItems = detail.noOfSaleItems;
     chooseBrand.value = brand;
 
     if (!brand) {
       console.error("ไม่พบข้อมูลแบรนด์ใน brandsDetail");
+      return;
     }
 
     if (brand.noOfSaleItems > 0) {
@@ -261,19 +256,25 @@ const displayModal = async (brandId) => {
       showConfirmModal.value = true;
     }
   } catch (error) {
-    console.error("เกิดข้อผิดพลาดตอนดึงข้อมูลแบรนด์:", error);
+    console.log(error.message);
   }
 };
 
-
 const confirmDeleteProduct = async () => {
   try {
+    const detail = await fetchBrandById(brandIdToDelete.value);
+    if (detail.error) {
+      brandNotExist.value = true;
+      return
+    }
     await deleteBrandById(brandIdToDelete.value);
-    brands.value = await fetchBrands();
-    showConfirmModal.value = !showConfirmModal.value;
     deleted.value = true;
+    brands.value = await fetchBrands();
+    showConfirmModal.value = false;
   } catch (error) {
-    console.log(error);
+    showConfirmModal.value = false;
+    brandNotExist.value = true;
+    deleted.value = false;
   }
 };
 </script>

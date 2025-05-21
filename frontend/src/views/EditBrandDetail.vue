@@ -57,7 +57,7 @@
             <label for="isActive" class="block text-sm font-medium mb-1 text-gray-700">Active Status</label>
             <input type="checkbox" class="itbms-isActive toggle" v-model="form.isActive" @click="form.isActive = !form.isActive" />
           </div>
-            </div>        
+            </div>
           </div>
 
           <!-- Buttons -->
@@ -67,7 +67,7 @@
               :disabled="!isFormModified"
               :class="!isFormModified ? 'disabled:opacity-50' : ''"
               @click="saveBrand"
-              >         
+              >
               Save
             </button>
             <button type="button" @click="cancelEdit"
@@ -149,7 +149,7 @@ onMounted(async () => {
     brand.value = data;
     console.log(brand.value);
     console.log(brand.value.name);
-    
+
     Object.assign(form, {
          name: brand.value.name,
          websiteUrl : brand.value.websiteUrl,
@@ -157,10 +157,10 @@ onMounted(async () => {
          isActive : brand.value.isActive
     });
     console.log(form);
-    
+
     originData.value = { ...form };
     console.log("test");
-    
+
   } catch (err) {
     showErrorModal.value = true;
     timeoutRef = setTimeout(() => router.push("/brands"), 3000);
@@ -179,7 +179,7 @@ const saveBrand = async () => {
     };
     console.log(payload);
     const a = await editBrand(route.params.id, payload);
-    
+
     router.push({ path: `/brands`, query: { updated: 'true' } });
   } catch (err) {
     if (err.response?.status === 404) showErrorModal.value = true;
