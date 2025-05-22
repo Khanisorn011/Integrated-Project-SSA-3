@@ -18,8 +18,8 @@
         Add New Product
       </h1>
 
-      <form @submit.prevent="handleSubmit" class="flex flex-col md:flex-row gap-12">
-        <!-- Product Image Preview -->
+      <!-- <form @submit.prevent="handleSubmit" class="flex flex-col md:flex-row gap-12">
+      
         <div class="md:w-1/2 w-full">
           <div
             class="bg-gray-50 rounded-xl border border-gray-200 shadow-sm p-3 transition-all duration-300 hover:shadow-md">
@@ -31,7 +31,6 @@
           </div>
         </div>
 
-        <!-- Product Info Form -->
         <div class="md:w-1/2 w-full text-base itbms-row">
           <div class="bg-blue-50 rounded-xl p-6 mb-6">
             <h2 class="text-xl font-semibold text-gray-800 mb-1">
@@ -64,7 +63,6 @@
                 maxlength="60" :ref="el => inputRefs[1] = el" @keydown.enter.prevent="handleEnter(1)" />
             </div>
 
-            <!-- Price + Quantity -->
             <div class="grid grid-cols-2 gap-5">
               <div>
                 <label class="text-gray-700 font-medium block mb-1">Price <span class="text-red-500">*</span></label>
@@ -80,7 +78,6 @@
               </div>
             </div>
 
-            <!-- Description -->
             <div>
               <label class="text-gray-700 font-medium block mb-1">Description <span
                   class="text-red-500">*</span></label>
@@ -90,7 +87,6 @@
                 @keydown.enter.prevent="handleEnter(3)"></textarea>
             </div>
 
-            <!-- Optional Fields Section -->
             <div class="mt-8">
               <h3 class="text-gray-700 font-medium pb-2 border-b border-gray-200 mb-4">
                 Additional Information (Optional)
@@ -149,7 +145,6 @@
               </div>
             </div>
 
-            <!-- Form Actions -->
             <div class="flex items-center gap-4 pt-6 mt-8 border-t border-gray-200">
               <button ref="submitButton" type="submit" :disabled="!isFormValid || submitting" :class="[
                 'itbms-save-button px-6 py-3 rounded-lg font-medium transition-all duration-200',
@@ -166,7 +161,8 @@
             </div>
           </div>
         </div>
-      </form>
+      </form> -->
+      <SaleItemForm @payload="saveProduct" :form="form"></SaleItemForm>
     </div>
 
     <Footer />
@@ -181,11 +177,11 @@ import Footer from "../components/Footer.vue";
 import { postProduct } from "../libs/fetchProduct.js";
 import { fetchBrands } from "../libs/fetchBrand.js";
 import { useStateStore } from "../stores/stateStore.js";
-import input from "daisyui/components/input";
+import SaleItemForm from "../components/SaleItemForm.vue"
 
 // get Image from store
-const stateStore = useStateStore();
-const { getImageUrl } = stateStore;
+// const stateStore = useStateStore();
+// const { getImageUrl } = stateStore;
 
 // router
 const router = useRouter();
@@ -195,7 +191,6 @@ const brands = ref([]);
 
 // form data
 const form = ref({
-  brandId: 1,
   brandName: "",
   model: "",
   price: null,
@@ -207,74 +202,78 @@ const form = ref({
   description: "",
 });
 
-const inputRefs = ref([])
+// const inputRefs = ref([])
 
-const handleEnter = (index) => {
-  const nextInput = inputRefs.value[index + 1]
-  if (nextInput) nextInput.focus();
-}
+// const handleEnter = (index) => {
+//   const nextInput = inputRefs.value[index + 1]
+//   if (nextInput) nextInput.focus();
+// }
 
 onMounted(async () => {
   try {
     brands.value = await fetchBrands();
     brands.value.sort((a, b) => a.name.localeCompare(b.name));
-    if (brands.value.length > 0) {
-      form.brandId = brands.value[0].id;
-    }
   } catch (err) {
     console.error("Failed to load brands", err);
   }
 });
 
+// watch(
+//   () => form.value.brandId,
+//   (selectedId) => {
+//     const selected = brands.value.find((b) => b.id === selectedId);
+//     form.value.brandName = selected ? selected.name : "";
+//   }
+// );
+
 //trim value in form
-const trim = (field) => {
-  if (form.value[field]) {
-    form.value[field] = form.value[field].trim();
-  }
-};
+// const trim = (field) => {
+//   if (form.value[field]) {
+//     form.value[field] = form.value[field].trim();
+//   }
+// };
 
 // set brand value to form
-watch(
-  () => form.value.brandId,
-  (selectedId) => {
-    const selected = brands.value.find((b) => b.id === selectedId);
-    form.value.brandName = selected ? selected.name : "";
-  }
-);
+
 
 // check if require input have data => can submit
-const isFormValid = computed(
-  () =>
-    form.value.brandId &&
-    form.value.model.trim() &&
-    form.value.price !== null &&
-    form.value.description.trim() !== ""
-);
+// const isFormValid = computed(
+//   () =>
+//     form.value.brandId &&
+//     form.value.model.trim() &&
+//     form.value.price !== null &&
+//     form.value.description.trim() !== ""
+// );
 
 const submitting = ref(false);
-const handleSubmit = async () => {
-  if (submitting.value) return;
-  submitting.value = true;
+const saveProduct = async (payload) => {
+  // if (submitting.value) return;
+  // submitting.value = true;
 
-  const payload = {
-    model: form.value.model.trim(),
-    description: form.value.description.trim(),
-    price: Number(form.value.price),
-    quantity: form.value.quantity,
-    color: form.value.color?.trim() || null,
-    ramGb: form.value.ramGb ? Number(form.value.ramGb) : null,
-    screenSizeInch: form.value.screenSizeInch
-      ? Number(form.value.screenSizeInch)
-      : null,
-    storageGb: form.value.storageGb ? Number(form.value.storageGb) : undefined,
-    brand: {
-      id: form.value.brandId,
-      name: form.value.brandName,
-    },
-  };
+  // const payload = {
+  //   model: form.value.model.trim(),
+  //   description: form.value.description.trim(),
+  //   price: Number(form.value.price),
+  //   quantity: form.value.quantity,
+  //   color: form.value.color?.trim() || null,
+  //   ramGb: form.value.ramGb ? Number(form.value.ramGb) : null,
+  //   screenSizeInch: form.value.screenSizeInch
+  //     ? Number(form.value.screenSizeInch)
+  //     : null,
+  //   storageGb: form.value.storageGb ? Number(form.value.storageGb) : undefined,
+  //   brand: {
+  //     id: form.value.brandId,
+  //     name: form.value.brandName,
+  //   }
+  // };
 
   try {
-    const res = await postProduct(payload);
+    const matched = brands.value.find(b => b.name === payload.brand.name);
+        const sendPayload =  {
+      ...payload,
+      brand : { id: matched?.id, name: matched?.name }
+    }
+    const res = await postProduct(sendPayload);
     if (res && res.ok) {
       router.push({ path: "/sale-items/list", query: { added: "true" } });
     } else {

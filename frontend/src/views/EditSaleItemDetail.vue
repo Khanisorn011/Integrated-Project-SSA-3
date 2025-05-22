@@ -18,31 +18,20 @@
       </nav>
 
       <div class="flex flex-col lg:flex-row gap-12">
-        <!-- Left: Images -->
-        <div class="lg:w-1/2 w-full">
-          <img :src="getImageUrl" :alt="form.brandName + ' ' + form.model"
-            class="w-full rounded-2xl shadow-lg object-cover aspect-square" />
-          <div class="flex gap-4 mt-4 overflow-x-auto">
-            <img v-for="(img, i) in product.images" :key="i" :src="img" :alt="`Image ${i + 1}`"
-              class="w-20 h-20 object-cover rounded-lg border border-gray-200 hover:ring-2 hover:ring-blue-300 transition cursor-pointer" />
-          </div>
-        </div>
 
-        <!-- Right: Form -->
-        <form @submit.prevent="saveProduct" class="lg:w-1/2 w-full space-y-6">
-          <!-- Brand Name -->
+        <!-- <form @submit.prevent="saveProduct" class="lg:w-1/2 w-full space-y-6">
+
           <div class="space-y-1">
             <label for="brandName" class="block text-sm font-medium text-gray-700">Brand Name</label>
             <select id="brandName" v-model="form.brandName"
               class="itbms-brand w-full px-4 py-2 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-300 bg-white"
               :ref="el => inputRefs[0] = el" @keydown.enter.prevent="handleEnter(0)" @blur="trimField('brandName')">
-              <option v-for="brand in brands" :key="brand.id" :value="brand.name">
+              <option v-for="brand in DW" :key="brand.id" :value="brand.name">
                 {{ brand.name }}
               </option>
             </select>
           </div>
 
-          <!-- Model -->
           <div class="space-y-1">
             <label for="model" class="block text-sm font-medium text-gray-700">Model</label>
             <input id="model" v-model="form.model" type="text" placeholder="Model"
@@ -50,7 +39,6 @@
               :ref="el => inputRefs[1] = el" @keydown.enter.prevent="handleEnter(1)" @blur="trimField('model')" />
           </div>
 
-          <!-- Price -->
           <div class="space-y-1">
             <label for="price" class="block text-sm font-medium text-gray-700">Price (Baht)</label>
             <div class="flex items-center space-x-2">
@@ -61,7 +49,6 @@
             </div>
           </div>
 
-          <!-- Description -->
           <div class="space-y-1">
             <label for="description" class="block text-sm font-medium text-gray-700">Description</label>
             <textarea id="description" v-model="form.description" placeholder="Description" rows="4"
@@ -69,7 +56,6 @@
               :ref="el => inputRefs[3] = el" @keydown.enter.prevent="handleEnter(3)" @blur="trimField('description')"></textarea>
           </div>
 
-          <!-- Other Fields -->
           <div class="grid grid-cols-2 gap-6">
             <div>
               <label class="block text-sm font-medium mb-1">RAM (GB)</label>
@@ -103,7 +89,6 @@
             </div>
           </div>
 
-          <!-- Buttons -->
           <div class="flex gap-4 pt-4">
             <button type="submit"
               class="itbms-save-button flex-1 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
@@ -117,7 +102,13 @@
               Cancel
             </button>
           </div>
-        </form>
+        </form> -->
+        <SaleItemForm
+          @payload="saveProduct"
+          :formtype="'edit'"
+          :form=form
+        >
+      </SaleItemForm>
       </div>
     </div>
 
@@ -151,15 +142,18 @@ import Modal from "../components/Modal.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";
+import SaleItemForm from '../components/SaleItemForm.vue'
 
 const route = useRoute();
 const router = useRouter();
-const stateStore = useStateStore();
-const { getImageUrl } = stateStore;
+// const stateStore = useStateStore();
+// const { getImageUrl } = stateStore;
+
 
 const product = ref(null);
 const brands = ref([]);
-const inputRefs = ref([]);
+// const inputRefs = ref([]);
+
 const showErrorModal = ref(false);
 const secondsLeft = ref(3);
 let timeoutRef = null;
@@ -179,23 +173,25 @@ const form = reactive({
 });
 
 // original snapshot for change detection
-const originData = ref({});
-const isFormModified = computed(() => JSON.stringify(form) !== JSON.stringify(originData.value));
+// const originData = ref({});
+// const isFormModified = computed(() => JSON.stringify(form) !== JSON.stringify(originData.value));
 
-const trimField = (key) => {
-  if (typeof form[key] === 'string') form[key] = form[key].trim();
-};
+// const trimField = (key) => {
+//   if (typeof form[key] === 'string') form[key] = form[key].trim();
+// };
 
-const handleEnter = (index) => {
-  const next = inputRefs.value[index + 1];
-  if (next) next.focus();
-  else saveProduct();
-};
+// const handleEnter = (index) => {
+//   const next = inputRefs.value[index + 1];
+//   if (next) next.focus();
+//   else saveProduct();
+// };
 
 onMounted(async () => {
   try {
     const data = await fetchProductById(route.params.id);
     product.value = data;
+    console.log(product.value);
+    
     Object.assign(form, {
       brandName: data.brandName,
       model: data.model,
@@ -207,8 +203,7 @@ onMounted(async () => {
       color: data.color,
       quantity: data.quantity,
     });
-    originData.value = { ...form };
-
+    // originData.value = { ...form };
     const bList = await fetchBrands();
     brands.value = bList.sort((a, b) => a.name.localeCompare(b.name));
   } catch (err) {
@@ -218,22 +213,31 @@ onMounted(async () => {
   }
 });
 
-const saveProduct = async () => {
+const saveProduct = async (payload) => {
   try {
-    const matched = brands.value.find(b => b.name === form.brandName);
-    const payload = {
-      brand: { id: matched.id, name: matched.name },
-      model: form.model,
-      description: form.description,
-      price: Number(form.price),
-      ramGb: form.ramGb,
-      screenSizeInch: Number(form.screenSizeInch),
-      storageGb: form.storageGb,
-      color: form.color,
-      quantity: form.quantity,
-    };
     console.log(payload);
-    const a = await editProduct(route.params.id, payload);
+    
+    const matched = brands.value.find(b => b.name === payload.brand.name);
+    console.log(matched);
+    
+    // const payload = {
+    //   brand: { id: matched.id, name: matched.name },
+    //   model: form.model,
+    //   description: form.description,
+    //   price: Number(form.price),
+    //   ramGb: form.ramGb,
+    //   screenSizeInch: Number(form.screenSizeInch),
+    //   storageGb: form.storageGb,
+    //   color: form.color,
+    //   quantity: form.quantity,
+    // };
+    
+    const sendPayload =  {
+      ...payload,
+      brand : { id: matched?.id, name: matched?.name }
+    }
+    console.log(sendPayload);
+    const a = await editProduct(route.params.id, sendPayload);
     console.log(a);
 
     router.push({ path: `/sale-items/${route.params.id}`, query: { updated: 'true' } });
@@ -245,9 +249,9 @@ const saveProduct = async () => {
 
 
 // cancel edit
-const cancelEdit = () => {
-  router.go(-1);
-};
+// const cancelEdit = () => {
+//   router.go(-1);
+// };
 
 // Watch for error modal to start countdown
 watch(showErrorModal, (v) => {
