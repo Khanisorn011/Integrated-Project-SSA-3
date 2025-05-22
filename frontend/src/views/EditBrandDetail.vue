@@ -27,10 +27,9 @@
           </div>
         </div>
 
-        <!-- Right: Form -->
-        <form @submit.prevent="saveBrand" class="lg:w-1/2 w-full space-y-6">
 
-          <!-- Model -->
+        <!-- <form @submit.prevent="saveBrand" class="lg:w-1/2 w-full space-y-6">
+
           <div class="space-y-1">
             <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
             <input id="name" required v-model="form.name" type="text" placeholder="Name"
@@ -38,7 +37,6 @@
               :ref="el => inputRefs[1] = el" @keydown.enter.prevent="handleEnter(1)" @blur="trimField('name')" />
           </div>
 
-          <!-- Other Fields -->
           <div class="grid grid-cols-2 gap-6">
             <div>
               <label class="block text-sm font-medium mb-1">WebsiteUrl</label>
@@ -60,7 +58,6 @@
             </div>
           </div>
 
-          <!-- Buttons -->
           <div class="flex gap-4 pt-4">
             <button type="submit"
               class="itbms-save-button flex-1 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
@@ -75,7 +72,14 @@
               Cancel
             </button>
           </div>
-        </form>
+        </form> -->
+      <BrandForm 
+        formtype="edit"
+        :form="form"
+        :originData="originData"
+        @payload="saveBrand"
+        >
+      </BrandForm>
       </div>
     </div>
 
@@ -104,7 +108,7 @@
 import { ref, reactive, onMounted, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import { fetchBrandById , editBrand} from '../libs/fetchBrand.js'
-
+import BrandForm from "../components/BrandForm.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";
@@ -115,7 +119,8 @@ const stateStore = useStateStore();
 const { getImageUrl } = stateStore;
 
 const brand = ref(null);
-const inputRefs = ref([]);
+// const inputRefs = ref([]);
+
 const showErrorModal = ref(false);
 const secondsLeft = ref(3);
 let timeoutRef = null;
@@ -131,21 +136,23 @@ const form = reactive({
 
 // original snapshot for change detection
 const originData = ref({});
-const isFormModified = computed(() => JSON.stringify(form) !== JSON.stringify(originData.value));
 
-const trimField = (key) => {
-  if (typeof form[key] === 'string') form[key] = form[key].trim();
-};
+// const trimField = (key) => {
+//   if (typeof form[key] === 'string') form[key] = form[key].trim();
+// };
 
-const handleEnter = (index) => {
-  const next = inputRefs.value[index + 1];
-  if (next) next.focus();
-  else saveBrand();
-};
+// const handleEnter = (index) => {
+//   const next = inputRefs.value[index + 1];
+//   if (next) next.focus();
+//   else saveBrand();
+// };
 
 onMounted(async () => {
   try {
     const data = await fetchBrandById(route.params.id);
+    if(data.err){
+      throw new Error("invalid Id")
+    }
     brand.value = data;
     console.log(brand.value);
     console.log(brand.value.name);
@@ -168,17 +175,11 @@ onMounted(async () => {
   }
 });
 
-const saveBrand = async () => {
+const saveBrand = async (payload) => {
   try {
-    const payload = {
-     id : route.params.id,
-     name: form.name,
-     websiteUrl : form.websiteUrl,
-     countryOfOrigin: form.countryOfOrigin,
-     isActive : form.isActive
-    };
-    console.log(payload);
-    const a = await editBrand(route.params.id, payload);
+    const editPayload = {id:route.params.id , ...payload}
+    console.log(editPayload);
+    const a = await editBrand(route.params.id, editPayload);
 
     router.push({ path: `/brands`, query: { updated: 'true' } });
   } catch (err) {
@@ -189,9 +190,9 @@ const saveBrand = async () => {
 
 
 // cancel edit
-const cancelEdit = () => {
-  router.go(-1);
-};
+// const cancelEdit = () => {
+//   router.go(-1);
+// };
 
 // Watch for error modal to start countdown
 watch(showErrorModal, (v) => {

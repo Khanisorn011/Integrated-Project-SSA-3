@@ -75,14 +75,17 @@
         <button
           type="submit"
           class="itbms-save-button flex-1 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
-          :disabled="!isFormValid || submitting"
-          :class="!isFormValid || submitting ? 'opacity-50 cursor-not-allowed' : ''"
+          :disabled="(!isFormValid || submitting) || !isFormModified"
+          :class="[
+            !isFormValid || submitting ? 'opacity-50 cursor-not-allowed' : '',
+            !isFormModified ? 'disabled:opacity-50' : '',
+          ]"
         >
           Save
         </button>
         <button
           type="button"
-          @click="cancelAdd"
+          @click="cancel"
           class="itbms-cancel-button flex-1 py-3 rounded-xl border border-red-400 text-red-600 font-medium hover:bg-red-50 transition"
         >
           Cancel
@@ -93,16 +96,19 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
-const emits = defineEmits(['payload']);
+const emits = defineEmits(["payload"]);
+const router = useRouter();
 
 const inputRefs = ref([]);
 const submitting = ref(false);
 
 const props = defineProps({
-  saveBrand: Function,
+  formtype: String,
+  form: Object,
+  originData: Object,
 });
 
 const form = reactive({
@@ -128,7 +134,7 @@ const handleEnter = (index) => {
   if (nextInput) nextInput.focus();
 };
 
-const cancelAdd = () => {
+const cancel = () => {
   router.back();
 };
 
@@ -137,7 +143,20 @@ const isFormValid = computed(() => {
 });
 
 const handleSubmit = () => {
-  props.saveBrand?.();
-  emits('payload', payload.value);
+  console.log(payload.value);
+  emits("payload", payload.value);
 };
+
+//for edit brand
+const originData = ref({});
+const isFormModified = computed(
+  () => JSON.stringify(form) !== JSON.stringify(originData.value)
+);
+
+if (props.formtype === "edit") {
+  onMounted(() => {
+    Object.assign(form, props?.form);
+    originData.value = JSON.parse(JSON.stringify(props.form)); // Save original data for comparison
+  });
+}
 </script>
