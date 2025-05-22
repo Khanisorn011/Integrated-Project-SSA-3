@@ -86,7 +86,9 @@
           </button>
         </div>
       </form> -->
-    <BrandForm @payload="saveBrand" />
+    <BrandForm
+    formtype="add"
+    @payload="saveBrand" />
     </div>
 
     <Footer />
