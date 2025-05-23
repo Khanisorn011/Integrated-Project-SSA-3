@@ -40,7 +40,7 @@ public class SaleItemController {
     }
 
     @GetMapping("/v2/sale-items")
-    public ResponseEntity<PageResponseDTO> getSalesItemsWithPage(@RequestBody PageRequestDTO request) {
+    public ResponseEntity<PageResponseDTO> getSalesItemsWithPage(@ModelAttribute PageRequestDTO request) {
         Page<SaleItemBase> saleItems = saleItemService.getByBrandNameIn(
                 request.getFilterBrands(), request.getPage(), request.getSize()
                 , request.getSortField() , request.getSortDirection()
