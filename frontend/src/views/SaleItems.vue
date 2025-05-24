@@ -13,32 +13,12 @@
     </section>
 
     <!-- Alerts -->
-    <!-- <div class="px-6 max-w-4xl mx-auto">
-      <div v-if="added"
-        class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102">
-        <div class="flex items-center">
-          <span class="text-green-500 font-bold mr-2">✓</span>
-          <strong>Success:</strong> <span class="itbms-message ml-2">The sale item has been successfully added.</span>
-        </div>
-      </div>
-      <div v-if="deleted"
-        class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102">
-        <div class="flex items-center">
-          <span class="text-red-500 font-bold mr-2">✕</span>
-          <strong>Deleted:</strong> <span class="itbms-message ml-2">The sale item has been deleted.</span>
-        </div>
-      </div>
-    </div> -->
 
-    <Alert v-if="added" :message="'The sale item has been successfully added.'" :state="'created'">
-    </Alert>
+    <Alert v-if="added" :message="'The sale item has been successfully added.'" :state="'created'" />
+    <Alert v-if="deleted" :message="'The sale item has been deleted.'" :state="'created'" />
 
-    <Alert v-if="deleted" :message="'The sale item has been deleted.'" :state="'created'">
-    </Alert>
+    <!-- Controls Bar -->
 
-
-
-    <!-- ✅ Controls Bar -->
     <div class="max-w-7xl mx-auto px-6 mb-8">
       <div
         class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg border border-gray-700/50">
@@ -68,12 +48,12 @@
                     </template>
                   </div>
                   <button @click="toggleDropdown">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2 flex-shrink-0 text-gray-700"
-                    viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 019 17v-3.586L3.293 6.707A1 1 0 013 6V4z" />
-                  </svg>
-                </button>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2 flex-shrink-0 text-gray-700"
+                      viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 019 17v-3.586L3.293 6.707A1 1 0 013 6V4z" />
+                    </svg>
+                  </button>
                 </div>
 
                 <!-- Dropdown Content -->
@@ -88,8 +68,6 @@
                 </div>
               </div>
 
-
-
               <!-- Clear Button -->
               <button @click="clearAllBrands"
                 class="self-start sm:self-auto px-4 py-2 text-sm font-medium bg-gray-100 text-gray-700 border border-gray-300 rounded-xl hover:bg-red-500 hover:text-white transition-all">
@@ -98,7 +76,6 @@
             </div>
           </div>
         </div>
-
         <div class="flex gap-2 w-full sm:w-auto">
           <button disabled
             class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg bg-blue-600 text-white shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
@@ -116,71 +93,111 @@
       </div>
     </div>
 
+
+
+
     <!-- Empty State -->
-    <div v-if="filteredProducts.length === 0" class="text-center text-gray-300 py-24">
-      <i class="itbms-row **:text-2xl font-semibold mb-2">no sale item</i>
+    <div v-if="saleItems.length === 0" class="text-center text-gray-300 py-24">
+      <i class="itbms-row text-2xl font-semibold mb-2">no sale item</i>
     </div>
 
     <!-- Gallery -->
-    <main
-      class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
-      <div v-for="(product, index) in filteredProducts" :key="product.id"
-        class="bg-white/5 p-4 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300 flex flex-col">
-        <ProductCard class="itbms-row" :product="product" :imageUrl="imageArray[index % imageArray.length]?.url">
-        </ProductCard>
+    <main class="max-w-6xl mx-auto px-6 pb-16 flex flex-col gap-4">
+      <!-- Sort Buttons-->
+      <div class="flex justify-end gap-2 mt-4">
+        <button @click="sortOrder = 'default'"
+          :class="['p-2 rounded-md', sortOrder === 'default' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <button @click="sortOrder = 'asc'"
+          :class="['p-2 rounded-md', sortOrder === 'asc' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
+          <img src="@/assets/icons/view-sort-ascending-svgrepo-com.svg" alt="Sort Ascending" class="w-5 h-5" />
+        </button>
+        <button @click="sortOrder = 'desc'"
+          :class="['p-2 rounded-md', sortOrder === 'desc' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
+          <img src="@/assets/icons/view-sort-descending-svgrepo-com.svg" alt="Sort Descending" class="w-5 h-5" />
+        </button>
       </div>
     </main>
 
-    <Footer />
+      <!-- Product Grid -->
+      <main
+        class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
+        <div v-for="(product, index) in saleItems" :key="product.id"
+          class="bg-white/5 p-4 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300 flex flex-col">
+          <ProductCard class="itbms-row" :product="product" :imageUrl="imageArray[index % imageArray.length]?.url" />
+        </div>
+      </main>
+
+
+      <div class="max-w-7xl mx-auto px-6 pb-12">
+        <PageBar :selectedBrands="selectedBrands" @updateSaleItems="updateSaleItems" />
+      </div>
+
+      <Footer />
   </div>
 </template>
 
-<script setup>
-import ProductCard from "../components/ProductCard.vue";
-import { ref, computed, onMounted, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import Header from "../components/Header.vue";
-import Footer from "../components/Footer.vue";
-import { fetchBrands } from "../libs/fetchBrand";
-import { fetchProducts } from "../libs/fetchProduct";
-import images from "../data/image.json";
+  <script setup>
+
+import { computed, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import Alert from "../components/Alert.vue";
+  import Footer from "../components/Footer.vue";
+  import Header from "../components/Header.vue";
+  import ProductCard from "../components/ProductCard.vue";
+  import images from "../data/image.json";
+  import { fetchBrands } from "../libs/fetchBrand";
 
-const products = ref([]);
-const brands = ref([]);
-const selectedBrands = ref([]);
-const imageArray = images;
-const router = useRouter();
-const showDropdown = ref(false);
+import PageBar from "../components/PageBar.vue";
 
-onMounted(async () => {
-  try {
-    products.value = await fetchProducts();
-    brands.value = await fetchBrands();
-    const savedBrands = sessionStorage.getItem("selectedBrands")
-    if (savedBrands) {
-      selectedBrands.value = JSON.parse(savedBrands)
+
+  const brands = ref([]);
+  const selectedBrands = ref([]);
+  const imageArray = images;
+  const router = useRouter();
+  const showDropdown = ref(false);
+
+  const saleItems = ref([]);
+
+
+  onMounted(async () => {
+    try {
+      brands.value = await fetchBrands();
+
+      const savedBrands = sessionStorage.getItem("selectedBrands");
+      if (savedBrands) {
+        selectedBrands.value = JSON.parse(savedBrands);
+
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
-  }
-});
+  });
 
-watch(selectedBrands, (newVal) => {
-  sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
+  watch(selectedBrands, (newVal) => {
+    sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
+
 })
-
 
 //router
 const route = useRoute()
 const added = computed(() => route.query.added === 'true')
 const deleted = computed(() => route.query.deleted === 'true')
 
-const sortedProducts = computed(() =>
-  [...products.value].sort(
-    (a, b) => new Date(a.createdTime) - new Date(b.createdTime)
-  )
-);
+const sortedProducts = computed(() => {
+  let baseProducts = [...products.value];
+
+  if (sortOrder.value === 'asc') {
+    return baseProducts.sort((a, b) => a.brandName.localeCompare(b.brandName));
+  } else if (sortOrder.value === 'desc') {
+    return baseProducts.sort((a, b) => b.brandName.localeCompare(a.brandName));
+  } else {
+    return baseProducts.sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime));
+  }
+});
 
 const filteredProducts = computed(() => {
   if (selectedBrands.value.length === 0) return sortedProducts.value
@@ -191,21 +208,20 @@ const sortedBrands = computed(() => {
   return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
 })
 
-function toggleBrand(brandName) {
-  if (selectedBrands.value.includes(brandName)) {
-    selectedBrands.value = selectedBrands.value.filter(b => b !== brandName)
-  } else {
-    selectedBrands.value.push(brandName)
+
+
+  function toggleDropdown() {
+    showDropdown.value = !showDropdown.value;
   }
-}
 
-function clearAllBrands() {
-  selectedBrands.value = []
-}
+  function clearAllBrands() {
+    selectedBrands.value = [];
+  }
 
-function toggleDropdown() {
-  showDropdown.value = !showDropdown.value;
-}
+  function updateSaleItems(newItems) {
+    saleItems.value = newItems;
+  }
+
 
 function removeBrand(brand) {
   selectedBrands.value = selectedBrands.value.filter((b) => b !== brand);
@@ -214,4 +230,10 @@ function removeBrand(brand) {
 function goToList() {
   router.push("/sale-items/list");
 }
+const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default")
+
+watch(sortOrder, (newVal) => {
+  sessionStorage.setItem("sortOrder", newVal)
+})
+
 </script>
