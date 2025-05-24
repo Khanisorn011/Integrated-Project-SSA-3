@@ -14,6 +14,6 @@ public interface SaleItemBaseRepository extends JpaRepository<SaleItemBase, Inte
     List<SaleItemBase> findAllByBrandId(Integer brandId);
 
     @Query("SELECT s FROM SaleItemBase s JOIN s.brand b WHERE b.name IN :brandNames")
-    Page<SaleItemBase> findByBrandNameIn(@Param("brandNames") List<String> brandNames, Pageable pageable);
+    Page<SaleItemBase> findByBrandNameIn(List<String> brandNames, Pageable pageable);
 }
 

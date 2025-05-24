@@ -64,18 +64,19 @@ public class SaleItemService {
     }
 
     public Page<SaleItemBase> getByBrandNameIn(List<String> filterBrands, Integer pageNum, Integer pageSize, String sortField, String sortDirection) {
+
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
         Sort sort = Sort.by(direction, sortField);
         PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
 
         if (filterBrands == null || filterBrands.isEmpty()) {
-            // ดึงทั้งหมด ถ้า filterBrands ว่าง
             return saleItemBaseRepository.findAll(pageRequest);
         } else {
-            // กรองเฉพาะตาม brandName
             return saleItemBaseRepository.findByBrandNameIn(filterBrands, pageRequest);
         }
     }
+
+
 
 }
 
