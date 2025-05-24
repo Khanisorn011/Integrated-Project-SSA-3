@@ -58,7 +58,7 @@
 
                 <!-- Dropdown Content -->
                 <div v-if="showDropdown"
-                  class="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                  class="absolute z-50 mt-2 w-full bg-white text-black border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
                   <label v-for="(brand, index) in sortedBrands" :key="index"
                     class="flex items-center px-4 py-2 text-sm cursor-pointer hover:bg-gray-100">
                     <input type="checkbox" :value="brand.name" v-model="selectedBrands"
@@ -104,7 +104,7 @@
     <!-- Gallery -->
     <main class="max-w-6xl mx-auto px-6 pb-16 flex flex-col gap-4">
       <!-- Sort Buttons-->
-      <div v-if="saleItems.length !== 0"  class="flex justify-end gap-2 mt-4">
+      <div v-if="saleItems.length !== 0" class="flex justify-end gap-2 mt-4">
         <button @click="sortOrder = 'default'"
           :class="['p-2 rounded-md', sortOrder === 'default' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -133,13 +133,8 @@
 
 
     <div class="max-w-7xl mx-auto px-6 pb-12">
-      <PageBar
-  :currentPage="currentPage"
-  :totalPages="pageResponse.totalPages"
-  :pageSize="pageSize"
-  @update:currentPage="(val) => currentPage = val"
-  @update:pageSize="(val) => pageSize = val"
-/>
+      <PageBar :currentPage="currentPage" :totalPages="pageResponse.totalPages" :pageSize="pageSize"
+        @update:currentPage="(val) => currentPage = val" @update:pageSize="(val) => pageSize = val" />
     </div>
 
     <Footer />
@@ -188,7 +183,7 @@ const payload = ref({
   page: currentPage.value,
   size: pageSize.value,
   sortField: "brand.name",
-  sortDirection: sortDirection.value, 
+  sortDirection: sortDirection.value,
 });
 
 onMounted(async () => {
@@ -215,7 +210,7 @@ watch([selectedBrands, currentPage, pageSize, sortOrder], async () => {
     filterBrands: selectedBrands.value,
     page: currentPage.value,
     size: pageSize.value,
-    sortDirection: sortDirection.value, 
+    sortDirection: sortDirection.value,
   };
   const response = await fetchSaleItemByCondition(payload.value);
   saleItems.value = response.content || [];
@@ -240,11 +235,6 @@ function toggleDropdown() {
 function clearAllBrands() {
   selectedBrands.value = [];
 }
-
-function updateSaleItems(newItems) {
-  saleItems.value = newItems;
-}
-
 
 function removeBrand(brand) {
   selectedBrands.value = selectedBrands.value.filter((b) => b !== brand);
