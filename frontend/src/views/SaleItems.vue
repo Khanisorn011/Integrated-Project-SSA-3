@@ -68,17 +68,17 @@
                     </template>
                   </div>
                   <button @click="toggleDropdown">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2 flex-shrink-0 text-gray-700"
-                    viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                      d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 019 17v-3.586L3.293 6.707A1 1 0 013 6V4z" />
-                  </svg>
-                </button>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 ml-2 flex-shrink-0 text-gray-700"
+                      viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707L15 13.414V19a1 1 0 01-1.447.894l-4-2A1 1 0 019 17v-3.586L3.293 6.707A1 1 0 013 6V4z" />
+                    </svg>
+                  </button>
                 </div>
 
                 <!-- Dropdown Content -->
                 <div v-if="showDropdown"
-                  class="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+  class="absolute z-50 mt-2 w-full bg-white border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto text-gray-800">
                   <label v-for="(brand, index) in sortedBrands" :key="index"
                     class="flex items-center px-4 py-2 text-sm cursor-pointer hover:bg-gray-100">
                     <input type="checkbox" :value="brand.name" v-model="selectedBrands"
@@ -98,7 +98,6 @@
             </div>
           </div>
         </div>
-
         <div class="flex gap-2 w-full sm:w-auto">
           <button disabled
             class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg bg-blue-600 text-white shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
@@ -116,18 +115,39 @@
       </div>
     </div>
 
+
+
     <!-- Empty State -->
     <div v-if="filteredProducts.length === 0" class="text-center text-gray-300 py-24">
       <i class="itbms-row **:text-2xl font-semibold mb-2">no sale item</i>
     </div>
 
     <!-- Gallery -->
-    <main
-      class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
-      <div v-for="(product, index) in filteredProducts" :key="product.id"
-        class="bg-white/5 p-4 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300 flex flex-col">
-        <ProductCard class="itbms-row" :product="product" :imageUrl="imageArray[index % imageArray.length]?.url">
-        </ProductCard>
+    <main class="max-w-6xl mx-auto px-6 pb-16 flex flex-col gap-4">
+      <!-- Sort Buttons-->
+      <div class="flex justify-end gap-2 mt-4">
+        <button @click="sortOrder = 'default'"
+          :class="['p-2 rounded-md', sortOrder === 'default' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <button @click="sortOrder = 'asc'"
+          :class="['p-2 rounded-md', sortOrder === 'asc' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
+          <img src="@/assets/icons/view-sort-ascending-svgrepo-com.svg" alt="Sort Ascending" class="w-5 h-5" />
+        </button>
+        <button @click="sortOrder = 'desc'"
+          :class="['p-2 rounded-md', sortOrder === 'desc' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
+          <img src="@/assets/icons/view-sort-descending-svgrepo-com.svg" alt="Sort Descending" class="w-5 h-5" />
+        </button>
+      </div>
+
+      <!-- Product Grid -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
+        <div v-for="(product, index) in filteredProducts" :key="product.id"
+          class="bg-white/5 p-4 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300 flex flex-col">
+          <ProductCard class="itbms-row" :product="product" :imageUrl="imageArray[index % imageArray.length]?.url" />
+        </div>
       </div>
     </main>
 
@@ -136,15 +156,15 @@
 </template>
 
 <script setup>
-import ProductCard from "../components/ProductCard.vue";
-import { ref, computed, onMounted, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import Header from "../components/Header.vue";
+import { computed, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import Alert from "../components/Alert.vue";
 import Footer from "../components/Footer.vue";
+import Header from "../components/Header.vue";
+import ProductCard from "../components/ProductCard.vue";
+import images from "../data/image.json";
 import { fetchBrands } from "../libs/fetchBrand";
 import { fetchProducts } from "../libs/fetchProduct";
-import images from "../data/image.json";
-import Alert from "../components/Alert.vue";
 
 const products = ref([]);
 const brands = ref([]);
@@ -170,17 +190,22 @@ watch(selectedBrands, (newVal) => {
   sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
 })
 
-
 //router
 const route = useRoute()
 const added = computed(() => route.query.added === 'true')
 const deleted = computed(() => route.query.deleted === 'true')
 
-const sortedProducts = computed(() =>
-  [...products.value].sort(
-    (a, b) => new Date(a.createdTime) - new Date(b.createdTime)
-  )
-);
+const sortedProducts = computed(() => {
+  let baseProducts = [...products.value];
+
+  if (sortOrder.value === 'asc') {
+    return baseProducts.sort((a, b) => a.brandName.localeCompare(b.brandName));
+  } else if (sortOrder.value === 'desc') {
+    return baseProducts.sort((a, b) => b.brandName.localeCompare(a.brandName));
+  } else {
+    return baseProducts.sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime));
+  }
+});
 
 const filteredProducts = computed(() => {
   if (selectedBrands.value.length === 0) return sortedProducts.value
@@ -190,14 +215,6 @@ const filteredProducts = computed(() => {
 const sortedBrands = computed(() => {
   return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
 })
-
-function toggleBrand(brandName) {
-  if (selectedBrands.value.includes(brandName)) {
-    selectedBrands.value = selectedBrands.value.filter(b => b !== brandName)
-  } else {
-    selectedBrands.value.push(brandName)
-  }
-}
 
 function clearAllBrands() {
   selectedBrands.value = []
@@ -214,4 +231,9 @@ function removeBrand(brand) {
 function goToList() {
   router.push("/sale-items/list");
 }
+const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default")
+
+watch(sortOrder, (newVal) => {
+  sessionStorage.setItem("sortOrder", newVal)
+})
 </script>
