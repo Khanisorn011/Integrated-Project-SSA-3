@@ -104,7 +104,7 @@
     <!-- Gallery -->
     <main class="max-w-6xl mx-auto px-6 pb-16 flex flex-col gap-4">
       <!-- Sort Buttons-->
-      <div class="flex justify-end gap-2 mt-4">
+      <div v-if="saleItems.length !== 0"  class="flex justify-end gap-2 mt-4">
         <button @click="sortOrder = 'default'"
           :class="['p-2 rounded-md', sortOrder === 'default' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -122,87 +122,110 @@
       </div>
     </main>
 
-      <!-- Product Grid -->
-      <main
-        class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
-        <div v-for="(product, index) in saleItems" :key="product.id"
-          class="bg-white/5 p-4 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300 flex flex-col">
-          <ProductCard class="itbms-row" :product="product" :imageUrl="imageArray[index % imageArray.length]?.url" />
-        </div>
-      </main>
-
-
-      <div class="max-w-7xl mx-auto px-6 pb-12">
-        <PageBar :selectedBrands="selectedBrands" @updateSaleItems="updateSaleItems" />
+    <!-- Product Grid -->
+    <main
+      class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
+      <div v-for="(product, index) in saleItems" :key="product.id"
+        class="bg-white/5 p-4 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300 flex flex-col">
+        <ProductCard class="itbms-row" :product="product" :imageUrl="imageArray[index % imageArray.length]?.url" />
       </div>
+    </main>
 
-      <Footer />
+
+    <div class="max-w-7xl mx-auto px-6 pb-12">
+      <PageBar
+  :currentPage="currentPage"
+  :totalPages="pageResponse.totalPages"
+  :pageSize="pageSize"
+  @update:currentPage="(val) => currentPage = val"
+  @update:pageSize="(val) => pageSize = val"
+/>
+    </div>
+
+    <Footer />
   </div>
 </template>
 
-  <script setup>
+<script setup>
 
 import { computed, onMounted, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Alert from "../components/Alert.vue";
-  import Footer from "../components/Footer.vue";
-  import Header from "../components/Header.vue";
-  import ProductCard from "../components/ProductCard.vue";
-  import images from "../data/image.json";
-  import { fetchBrands } from "../libs/fetchBrand";
-
+import Footer from "../components/Footer.vue";
+import Header from "../components/Header.vue";
+import ProductCard from "../components/ProductCard.vue";
+import images from "../data/image.json";
+import { fetchBrands } from "../libs/fetchBrand";
+import { fetchSaleItemByCondition } from "../libs/fetchSaleItem";
 import PageBar from "../components/PageBar.vue";
 
 
-  const brands = ref([]);
-  const selectedBrands = ref([]);
-  const imageArray = images;
-  const router = useRouter();
-  const showDropdown = ref(false);
+const brands = ref([]);
+const selectedBrands = ref([]);
+const imageArray = images;
+const router = useRouter();
+const showDropdown = ref(false);
 
-  const saleItems = ref([]);
+const saleItems = ref([]);
+const currentPage = ref(0);
+const pageSize = ref(10);
+const pageResponse = ref({ totalPages: 0 });
 
+const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default");
 
-  onMounted(async () => {
-    try {
-      brands.value = await fetchBrands();
+watch(sortOrder, (newVal) => {
+  sessionStorage.setItem("sortOrder", newVal);
+});
 
-      const savedBrands = sessionStorage.getItem("selectedBrands");
-      if (savedBrands) {
-        selectedBrands.value = JSON.parse(savedBrands);
+const sortDirection = computed(() => {
+  if (sortOrder.value === "asc") return "ASC";
+  if (sortOrder.value === "desc") return "DESC";
+  return null;
+});
 
-      }
-    } catch (error) {
-      console.log(error);
+const payload = ref({
+  filterBrands: [],
+  page: currentPage.value,
+  size: pageSize.value,
+  sortField: "brand.name",
+  sortDirection: sortDirection.value, 
+});
+
+onMounted(async () => {
+  try {
+    brands.value = await fetchBrands();
+
+    const savedBrands = sessionStorage.getItem("selectedBrands");
+    if (savedBrands) {
+      selectedBrands.value = JSON.parse(savedBrands);
+
     }
-  });
+  } catch (error) {
+    console.log(error);
+  }
+});
 
-  watch(selectedBrands, (newVal) => {
-    sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
-
+watch(selectedBrands, (newVal) => {
+  sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
 })
+
+watch([selectedBrands, currentPage, pageSize, sortOrder], async () => {
+  payload.value = {
+    ...payload.value,
+    filterBrands: selectedBrands.value,
+    page: currentPage.value,
+    size: pageSize.value,
+    sortDirection: sortDirection.value, 
+  };
+  const response = await fetchSaleItemByCondition(payload.value);
+  saleItems.value = response.content || [];
+  pageResponse.value.totalPages = response.totalPages || 0;
+}, { immediate: true });
 
 //router
 const route = useRoute()
 const added = computed(() => route.query.added === 'true')
 const deleted = computed(() => route.query.deleted === 'true')
-
-const sortedProducts = computed(() => {
-  let baseProducts = [...products.value];
-
-  if (sortOrder.value === 'asc') {
-    return baseProducts.sort((a, b) => a.brandName.localeCompare(b.brandName));
-  } else if (sortOrder.value === 'desc') {
-    return baseProducts.sort((a, b) => b.brandName.localeCompare(a.brandName));
-  } else {
-    return baseProducts.sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime));
-  }
-});
-
-const filteredProducts = computed(() => {
-  if (selectedBrands.value.length === 0) return sortedProducts.value
-  return sortedProducts.value.filter((p) => selectedBrands.value.includes(p.brandName))
-});
 
 const sortedBrands = computed(() => {
   return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
@@ -210,17 +233,17 @@ const sortedBrands = computed(() => {
 
 
 
-  function toggleDropdown() {
-    showDropdown.value = !showDropdown.value;
-  }
+function toggleDropdown() {
+  showDropdown.value = !showDropdown.value;
+}
 
-  function clearAllBrands() {
-    selectedBrands.value = [];
-  }
+function clearAllBrands() {
+  selectedBrands.value = [];
+}
 
-  function updateSaleItems(newItems) {
-    saleItems.value = newItems;
-  }
+function updateSaleItems(newItems) {
+  saleItems.value = newItems;
+}
 
 
 function removeBrand(brand) {
@@ -230,10 +253,15 @@ function removeBrand(brand) {
 function goToList() {
   router.push("/sale-items/list");
 }
-const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default")
 
-watch(sortOrder, (newVal) => {
-  sessionStorage.setItem("sortOrder", newVal)
-})
+async function fetchSaleItems() {
+  const response = await fetchSaleItemByCondition(payload.value);
+  pageResponse.value = {
+    totalPages: response.totalPages || 0,
+  };
+  saleItems.value = response.content || [];
+}
+
+watch([selectedBrands, currentPage, pageSize], fetchSaleItems, { immediate: true });
 
 </script>
