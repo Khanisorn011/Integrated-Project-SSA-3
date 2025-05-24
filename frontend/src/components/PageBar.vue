@@ -1,25 +1,25 @@
 <template>
   <div>
-    <div class="join" v-if="pageResponse.totalPages > 1">
-      <button @click="goToFirstPage" :disabled="currentPage === 0" class="join-item btn">First</button>
-      <button @click="goToPreviousPage" :disabled="currentPage === 0" class="join-item btn">Prev</button>
+    <div class="join" v-if="totalPages > 1">
+      <button @click="$emit('update:currentPage', 0)" :disabled="currentPage === 0" class="join-item btn">First</button>
+      <button @click="$emit('update:currentPage', currentPage - 1)" :disabled="currentPage === 0" class="join-item btn">Prev</button>
 
       <button
         v-for="page in visiblePages"
         :key="page"
-        @click="goToPage(page)"
+        @click="$emit('update:currentPage', page)"
         :class="['join-item btn', currentPage === page && 'btn-primary']"
       >
         {{ page + 1 }}
       </button>
 
-      <button @click="goToNextPage" :disabled="currentPage === pageResponse.totalPages - 1" class="join-item btn">Next</button>
-      <button @click="goToLastPage" :disabled="currentPage === pageResponse.totalPages - 1" class="join-item btn">Last</button>
+      <button @click="$emit('update:currentPage', currentPage + 1)" :disabled="currentPage === totalPages - 1" class="join-item btn">Next</button>
+      <button @click="$emit('update:currentPage', totalPages - 1)" :disabled="currentPage === totalPages - 1" class="join-item btn">Last</button>
     </div>
 
     <div class="mt-4">
       <label>Show</label>
-      <select v-model="payload.size" class="ml-2 text-black">
+      <select :value="pageSize" @change="$emit('update:pageSize', Number($event.target.value))" class="ml-2 text-black">
         <option :value="5">5</option>
         <option :value="10">10</option>
         <option :value="20">20</option>
@@ -29,97 +29,25 @@
 </template>
 
 <script setup>
-import { ref, watch, computed, onMounted } from 'vue';
-import { fetchSaleItemByCondition } from '../libs/fetchSaleItem.js';
-import { usePageStore } from '../stores/pageStore.js';
-import { defineProps, defineEmits } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps({
-  selectedBrands: Array,
-  saleItems: Array,
+  currentPage: Number,
+  pageSize: Number,
+  totalPages: Number,
 });
-const emit = defineEmits(['updateSaleItems']);
 
-const currentPage = ref(0);
-const pageResponse = ref({});
-const pageStore = usePageStore();
 const maxVisible = 10;
-const visibleStart = ref(0);
-const saleItems = ref([]);
-
-
-const payload = ref({
-  filterBrands: [],
-  page: 0,
-  size: 100,
-  sortField: 'createdOn',
-  sortDirection: null,
-});
+const visibleStart = computed(() =>
+  Math.max(0, Math.min(props.currentPage - Math.floor(maxVisible / 2), props.totalPages - maxVisible))
+);
 
 const visiblePages = computed(() => {
-  const total = pageResponse.value.totalPages || 0;
-  return Array.from(
-    { length: Math.min(maxVisible, total - visibleStart.value) },
-    (_, i) => visibleStart.value + i
-  );
-});
-
-watch(() => props.selectedBrands, async (newBrands) => {
-  payload.value.filterBrands = newBrands;
-  payload.value.page = 0;
-  currentPage.value = 0;
-  pageResponse.value = await fetchSaleItemByCondition(payload.value);
-  saleItems.value = pageResponse.value.content;
-  emit('updateSaleItems', saleItems.value);
-});
-
-watch(() => payload.value.size, async () => {
-  payload.value.page = 0;
-  currentPage.value = 0;
-  pageResponse.value = await fetchSaleItemByCondition(payload.value);
-  saleItems.value = pageResponse.value.content;
-  emit('updateSaleItems', saleItems.value);
-});
-
-watch(currentPage, async () => {
-  payload.value.page = currentPage.value;
-  pageResponse.value = await fetchSaleItemByCondition(payload.value);
-  saleItems.value = pageResponse.value.content;
-  emit('updateSaleItems', saleItems.value);
-});
-
-onMounted(async () => {
-  pageResponse.value = await fetchSaleItemByCondition(payload.value);
-  saleItems.value = pageResponse.value.content;
-  emit('updateSaleItems',saleItems.value)
-});
-
-function goToPage(page) {
-  currentPage.value = page;
-}
-function goToNextPage() {
-  if (currentPage.value < pageResponse.value.totalPages - 1) {
-    currentPage.value++;
-    if (currentPage.value > visibleStart.value + maxVisible - 1) {
-      visibleStart.value++;
-    }
+  const pages = [];
+  const end = Math.min(visibleStart.value + maxVisible, props.totalPages);
+  for (let i = visibleStart.value; i < end; i++) {
+    pages.push(i);
   }
-}
-function goToPreviousPage() {
-  if (currentPage.value > 0) {
-    currentPage.value--;
-    if (currentPage.value < visibleStart.value) {
-      visibleStart.value--;
-    }
-  }
-}
-function goToFirstPage() {
-  currentPage.value = 0;
-  visibleStart.value = 0;
-}
-function goToLastPage() {
-  currentPage.value = pageResponse.value.totalPages - 1;
-  visibleStart.value = Math.max(0, pageResponse.value.totalPages - maxVisible);
-}
+  return pages;
+});
 </script>
-
