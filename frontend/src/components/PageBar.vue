@@ -51,7 +51,7 @@ const saleItems = ref([]);
 const payload = ref({
   filterBrands: [],
   page: 0,
-  size: 5,
+  size: 100,
   sortField: 'createdOn',
   sortDirection: null,
 });

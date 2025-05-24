@@ -56,7 +56,7 @@ describe(`TC-FE-PBI2-VIEW-SALE-ITEM-DETAIL-1\n
         cy.get('@row').contains('.itbms-brand','Xiaomi')
         cy.get('@row').contains('.itbms-model','13T Pro')
         cy.get('@row').contains('.itbms-price','23,100')
-	cy.get('@row').contains('.itbms-description','Xiaomi 13T Pro 12/512GB สี Meadow Green ชิป Dimensity 9200+ เร็วแรง กล้อง Leica ถ่ายรูปสวยขั้นเทพ มีที่ชาร์จ 120W ครบกล่อง จัดส่งฟรีทั่วประเทศ')
+        cy.get('@row').contains('.itbms-description','Xiaomi 13T Pro 12/512GB สี Meadow Green ชิป Dimensity 9200+ เร็วแรง กล้อง Leica ถ่ายรูปสวยขั้นเทพ มีที่ชาร์จ 120W ครบกล่อง จัดส่งฟรีทั่วประเทศ')
         cy.get('@row').contains('.itbms-ramGb','12')
         cy.get('@row').contains('.itbms-ramGb-unit','GB')
         cy.get('@row').contains('.itbms-screenSizeInch','-')

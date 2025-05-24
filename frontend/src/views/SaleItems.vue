@@ -13,10 +13,12 @@
     </section>
 
     <!-- Alerts -->
+
     <Alert v-if="added" :message="'The sale item has been successfully added.'" :state="'created'" />
     <Alert v-if="deleted" :message="'The sale item has been deleted.'" :state="'created'" />
 
     <!-- Controls Bar -->
+
     <div class="max-w-7xl mx-auto px-6 mb-8">
       <div
         class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg border border-gray-700/50">
@@ -74,7 +76,6 @@
             </div>
           </div>
         </div>
-
         <div class="flex gap-2 w-full sm:w-auto">
           <button disabled
             class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg bg-blue-600 text-white shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
@@ -92,81 +93,147 @@
       </div>
     </div>
 
+
+
+
+    <!-- Empty State -->
     <div v-if="saleItems.length === 0" class="text-center text-gray-300 py-24">
       <i class="itbms-row text-2xl font-semibold mb-2">no sale item</i>
     </div>
 
-    <main
-      class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
-      <div v-for="(product, index) in saleItems" :key="product.id"
-        class="bg-white/5 p-4 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300 flex flex-col">
-        <ProductCard class="itbms-row" :product="product" :imageUrl="imageArray[index % imageArray.length]?.url" />
+    <!-- Gallery -->
+    <main class="max-w-6xl mx-auto px-6 pb-16 flex flex-col gap-4">
+      <!-- Sort Buttons-->
+      <div class="flex justify-end gap-2 mt-4">
+        <button @click="sortOrder = 'default'"
+          :class="['p-2 rounded-md', sortOrder === 'default' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
+          <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+        <button @click="sortOrder = 'asc'"
+          :class="['p-2 rounded-md', sortOrder === 'asc' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
+          <img src="@/assets/icons/view-sort-ascending-svgrepo-com.svg" alt="Sort Ascending" class="w-5 h-5" />
+        </button>
+        <button @click="sortOrder = 'desc'"
+          :class="['p-2 rounded-md', sortOrder === 'desc' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
+          <img src="@/assets/icons/view-sort-descending-svgrepo-com.svg" alt="Sort Descending" class="w-5 h-5" />
+        </button>
       </div>
     </main>
 
-    <div class="max-w-7xl mx-auto px-6 pb-12">
-      <PageBar :selectedBrands="selectedBrands" @updateSaleItems="updateSaleItems" />
-    </div>
+      <!-- Product Grid -->
+      <main
+        class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
+        <div v-for="(product, index) in saleItems" :key="product.id"
+          class="bg-white/5 p-4 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300 flex flex-col">
+          <ProductCard class="itbms-row" :product="product" :imageUrl="imageArray[index % imageArray.length]?.url" />
+        </div>
+      </main>
 
-    <Footer />
+
+      <div class="max-w-7xl mx-auto px-6 pb-12">
+        <PageBar :selectedBrands="selectedBrands" @updateSaleItems="updateSaleItems" />
+      </div>
+
+      <Footer />
   </div>
 </template>
 
-<script setup>
-import ProductCard from "../components/ProductCard.vue";
-import { ref, computed, onMounted, watch } from "vue";
-import { useRouter, useRoute } from "vue-router";
-import Header from "../components/Header.vue";
-import Footer from "../components/Footer.vue";
-import { fetchBrands } from "../libs/fetchBrand";
-import images from "../data/image.json";
+  <script setup>
+
+import { computed, onMounted, ref, watch } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import Alert from "../components/Alert.vue";
+  import Footer from "../components/Footer.vue";
+  import Header from "../components/Header.vue";
+  import ProductCard from "../components/ProductCard.vue";
+  import images from "../data/image.json";
+  import { fetchBrands } from "../libs/fetchBrand";
+
 import PageBar from "../components/PageBar.vue";
 
-const brands = ref([]);
-const selectedBrands = ref([]);
-const imageArray = images;
-const router = useRouter();
-const showDropdown = ref(false);
-const saleItems = ref([]);
 
-onMounted(async () => {
-  try {
-    brands.value = await fetchBrands();
-    const savedBrands = sessionStorage.getItem("selectedBrands");
-    if (savedBrands) {
-      selectedBrands.value = JSON.parse(savedBrands);
+  const brands = ref([]);
+  const selectedBrands = ref([]);
+  const imageArray = images;
+  const router = useRouter();
+  const showDropdown = ref(false);
+
+  const saleItems = ref([]);
+
+
+  onMounted(async () => {
+    try {
+      brands.value = await fetchBrands();
+
+      const savedBrands = sessionStorage.getItem("selectedBrands");
+      if (savedBrands) {
+        selectedBrands.value = JSON.parse(savedBrands);
+
+      }
+    } catch (error) {
+      console.log(error);
     }
-  } catch (error) {
-    console.log(error);
+  });
+
+  watch(selectedBrands, (newVal) => {
+    sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
+
+})
+
+//router
+const route = useRoute()
+const added = computed(() => route.query.added === 'true')
+const deleted = computed(() => route.query.deleted === 'true')
+
+const sortedProducts = computed(() => {
+  let baseProducts = [...products.value];
+
+  if (sortOrder.value === 'asc') {
+    return baseProducts.sort((a, b) => a.brandName.localeCompare(b.brandName));
+  } else if (sortOrder.value === 'desc') {
+    return baseProducts.sort((a, b) => b.brandName.localeCompare(a.brandName));
+  } else {
+    return baseProducts.sort((a, b) => new Date(a.createdTime) - new Date(b.createdTime));
   }
 });
 
-watch(selectedBrands, (newVal) => {
-  sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
+const filteredProducts = computed(() => {
+  if (selectedBrands.value.length === 0) return sortedProducts.value
+  return sortedProducts.value.filter((p) => selectedBrands.value.includes(p.brandName))
 });
-
-const route = useRoute();
-const added = computed(() => route.query.added === "true");
-const deleted = computed(() => route.query.deleted === "true");
 
 const sortedBrands = computed(() => {
   return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
-});
+})
 
-function toggleDropdown() {
-  showDropdown.value = !showDropdown.value;
-}
+
+
+  function toggleDropdown() {
+    showDropdown.value = !showDropdown.value;
+  }
+
+  function clearAllBrands() {
+    selectedBrands.value = [];
+  }
+
+  function updateSaleItems(newItems) {
+    saleItems.value = newItems;
+  }
+
+
 function removeBrand(brand) {
   selectedBrands.value = selectedBrands.value.filter((b) => b !== brand);
 }
-function clearAllBrands() {
-  selectedBrands.value = [];
-}
+
 function goToList() {
   router.push("/sale-items/list");
 }
-function updateSaleItems(newItems) {
-  saleItems.value = newItems;
-}
+const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default")
+
+watch(sortOrder, (newVal) => {
+  sessionStorage.setItem("sortOrder", newVal)
+})
+
 </script>
