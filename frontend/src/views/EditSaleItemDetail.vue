@@ -1,25 +1,25 @@
 <template>
-  <div class="bg-gray-50 min-h-screen">
+  <div class="bg-gray-50 min-h-screen flex-col">
     <Header />
+    <main class="flex-grow">
+      <!-- Product Detail -->
+      <div v-if="product"
+        class="bg-white text-gray-800 px-8 py-12 mx-auto max-w-5xl rounded-3xl shadow-2xl mt-10 space-y-8">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center space-x-2 text-sm text-gray-500">
+          <router-link to="/sale-items" class="itbms-home-button font-medium text-blue-600 hover:underline">
+            Home
+          </router-link>
+          <span>›</span>
+          <router-link :to="`/sale-items/${route.params.id}`" class="itbms-back-button font-semibold text-gray-900">
+            {{ form.brandName }} {{ form.model }} {{ form.ramGb }}GB/
+            {{ form.storageGb }}GB {{ form.color }}
+          </router-link>
+        </nav>
 
-    <!-- Product Detail -->
-    <div v-if="product"
-      class="bg-white text-gray-800 px-8 py-12 mx-auto max-w-5xl rounded-3xl shadow-2xl mt-10 space-y-8">
-      <!-- Breadcrumb -->
-      <nav class="flex items-center space-x-2 text-sm text-gray-500">
-        <router-link to="/sale-items" class="itbms-home-button font-medium text-blue-600 hover:underline">
-          Home
-        </router-link>
-        <span>›</span>
-        <router-link :to="`/sale-items/${route.params.id}`" class="itbms-back-button font-semibold text-gray-900">
-          {{ form.brandName }} {{ form.model }} {{ form.ramGb }}GB/
-          {{ form.storageGb }}GB {{ form.color }}
-        </router-link>
-      </nav>
+        <div class="flex flex-col lg:flex-row gap-12">
 
-      <div class="flex flex-col lg:flex-row gap-12">
-
-        <!-- <form @submit.prevent="saveProduct" class="lg:w-1/2 w-full space-y-6">
+          <!-- <form @submit.prevent="saveProduct" class="lg:w-1/2 w-full space-y-6">
 
           <div class="space-y-1">
             <label for="brandName" class="block text-sm font-medium text-gray-700">Brand Name</label>
@@ -103,31 +103,29 @@
             </button>
           </div>
         </form> -->
-        <SaleItemForm
-          @payload="saveProduct"
-          :formtype="'edit'"
-          :form=form
-        >
-      </SaleItemForm>
-      </div>
-    </div>
-
-    <!-- Fallback -->
-    <div v-else class="text-center text-red-500 py-16 text-lg">
-      Product not found.
-    </div>
-
-    <!-- Error Modal -->
-    <transition name="fade">
-      <div v-if="showErrorModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
-        <div class="bg-white p-6 rounded-2xl shadow-lg max-w-sm text-center">
-          <h2 class="text-xl font-bold text-red-600 mb-2">Item Not Found</h2>
-          <p class="mb-4 text-gray-700">The requested sale item does not exist.</p>
-          <p class="text-sm text-gray-500 mb-6">Redirecting in {{ secondsLeft }} seconds...</p>
-          <button @click="goSaleItemList" class="px-6 py-2 rounded-xl bg-yellow-500 text-white font-medium hover:bg-yellow-600 transition">OK</button>
+          <SaleItemForm @payload="saveProduct" :formtype="'edit'" :form=form>
+          </SaleItemForm>
         </div>
       </div>
-    </transition>
+
+      <!-- Fallback -->
+      <div v-else class="text-center text-red-500 py-16 text-lg">
+        Product not found.
+      </div>
+
+      <!-- Error Modal -->
+      <transition name="fade">
+        <div v-if="showErrorModal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+          <div class="bg-white p-6 rounded-2xl shadow-lg max-w-sm text-center">
+            <h2 class="text-xl font-bold text-red-600 mb-2">Item Not Found</h2>
+            <p class="mb-4 text-gray-700">The requested sale item does not exist.</p>
+            <p class="text-sm text-gray-500 mb-6">Redirecting in {{ secondsLeft }} seconds...</p>
+            <button @click="goSaleItemList"
+              class="px-6 py-2 rounded-xl bg-yellow-500 text-white font-medium hover:bg-yellow-600 transition">OK</button>
+          </div>
+        </div>
+      </transition>
+    </main>
 
     <Footer />
   </div>
@@ -191,7 +189,7 @@ onMounted(async () => {
     const data = await fetchProductById(route.params.id);
     product.value = data;
     console.log(product.value);
-    
+
     Object.assign(form, {
       brandName: data.brandName,
       model: data.model,
@@ -216,10 +214,10 @@ onMounted(async () => {
 const saveProduct = async (payload) => {
   try {
     console.log(payload);
-    
+
     const matched = brands.value.find(b => b.name === payload.brand.name);
     console.log(matched);
-    
+
     // const payload = {
     //   brand: { id: matched.id, name: matched.name },
     //   model: form.model,
@@ -231,10 +229,10 @@ const saveProduct = async (payload) => {
     //   color: form.color,
     //   quantity: form.quantity,
     // };
-    
-    const sendPayload =  {
+
+    const sendPayload = {
       ...payload,
-      brand : { id: matched?.id, name: matched?.name }
+      brand: { id: matched?.id, name: matched?.name }
     }
     console.log(sendPayload);
     const a = await editProduct(route.params.id, sendPayload);
@@ -271,6 +269,13 @@ const goSaleItemList = () => {
 </script>
 
 <style scoped>
-.fade-enter-active, .fade-leave-active { transition: opacity 0.3s ease; }
-.fade-enter-from, .fade-leave-to { opacity: 0; }
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
 </style>

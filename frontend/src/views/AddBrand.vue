@@ -1,22 +1,24 @@
 <template>
-  <div class="bg-gray-50 min-h-screen pb-12">
+  <div class="bg-gray-50 min-h-screen flex flex-col">
     <Header />
+    <main class="flex-grow">
 
-    <div class="bg-white text-gray-800 px-8 py-12 mx-auto max-w-5xl rounded-3xl shadow-2xl mt-10 space-y-8">
-      <!-- Breadcrumb -->
-      <nav class="flex items-center space-x-2 text-sm text-gray-500">
-        <router-link to="/sale-items/list" class="itbms-item-list font-medium text-blue-600 hover:underline">
-          Sale Item List
-        </router-link>
-         <span> > </span>
-        <router-link to="/brands" class="itbms-manage-brand text-blue-500 hover:text-blue-700 transition-colors">Brand List</router-link>
-        <span> > </span>
-        <b>New Brand</b>
-      </nav>
+      <div class="bg-white text-gray-800 px-8 py-12 mx-auto max-w-5xl rounded-3xl shadow-2xl mt-10 space-y-8">
+        <!-- Breadcrumb -->
+        <nav class="flex items-center space-x-2 text-sm text-gray-500">
+          <router-link to="/sale-items/list" class="itbms-item-list font-medium text-blue-600 hover:underline">
+            Sale Item List
+          </router-link>
+          <span> > </span>
+          <router-link to="/brands" class="itbms-manage-brand text-blue-500 hover:text-blue-700 transition-colors">Brand
+            List</router-link>
+          <span> > </span>
+          <b>New Brand</b>
+        </nav>
 
-      <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">Add New Brand</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">Add New Brand</h1>
 
-      <!-- <form @submit.prevent="saveBrand" class="space-y-6">
+        <!-- <form @submit.prevent="saveBrand" class="space-y-6">
          
         <div class="space-y-1">
           <label for="name" class="block text-sm font-medium text-gray-700">
@@ -86,11 +88,9 @@
           </button>
         </div>
       </form> -->
-    <BrandForm
-    formtype="add"
-    @payload="saveBrand" />
-    </div>
-
+        <BrandForm formtype="add" @payload="saveBrand" />
+      </div>
+    </main>
     <Footer />
   </div>
 </template>
@@ -148,7 +148,7 @@ const saveBrand = async (payload) => {
   try {
     const res = await AddBrand(payload);
     if (res) {
-      router.push({ path: '/brands', query: { added : 'true' } });
+      router.push({ path: '/brands', query: { added: 'true' } });
     } else {
       alert('Failed to add brand.');
     }
@@ -165,5 +165,4 @@ const saveBrand = async (payload) => {
 // };
 </script>
 
-<style scoped>
-</style>
+<style scoped></style>

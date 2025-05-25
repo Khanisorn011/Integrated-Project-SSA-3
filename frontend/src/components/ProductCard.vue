@@ -8,7 +8,7 @@
     class="block"
   >
     <div
-      class="bg-white text-black rounded-xl shadow-md p-4 hover:-translate-y-1 transition-transform w-full max-w-xs mx-auto min-h-[350px] flex flex-col justify-between "
+      class="bg-white text-black rounded-xl p-4 hover:-translate-y-1 transition-transform w-full max-w-xs mx-auto min-h-[350px] flex flex-col justify-between shadow-lg border border-gray-200 "
     >
       <!-- Image -->
       <div

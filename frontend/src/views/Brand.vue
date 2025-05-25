@@ -3,19 +3,12 @@
     <!-- Header -->
     <Header></Header>
 
-    <div
-      class="bg-white border-b border-gray-200 pt-8 pb-6 px-6 flex justify-between items-center"
-    >
+    <div class="bg-white border-b border-gray-200 pt-8 pb-6 px-6 flex justify-between items-center">
       <div class="flex items-center space-x-4">
-        <router-link
-          to="/sale-items/list"
-          class="text-blue-500 hover:text-blue-700 transition-colors"
-          >Sale Item List</router-link
-        >
+        <router-link to="/sale-items/list" class="text-blue-500 hover:text-blue-700 transition-colors">Sale Item
+          List</router-link>
       </div>
-      <button
-        class="itbms-add-button bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors"
-      >
+      <button class="itbms-add-button bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded transition-colors">
         <router-link to="/brands/add"> Add Brand </router-link>
       </button>
     </div>
@@ -33,11 +26,7 @@
             <span class="ml-2 itbms-message">The brand has been added.</span>
           </div>
         </div> -->
-        <Alert
-         v-if="added"
-         :message="'The brand has been added.'"
-         :state="'created'"
-        >
+        <Alert v-if="added" :message="'The brand has been added.'" :state="'created'">
         </Alert>
 
         <!-- <div
@@ -50,11 +39,7 @@
             <span class="ml-2 itbms-message">The brand has been deleted.</span>
           </div>
         </div> -->
-        <Alert
-         v-if="deleted"
-         :message="'The brand has been deleted.'"
-         :state="'error'"
-        >
+        <Alert v-if="deleted" :message="'The brand has been deleted.'" :state="'error'">
         </Alert>
         <!-- <div
           v-if="updated"
@@ -66,19 +51,12 @@
             <span class="ml-2 itbms-message">The brand has been updated.</span>
           </div>
         </div> -->
-        <Alert
-         v-if="updated"
-         :message="'The brand has been updated.'"
-         :state="'updated'"
-        >
+        <Alert v-if="updated" :message="'The brand has been updated.'" :state="'updated'">
         </Alert>
       </div>
 
       <!-- Empty State -->
-      <div
-        v-if="brands.length === 0"
-        class="flex flex-col items-center justify-center text-center text-gray-500 py-24"
-      >
+      <div v-if="brands.length === 0" class="flex flex-col items-center justify-center text-center text-gray-500 py-24">
         <div class="text-6xl text-gray-400 mb-4">🏷️</div>
         <h3 class="text-2xl font-semibold mb-2">No Brands Found</h3>
         <p class="text-gray-400 max-w-md">
@@ -87,10 +65,7 @@
       </div>
 
       <!-- Brands Table -->
-      <div
-        v-else
-        class="max-w-7xl mx-auto bg-white border border-gray-200 rounded-md shadow-sm"
-      >
+      <div v-else class="max-w-7xl mx-auto bg-white border border-gray-200 rounded-md shadow-sm">
         <div class="overflow-x-auto">
           <table class="min-w-full bg-white">
             <thead>
@@ -101,25 +76,18 @@
               </tr>
             </thead>
             <tbody>
-              <tr
-                v-for="brand in brands"
-                :key="brand.id"
-                class="itbms-row border-b border-gray-200 relative"
-              >
+              <tr v-for="brand in brands" :key="brand.id" class="itbms-row border-b border-gray-200 relative">
                 <td class="py-3 px-6 itbms-id">{{ brand.id || "-" }}</td>
                 <td class="py-3 px-6 itbms-name">{{ brand.name }}</td>
                 <td class="py-3 pl-6 inline-flex">
                   <div class="inline-flex"></div>
-                  <router-link
-                    :to="`/brands/${brand.id}/edit`"
-                    class="itbms-edit-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors"
-                  >
+                  <router-link :to="`/brands/${brand.id}/edit`"
+                    class="itbms-edit-button bg-blue-700 text-white px-3 py-1 rounded-sm mr-2 hover:bg-gray-300 transition-colors">
                     Edit
                   </router-link>
                   <button
-                    class="itbms-delete-button bg-gray-200 text-gray-700 px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors relative"
-                    @click="displayModal(brand.id)"
-                  >
+                    class="itbms-delete-button bg-red-700 text-white px-3 py-1 rounded-sm hover:bg-gray-300 transition-colors relative"
+                    @click="displayModal(brand.id)">
                     Delete
                   </button>
                 </td>
@@ -160,20 +128,14 @@
         </div>
       </div>
     </div> -->
-    <Modal
-      v-if="showConfirmModal"
-      :title="'Confirm Deletion'"
-      :message="`Do you want to delete ${chooseBrand?.name} brand?`"
-      :confirmAction="confirmDeleteProduct"
-      :displayConfirm="true"
-      :closeAction="
-        () => {
+    <Modal v-if="showConfirmModal" :title="'Confirm Deletion'"
+      :message="`Do you want to delete ${chooseBrand?.name} brand?`" :confirmAction="confirmDeleteProduct"
+      :displayConfirm="true" :closeAction="() => {
           brandNotExist = false;
           updateBrand();
           showConfirmModal = false;
         }
-      "
-    >
+        ">
     </Modal>
 
     <!-- <div
@@ -195,18 +157,12 @@
       </div>
     </div> -->
 
-    <Modal
-      v-if="brandNotExist === true"
-      :title="'Brand not exist'"
-      :message="`An error has occurred, the brand does not exist.`"
-      :displayConfirm="false"
-      :closeAction="
-        () => {
+    <Modal v-if="brandNotExist === true" :title="'Brand not exist'"
+      :message="`An error has occurred, the brand does not exist.`" :displayConfirm="false" :closeAction="() => {
           brandNotExist = false;
           updateBrand();
         }
-      "
-    >
+        ">
     </Modal>
 
     <!-- <div
@@ -229,17 +185,12 @@
       </div>
     </div> -->
 
-    <Modal
-      v-if="showHaveItemInBrandModal === true"
-      :title="'Have sale item in brand'"
+    <Modal v-if="showHaveItemInBrandModal === true" :title="'Have sale item in brand'"
       :message="`Delete ${chooseBrand.name} is not allowed. There are sale items with ${chooseBrand.name} brand.`"
-      :displayConfirm="false"
-      :closeAction="
-        () => {
+      :displayConfirm="false" :closeAction="() => {
           showHaveItemInBrandModal = false;
         }
-      "
-    >
+        ">
     </Modal>
 
     <Footer></Footer>

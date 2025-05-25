@@ -1,13 +1,13 @@
 <template>
-  <div class="bg-gradient-to-br from-zinc-900 via-zinc-800 to-gray-900 text-white min-h-screen font-[Poppins]">
+  <div class="bg-white to-gray-900 text-black min-h-screen font-[Poppins] ">
     <Header />
 
     <!-- Section Title -->
     <section class="py-12 px-7 text-center">
-      <h2 class="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500">
+      <h2 class="text-5xl font-bold mb-4 bg-clip-text text-transparent bg-black text-shadow-lg">
         รายการมือถือทั้งหมด
       </h2>
-      <p class="text-gray-300 text-lg max-w-2xl mx-auto">
+      <p class="text-gray-800 text-lg max-w-2xl mx-auto text-shadow-lg">
         ดูสินค้าทั้งหมดที่มีในระบบในรูปแบบแกลเลอรี
       </p>
     </section>
@@ -21,7 +21,7 @@
 
     <div class="max-w-7xl mx-auto px-6 mb-8">
       <div
-        class="bg-gray-800/50 backdrop-blur-sm rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg border border-gray-700/50">
+        class="bg-white backdrop-blur-sm rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg border border-gray-300">
         <div class="flex items-center gap-4 w-full sm:w-auto">
           <router-link to="/sale-items/add"
             class="itbms-sale-item-add bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2.5 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-md flex items-center gap-2 whitespace-nowrap">
@@ -58,7 +58,7 @@
 
                 <!-- Dropdown Content -->
                 <div v-if="showDropdown"
-                  class="absolute z-50 mt-2 w-full bg-white text-black border border-gray-200 rounded-xl shadow-lg max-h-60 overflow-y-auto">
+                  class="absolute z-50 mt-2 w-full bg-white text-black border border-gray-300 rounded-xl shadow-lg max-h-60 overflow-y-auto">
                   <label v-for="(brand, index) in sortedBrands" :key="index"
                     class="flex items-center px-4 py-2 text-sm cursor-pointer hover:bg-gray-100">
                     <input type="checkbox" :value="brand.name" v-model="selectedBrands"
@@ -102,9 +102,9 @@
     </div>
 
     <!-- Gallery -->
-    <main class="max-w-6xl mx-auto px-6 pb-16 flex flex-col gap-4">
+    <main class="max-w-6xl mx-auto px-1 pb-16 flex flex-col gap-4">
       <!-- Sort Buttons-->
-      <div v-if="saleItems.length !== 0" class="flex justify-end gap-2 mt-4">
+      <div v-if="saleItems.length !== 0" class="flex justify-end gap-3 mt-4">
         <button @click="sortOrder = 'default'"
           :class="['p-2 rounded-md', sortOrder === 'default' ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700']">
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -124,9 +124,9 @@
 
     <!-- Product Grid -->
     <main
-      class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16">
+      class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16 ">
       <div v-for="(product, index) in saleItems" :key="product.id"
-        class="bg-white/5 p-4 rounded-xl border border-gray-700/50 hover:bg-white/10 transition-all duration-300 flex flex-col">
+        class="bg-white/5 p-4 rounded-xl border-gray-700/50 hover:bg-white/10 transition-all duration-300 flex flex-col ">
         <ProductCard class="itbms-row" :product="product" :imageUrl="imageArray[index % imageArray.length]?.url" />
       </div>
     </main>
