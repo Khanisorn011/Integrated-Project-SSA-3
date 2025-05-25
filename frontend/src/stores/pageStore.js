@@ -2,7 +2,7 @@ import { ref, computed } from "vue";
 import { acceptHMRUpdate, defineStore } from "pinia";
 
 export const usePageStore = defineStore("counter", () => {
-  const pageNumber = ref(sessionStorage.getItem("pageNumber"));
+  const pageNumber = ref(sessionStorage.getItem("pageNumber") || 0);
 
   const setPageNumber = (pageNum) => {
     pageNumber.value = pageNum;
@@ -10,7 +10,7 @@ export const usePageStore = defineStore("counter", () => {
   };
 
   const getPageNumber = () => {
-    return pageNumber.value || 0;
+    return Number(pageNumber.value);
   };
 
   return { setPageNumber, getPageNumber };

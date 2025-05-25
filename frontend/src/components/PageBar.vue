@@ -9,7 +9,7 @@
         v-for="page in visiblePages"
         :key="page"
         @click="$emit('update:currentPage', page)"
-        :class="['join-item btn btn-sm px-3', currentPage === page && 'btn-primary']"
+        :class="['join-item btn btn-sm px-3', currentPage == page && 'btn-primary']"
       >
         {{ page + 1 }}
       </button>
@@ -32,7 +32,7 @@
 
 
 <script setup>
-import { computed } from 'vue';
+import { ref, watch, computed } from 'vue';
 
 const props = defineProps({
   currentPage: Number,
@@ -40,10 +40,18 @@ const props = defineProps({
   totalPages: Number,
 });
 
+const emit = defineEmits(['update:currentPage', 'update:pageSize']);
+
 const maxVisible = 10;
-const visibleStart = computed(() =>
-  Math.max(0, Math.min(props.currentPage - Math.floor(maxVisible / 2), props.totalPages - maxVisible))
-);
+const visibleStart = ref(0);
+
+watch(() => props.currentPage, (newPage) => {
+  if (newPage < visibleStart.value) {
+    visibleStart.value = newPage;
+  } else if (newPage >= visibleStart.value + maxVisible) {
+    visibleStart.value = newPage - maxVisible + 1;
+  }
+});
 
 const visiblePages = computed(() => {
   const pages = [];
@@ -54,3 +62,4 @@ const visiblePages = computed(() => {
   return pages;
 });
 </script>
+

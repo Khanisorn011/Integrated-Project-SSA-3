@@ -153,20 +153,34 @@ import images from "../data/image.json";
 import { fetchBrands } from "../libs/fetchBrand";
 import { fetchSaleItemByCondition } from "../libs/fetchSaleItem";
 import PageBar from "../components/PageBar.vue";
-
+import {usePageStore} from '../stores/pageStore.js'
 
 const brands = ref([]);
 const selectedBrands = ref([]);
 const imageArray = images;
 const router = useRouter();
 const showDropdown = ref(false);
+const pageStore = usePageStore()
 
 const saleItems = ref([]);
-const currentPage = ref(0);
+const currentPage = ref(pageStore.getPageNumber());
 const pageSize = ref(10);
 const pageResponse = ref({ totalPages: 0 });
 
 const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default");
+
+onMounted(() => {
+  pageStore.setPageNumber(currentPage.value)
+  console.log(pageStore.getPageNumber());
+  console.log(currentPage.value);
+})
+
+watch(currentPage,() => {
+  console.log(currentPage.value);
+  pageStore.setPageNumber(currentPage.value)
+  console.log(pageStore.getPageNumber());
+  
+})
 
 watch(sortOrder, (newVal) => {
   sessionStorage.setItem("sortOrder", newVal);
@@ -204,6 +218,10 @@ watch(selectedBrands, (newVal) => {
   sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
 })
 
+const sortedBrands = computed(() => {
+  return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
+})
+
 watch([selectedBrands, currentPage, pageSize, sortOrder], async () => {
   payload.value = {
     ...payload.value,
@@ -217,15 +235,25 @@ watch([selectedBrands, currentPage, pageSize, sortOrder], async () => {
   pageResponse.value.totalPages = response.totalPages || 0;
 }, { immediate: true });
 
+
+watch(
+  [selectedBrands, sortedBrands],
+  ([newSelected, newSorted]) => {
+    const isSortedChanged = !isEqual(prevSorted, newSorted);
+    if (isSortedChanged || newSelected !== prevSortedSelected) {
+      pageStore.setPageNumber(0);
+      currentPage.value = pageStore.getPageNumber();
+    }
+    prevSorted = [...newSorted]; // clone ค่าเก็บไว้เทียบรอบหน้า
+    prevSelected = [...newSelected];
+  },
+  { deep: true }
+);
+
 //router
 const route = useRoute()
 const added = computed(() => route.query.added === 'true')
 const deleted = computed(() => route.query.deleted === 'true')
-
-const sortedBrands = computed(() => {
-  return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
-})
-
 
 
 function toggleDropdown() {
@@ -243,15 +271,5 @@ function removeBrand(brand) {
 function goToList() {
   router.push("/sale-items/list");
 }
-
-async function fetchSaleItems() {
-  const response = await fetchSaleItemByCondition(payload.value);
-  pageResponse.value = {
-    totalPages: response.totalPages || 0,
-  };
-  saleItems.value = response.content || [];
-}
-
-watch([selectedBrands, currentPage, pageSize], fetchSaleItems, { immediate: true });
 
 </script>
