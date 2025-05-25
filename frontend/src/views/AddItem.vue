@@ -1,24 +1,24 @@
 <template>
-  <div class="bg-gradient-to-b from-gray-50 to-gray-100 min-h-screen pb-12">
+  <div class="flex flex-col min-h-screen bg-white text-black">
     <Header />
+    <main class="flex-grow">
+      <!-- Add Product Form -->
+      <div class="bg-white text-black px-8 py-10 mx-auto max-w-6xl rounded-2xl shadow-lg mt-8 mb-12">
+        <!-- Breadcrumb Navigation -->
+        <nav class="flex items-center text-lg text-gray-600 mb-6">
+          <router-link to="/sale-items"
+            class="itbms-home-button font-medium text-blue-600 hover:text-blue-800 transition-colors">
+            Home
+          </router-link>
+          <span class="mx-2 text-gray-400 font-light"> > </span>
+          <span class="text-gray-800 font-medium">Add New Product</span>
+        </nav>
 
-    <!-- Add Product Form -->
-    <div class="bg-white text-black px-8 py-10 mx-auto max-w-6xl rounded-2xl shadow-lg mt-8 mb-12">
-      <!-- Breadcrumb Navigation -->
-      <nav class="flex items-center text-lg text-gray-600 mb-6">
-        <router-link to="/sale-items"
-          class="itbms-home-button font-medium text-blue-600 hover:text-blue-800 transition-colors">
-          Home
-        </router-link>
-        <span class="mx-2 text-gray-400 font-light"> > </span>
-        <span class="text-gray-800 font-medium">Add New Product</span>
-      </nav>
+        <h1 class="text-3xl font-bold text-gray-800 mb-8 border-b border-gray-200 pb-4">
+          Add New Product
+        </h1>
 
-      <h1 class="text-3xl font-bold text-gray-800 mb-8 border-b border-gray-200 pb-4">
-        Add New Product
-      </h1>
-
-      <!-- <form @submit.prevent="handleSubmit" class="flex flex-col md:flex-row gap-12">
+        <!-- <form @submit.prevent="handleSubmit" class="flex flex-col md:flex-row gap-12">
       
         <div class="md:w-1/2 w-full">
           <div
@@ -162,9 +162,9 @@
           </div>
         </div>
       </form> -->
-      <SaleItemForm @payload="saveProduct" :form="form"></SaleItemForm>
-    </div>
-
+        <SaleItemForm @payload="saveProduct" :form="form"></SaleItemForm>
+      </div>
+    </main>
     <Footer />
   </div>
 </template>
@@ -269,9 +269,9 @@ const saveProduct = async (payload) => {
 
   try {
     const matched = brands.value.find(b => b.name === payload.brand.name);
-        const sendPayload =  {
+    const sendPayload = {
       ...payload,
-      brand : { id: matched?.id, name: matched?.name }
+      brand: { id: matched?.id, name: matched?.name }
     }
     const res = await postProduct(sendPayload);
     if (res && res.ok) {
