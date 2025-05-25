@@ -16,41 +16,12 @@
     <main class="container mx-auto py-6 px-4">
       <!-- Alerts -->
       <div class="max-w-4xl mx-auto mb-6">
-        <!-- <div
-          v-if="added"
-          class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md"
-        >
-          <div class="flex items-center">
-            <span class="itbms-message text-green-500 font-bold mr-2">✓</span>
-            <strong>Success:</strong>
-            <span class="ml-2 itbms-message">The brand has been added.</span>
-          </div>
-        </div> -->
         <Alert v-if="added" :message="'The brand has been added.'" :state="'created'">
         </Alert>
 
-        <!-- <div
-          v-if="deleted"
-          class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg shadow-md"
-        >
-          <div class="flex items-center">
-            <span class="text-red-500 font-bold mr-2">✕</span>
-            <strong>Deleted:</strong>
-            <span class="ml-2 itbms-message">The brand has been deleted.</span>
-          </div>
-        </div> -->
         <Alert v-if="deleted" :message="'The brand has been deleted.'" :state="'error'">
         </Alert>
-        <!-- <div
-          v-if="updated"
-          class="bg-orange-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg shadow-md"
-        >
-          <div class="flex items-center">
-            <span class="text-green-500 font-bold mr-2">✓</span>
-            <strong>Updated:</strong>
-            <span class="ml-2 itbms-message">The brand has been updated.</span>
-          </div>
-        </div> -->
+
         <Alert v-if="updated" :message="'The brand has been updated.'" :state="'updated'">
         </Alert>
       </div>
@@ -99,35 +70,6 @@
     </main>
 
     <!-- Delete modal confirm-->
-    <!-- <div
-      v-if="showConfirmModal"
-      class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
-    >
-      <div class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center">
-        <h2 class="text-xl font-bold text-gray-800 mb-4">Confirm Deletion</h2>
-        <p class="itbms-message text-gray-700 mb-6">
-          Do you want to delete {{ chooseBrand?.name }} brand?
-        </p>
-        <div class="flex justify-center gap-4">
-          <button
-            @click="confirmDeleteProduct"
-            class="itbms-confirm-button px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-          >
-            Confirm
-          </button>
-          <button
-            @click="
-              brandNotExist = false;
-              updateBrand();
-              showConfirmModal = false;
-            "
-            class="itbms-cancel-button px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div> -->
     <Modal v-if="showConfirmModal" :title="'Confirm Deletion'"
       :message="`Do you want to delete ${chooseBrand?.name} brand?`" :confirmAction="confirmDeleteProduct"
       :displayConfirm="true" :closeAction="() => {
@@ -138,25 +80,6 @@
         ">
     </Modal>
 
-    <!-- <div
-      v-if="brandNotExist === true"
-      class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
-    >
-      <div class="bg-white p-6 rounded-xl shadow-lg max-w-96 text-center">
-        <p class="itbms-message text-gray-700 mb-6">
-          An error has occurred, the brand does not exist.
-        </p>
-        <div class="flex justify-center gap-4">
-          <button
-            @click="(brandNotExist = false), updateBrand()"
-            class="itbms-cancel-button px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div> -->
-
     <Modal v-if="brandNotExist === true" :title="'Brand not exist'"
       :message="`An error has occurred, the brand does not exist.`" :displayConfirm="false" :closeAction="() => {
           brandNotExist = false;
@@ -164,26 +87,6 @@
         }
         ">
     </Modal>
-
-    <!-- <div
-      v-if="showHaveItemInBrandModal === true"
-      class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
-    >
-      <div class="bg-white p-6 rounded-xl shadow-lg max-w-96 text-center">
-        <p class="itbms-message text-gray-700 mb-6">
-          Delete {{ chooseBrand.name }} is not allowed. There are sale items
-          with {{ chooseBrand.name }} brand.
-        </p>
-        <div class="flex justify-center gap-4">
-          <button
-            @click="showHaveItemInBrandModal = false"
-            class="itbms-cancel-button px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div> -->
 
     <Modal v-if="showHaveItemInBrandModal === true" :title="'Have sale item in brand'"
       :message="`Delete ${chooseBrand.name} is not allowed. There are sale items with ${chooseBrand.name} brand.`"
@@ -211,7 +114,6 @@ import Modal from "../components/Modal.vue";
 import Alert from "../components/Alert.vue";
 // brands
 const brands = ref([]);
-// const brandsDetail = ref([]);
 
 // router
 const route = useRoute();
@@ -224,11 +126,6 @@ onMounted(async () => {
   try {
     brands.value = await fetchBrands();
     console.log(brands.value);
-
-    // for (let index = 0; index < brands.value.length; index++) {
-    //   const brand = await fetchBrandById(brands.value[index].id);
-    //   brandsDetail.value.push(brand);
-    // }
   } catch (err) {
     console.error("Failed to load brands:", err);
   }

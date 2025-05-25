@@ -9,7 +9,7 @@ export const useStateStore = defineStore('imageStore', () => {
     sessionStorage.setItem('imageUrl',JSON.stringify(imageUrl.value))
   }
 
-  const getImageUrl = computed(() => imageUrl.value || null);
+  const getImageUrl = computed(() => imageUrl.value || '../../images/huawei.png');
  
   return {
     setImageUrl,
