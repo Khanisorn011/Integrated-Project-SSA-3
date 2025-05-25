@@ -3,21 +3,6 @@
     <Header />
     <main class="flex-grow">
       <!-- Alerts -->
-      <!-- <div class="px-6 max-w-4xl mx-auto">
-      <div
-        v-if="updated"
-        class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102"
-      >
-        <div class="flex items-center">
-          <span class="text-green-500 font-bold mr-2">✓</span>
-          <strong>Updated:</strong>
-          <span class="itbms-message ml-2"
-            >The sale item has been updated.</span
-          >
-        </div>
-      </div>
-    </div> -->
-
       <Alert v-if="updated" :message="'The sale item has been updated.'" :state="'updated'">
       </Alert>
 

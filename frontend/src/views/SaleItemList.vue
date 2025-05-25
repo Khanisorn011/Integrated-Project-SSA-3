@@ -1,227 +1,293 @@
 <template>
-  <div class="bg-white text-black min-h-screen font-[Poppins] flex flex-col">
+  <div class="bg-gradient-to-br from-indigo-50 via-white to-purple-50 text-gray-900 min-h-screen font-[Inter] flex flex-col relative overflow-hidden">
+    <!-- Animated Background Elements -->
+    <div class="absolute inset-0 overflow-hidden pointer-events-none">
+      <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
+      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-400/20 to-orange-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
+      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-cyan-400/10 to-blue-600/10 rounded-full blur-3xl animate-pulse delay-500"></div>
+    </div>
+
     <Header />
-    <main class="flex-grow">
-      <!-- Section Title -->
-      <section class="py-16 px-7 text-center">
-        <h2
-          class="text-5xl font-extrabold mb-4 bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500 drop-shadow-lg">
-          รายการแบบ List
-        </h2>
-        <p class="text-gray-800 text-lg max-w-2xl mx-auto">
-          ดูมือถือในรูปแบบรายการพร้อมรายละเอียดเบื้องต้น
-        </p>
+    
+    <main class="flex-grow relative z-10">
+      <!-- Hero Section Title -->
+      <section class="py-24 px-7 text-center relative">
+        <div class="absolute inset-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"></div>
+        <div class="relative z-10 max-w-5xl mx-auto">
+          
+          <h2 class="text-7xl font-black mb-8 bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 drop-shadow-2xl leading-tight">
+            รายการแบบ List
+          </h2>
+          
+          <p class="text-gray-600 text-xl max-w-3xl mx-auto leading-relaxed font-medium mb-8">
+            ดูมือถือในรูปแบบรายการพร้อมรายละเอียดเบื้องต้น
+          </p>
+          
+          <!-- Stats Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12">
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+              <div class="text-3xl font-bold text-blue-600">{{ filteredProducts.length }}</div>
+              <div class="text-gray-600 font-medium">Total Items</div>
+            </div>
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+              <div class="text-3xl font-bold text-purple-600">{{ brands.length }}</div>
+              <div class="text-gray-600 font-medium">Brands</div>
+            </div>
+            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
+              <div class="text-3xl font-bold text-green-600">{{ selectedBrand === 'all' ? 'All' : '1' }}</div>
+              <div class="text-gray-600 font-medium">Selected Brand</div>
+            </div>
+          </div>
+        </div>
       </section>
 
-      <!-- Alerts -->
-      <div class="px-6 max-w-4xl mx-auto">
-        <!-- <div
-        v-if="added"
-        class="bg-green-50 border-l-4 border-green-500 text-green-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102"
-      >
-        <div class="flex items-center">
-          <span class="text-green-500 font-bold mr-2">✓</span>
-          <strong>Success:</strong>
-          <span class="itbms-message ml-2"
-            >The sale item has been successfully added.</span
-          >
+      <!-- Alerts with Enhanced Design -->
+      <div class="px-6 max-w-6xl mx-auto mb-8">
+        <div v-if="added" class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 p-6 rounded-xl shadow-lg mb-4 animate-slide-in">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-green-800 font-semibold">Success!</p>
+              <p class="text-green-700">The sale item has been successfully added.</p>
+            </div>
+          </div>
         </div>
-      </div> -->
 
-        <Alert v-if="added" :message="'The sale item has been successfully added.'" :state="'created'">
-        </Alert>
-
-        <!-- <div
-        v-if="deleted"
-        class="bg-red-50 border-l-4 border-red-500 text-red-700 p-4 rounded-lg mb-6 shadow-md transform transition-all duration-300 hover:scale-102"
-      >
-        <div class="flex items-center">
-          <span class="text-red-500 font-bold mr-2">✕</span>
-          <strong>Deleted:</strong>
-          <span class="itbms-message ml-2"
-            >The sale item has been deleted.</span
-          >
+        <div v-if="deleted" class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 p-6 rounded-xl shadow-lg mb-4 animate-slide-in">
+          <div class="flex items-center">
+            <div class="flex-shrink-0">
+              <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+              </svg>
+            </div>
+            <div class="ml-3">
+              <p class="text-green-800 font-semibold">Deleted!</p>
+              <p class="text-green-700">The sale item has been deleted.</p>
+            </div>
+          </div>
         </div>
-      </div> -->
-
-        <Alert v-if="deleted" :message="'The sale item has been deleted.'" :state="'created'">
-        </Alert>
       </div>
 
-      <!-- Controls Bar -->
-      <div class="max-w-7xl mx-auto px-6 mb-8">
-        <div
-          class="bg-while backdrop-blur-sm rounded-xl p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg border border-gray-300/50">
-          <div class="flex items-center gap-4 w-full sm:w-auto">
-            <!-- Add Sale Item -->
-            <router-link to="/sale-items/add"
-              class="itbms-sale-item-add bg-gradient-to-r from-blue-600 to-blue-700 text-white px-5 py-2.5 rounded-lg hover:from-blue-700 hover:to-blue-800 transition-all duration-300 shadow-md flex items-center gap-2 whitespace-nowrap">
-              Add Sale Item
-            </router-link>
+      <!-- Enhanced Controls Bar -->
+      <div class="max-w-7xl mx-auto px-6 mb-12">
+        <div class="bg-white/80 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl border border-white/30 ring-1 ring-gray-200/20 hover:shadow-3xl transition-all duration-700">
+          <div class="flex flex-col lg:flex-row justify-between items-center gap-8">
+            <div class="flex items-center gap-6 w-full lg:w-auto flex-wrap">
+              <!-- Add Sale Item -->
+              <router-link to="/sale-items/add"
+                class="itbms-sale-item-add group bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 text-white px-8 py-4 rounded-2xl hover:from-blue-700 hover:via-purple-700 hover:to-purple-800 transition-all duration-500 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 hover:scale-105 flex items-center gap-4 whitespace-nowrap font-bold text-lg relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                <svg class="w-6 h-6 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                <span class="relative z-10">Add Sale Item</span>
+              </router-link>
 
-            <!-- Manage Brand -->
-            <router-link to="/brands"
-              class="itbms-manage-brand bg-black text-white px-5 py-2.5 rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all duration-300 shadow-md flex items-center gap-2 whitespace-nowrap">
-              Manage Brand
-            </router-link>
+              <!-- Manage Brand -->
+              <router-link to="/brands"
+                class="itbms-manage-brand group bg-gradient-to-r from-gray-800 via-gray-900 to-black text-white px-8 py-4 rounded-2xl hover:from-gray-700 hover:via-gray-800 hover:to-gray-900 transition-all duration-500 shadow-xl hover:shadow-2xl transform hover:-translate-y-2 hover:scale-105 flex items-center gap-4 whitespace-nowrap font-bold text-lg relative overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/10 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-1000"></div>
+                <svg class="w-6 h-6 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+                </svg>
+                <span class="relative z-10">Manage Brand</span>
+              </router-link>
 
-            <!-- Select Brand -->
-            <div class="relative w-full sm:w-auto">
-              <select v-model="selectedBrand"
-                class="pl-4 pr-10 py-2.5 rounded-lg bg-gray-700 text-gray-200 focus:outline-none focus:ring-2 focus:ring-blue-500 border border-gray-600 appearance-none w-full">
-                <option value="all">All Brands</option>
-                <option v-for="(brand, index) in brands" :key="brand.id || index" :value="brand.name">
-                  {{ brand.name }}
-                </option>
-              </select>
-              <div class="absolute inset-y-0 right-0 flex items-center pr-3 pointer-events-none">
-                <span class="text-gray-400">▼</span>
+              <!-- Enhanced Select Brand -->
+              <div class="relative w-full sm:w-auto min-w-[250px]">
+                <select v-model="selectedBrand"
+                  class="pl-6 pr-14 py-4 rounded-2xl bg-white/90 backdrop-blur-sm border-2 border-gray-200 text-gray-800 focus:outline-none focus:ring-4 focus:ring-blue-500/30 focus:border-blue-500 appearance-none w-full shadow-lg font-semibold text-lg transition-all duration-300 hover:shadow-xl hover:border-gray-300">
+                  <option value="all">🌟 All Brands</option>
+                  <option v-for="(brand, index) in brands" :key="brand.id || index" :value="brand.name">
+                    📱 {{ brand.name }}
+                  </option>
+                </select>
+                <div class="absolute inset-y-0 right-0 flex items-center pr-6 pointer-events-none">
+                  <svg class="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                  </svg>
+                </div>
+              </div>
+            </div>
+
+            <!-- Enhanced View Toggle -->
+            <div class="flex gap-2 w-full lg:w-auto bg-gradient-to-r from-gray-100 to-gray-200 p-2 rounded-2xl shadow-inner">
+              <button @click="goToGallery"
+                class="flex-1 lg:flex-none px-8 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-3 text-gray-600 hover:bg-white hover:shadow-lg hover:text-gray-800 font-semibold text-lg transform hover:-translate-y-0.5">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+                </svg>
+                Gallery
+              </button>
+              <button disabled
+                class="flex-1 lg:flex-none px-8 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-xl flex items-center justify-center gap-3 font-semibold text-lg">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
+                </svg>
+                List
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Enhanced Empty State -->
+      <div v-if="filteredProducts.length === 0" class="text-center py-32">
+        <div class="max-w-lg mx-auto">
+          <div class="relative mb-8">
+            <div class="w-32 h-32 mx-auto bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-2xl">
+              <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+              </svg>
+            </div>
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
+              <span class="text-lg">✨</span>
+            </div>
+          </div>
+          <h3 class="text-4xl font-bold mb-4 text-gray-700">No Sale Items Yet</h3>
+          <p class="text-gray-500 text-xl mb-8">Start building your inventory by adding your first mobile device</p>
+          <router-link to="/sale-items/add" 
+            class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Add Your First Item
+          </router-link>
+        </div>
+      </div>
+
+      <!-- Premium Table Design -->
+      <main v-if="filteredProducts.length > 0" class="max-w-7xl mx-auto px-6 pb-20">
+        <div class="bg-white/90 backdrop-blur-2xl rounded-3xl shadow-2xl overflow-hidden border border-white/50 ring-1 ring-gray-200/20">
+          <!-- Table Header with Search -->
+          <div class="bg-gradient-to-r from-gray-50 to-blue-50 p-6 border-b border-gray-200/50">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4">
+              <h3 class="text-2xl font-bold text-gray-800">Product Inventory</h3>
+              <div class="flex items-center gap-4">
+                <div class="relative">
+                  <input type="text" placeholder="Search products..." 
+                    class="pl-12 pr-4 py-3 rounded-xl bg-white border-2 border-gray-200 focus:border-blue-500 focus:outline-none focus:ring-4 focus:ring-blue-500/20 transition-all duration-300 w-64">
+                  <svg class="w-5 h-5 text-gray-400 absolute left-4 top-1/2 transform -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                  </svg>
+                </div>
               </div>
             </div>
           </div>
 
-          <!-- View Toggle -->
-          <div class="flex gap-2 w-full sm:w-auto">
-            <button @click="goToGallery"
-              class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 bg-gray-700 text-gray-300 hover:bg-gray-600">
-              <span class="font-mono">■ ■</span>
-              Gallery
-            </button>
-            <button disabled
-              class="flex-1 sm:flex-none px-4 py-2.5 rounded-lg bg-blue-600 text-white shadow-md shadow-blue-500/20 flex items-center justify-center gap-2">
-              <span class="font-mono">≡</span>
-              List
-            </button>
+          <div class="overflow-x-auto">
+            <table class="min-w-full table-auto">
+              <thead>
+                <tr class="bg-gradient-to-r from-gray-50 via-blue-50 to-purple-50 border-b border-gray-200">
+                  <th class="px-8 py-6 text-center text-sm font-black text-gray-700 uppercase tracking-wider">
+                    <div class="flex items-center justify-center gap-2">
+                      <span>ID</span>
+                      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4"></path>
+                      </svg>
+                    </div>
+                  </th>
+                  <th class="px-8 py-6 text-center text-sm font-black text-gray-700 uppercase tracking-wider">Brand</th>
+                  <th class="px-8 py-6 text-left text-sm font-black text-gray-700 uppercase tracking-wider">Model</th>
+                  <th class="px-8 py-6 text-center text-sm font-black text-gray-700 uppercase tracking-wider">Ram</th>
+                  <th class="px-8 py-6 text-center text-sm font-black text-gray-700 uppercase tracking-wider">Storage</th>
+                  <th class="px-8 py-6 text-center text-sm font-black text-gray-700 uppercase tracking-wider">Color</th>
+                  <th class="px-8 py-6 text-center text-sm font-black text-gray-700 uppercase tracking-wider">Price</th>
+                  <th class="px-8 py-6 text-center text-sm font-black text-gray-700 uppercase tracking-wider">Actions</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100">
+                <tr v-for="(product, index) in filteredProducts" :key="product.id || index"
+                  class="itbms-row hover:bg-gradient-to-r hover:from-blue-50/80 hover:via-purple-50/80 hover:to-pink-50/80 transition-all duration-500 group hover:shadow-lg"
+                  :class="index % 2 === 0 ? 'bg-white/80' : 'bg-gray-50/50'">
+                  
+                  <td class="px-8 py-6 itbms-id text-center">
+                    <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-2xl text-lg font-bold shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                      {{ product.id }}
+                    </div>
+                  </td>
+                  
+                  <td class="px-8 py-6 itbms-brand text-center">
+                    <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border border-purple-200 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
+                      {{ product.brandName }}
+                    </span>
+                  </td>
+                  
+                  <td class="px-8 py-6 itbms-model">
+                    <div class="font-bold text-lg text-gray-900 group-hover:text-blue-700 transition-colors duration-300">
+                      {{ product.model }}
+                    </div>
+                  </td>
+                  
+                  <td class="px-8 py-6 itbms-ramGb text-center">
+                    <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
+                      🚀 {{ product.ramGb || "-" }} GB
+                    </span>
+                  </td>
+                  
+                  <td class="px-8 py-6 itbms-storageGb text-center">
+                    <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-orange-100 to-yellow-100 text-orange-800 border border-orange-200 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
+                      💾 {{ product.storageGb }} GB
+                    </span>
+                  </td>
+                  
+                  <td class="px-8 py-6 itbms-color text-center">
+                    <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border border-gray-200 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
+                      🎨 {{ product.color || "-" }}
+                    </span>
+                  </td>
+                  
+                  <td class="px-8 py-6 itbms-price text-center">
+                    <div class="text-2xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent group-hover:from-green-700 group-hover:to-emerald-700 transition-all duration-300">
+                      {{ product.price?.toLocaleString() }} ฿
+                    </div>
+                  </td>
+                  
+                  <td class="px-8 py-6">
+                    <div class="flex gap-4 justify-center">
+                      <button @click="editProduct(product.id)"
+                        class="itbms-edit-button group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white p-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                        <svg class="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                        </svg>
+                      </button>
+                      
+                      <button @click="deleteProductHandler(product.id)"
+                        class="itbms-delete-button group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white p-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
+                        <svg class="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                        </svg>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
           </div>
-        </div>
-      </div>
-
-      <!-- Empty State -->
-      <div v-if="filteredProducts.length === 0" class="text-center text-gray-300 py-24">
-        <h3 class="text-2xl font-semibold mb-2">no sale item</h3>
-      </div>
-
-      <!-- Sale Item Table View -->
-      <main v-if="filteredProducts.length > 0" class="max-w-6xl mx-auto space-y-5 px-6 pb-16 roun">
-        <div class="overflow-x-auto">
-          <table class="min-w-full table-auto text-sm text-left text-black">
-            <thead>
-              <tr class="bg-gray-400 backdrop-blur-sm text-black">
-                <th class="px-4 py-3 text-center">ID</th>
-                <th class="px-4 py-3x text-center">Brand</th>
-                <th class="px-4 py-3">Model</th>
-                <th class="px-4 py-3 text-center">Ram</th>
-                <th class="px-4 py-3 text-center">Storage</th>
-                <th class="px-4 py-3 text-center">Color</th>
-                <th class="px-4 py-3 text-center">Price</th>
-                <th class="px-4 py-3">Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(product, index) in filteredProducts" :key="product.id || index"
-                class="itbms-row bg-gray-200 border-b border-gray-700 hover:bg-gray-700/40 transition-all duration-300">
-                <td class="px-4 py-2 itbms-id text-center">{{ product.id }}</td>
-                <td class="px-4 py-2 itbms-brand text-center">
-                  {{ product.brandName }}
-                </td>
-                <td class="px-4 py-2 itbms-model">{{ product.model }}</td>
-                <td class="px-4 py-2 itbms-ramGb text-center">
-                  {{ product.ramGb || "-" }} GB
-                </td>
-                <td class="px-4 py-2 itbms-storageGb text-center">
-                  {{ product.storageGb }} GB
-                </td>
-                <td class="px-4 py-2 itbms-color text-center">
-                  {{ product.color || "-" }}
-                </td>
-                <td class="px-4 py-2 itbms-price text-center">
-                  {{ product.price?.toLocaleString() }} ฿
-                </td>
-                <td class="px-4 py-2">
-                  <div class="flex gap-2">
-                    <button @click="editProduct(product.id)"
-                      class="itbms-edit-button bg-blue-700 hover:bg-blue-600 text-white px-3 py-1.5 rounded-md transition-all duration-300">
-                      E
-                    </button>
-                    <button @click="deleteProductHandler(product.id)"
-                      class="itbms-delete-button bg-red-700 hover:bg-red-600 text-white px-3 py-1.5 rounded-md transition-all duration-300">
-                      D
-                    </button>
-                  </div>
-                </td>
-              </tr>
-            </tbody>
-          </table>
         </div>
       </main>
     </main>
 
     <Footer />
 
-    <!-- Confirm Modal -->
-    <!-- <transition name="fade">
-      <div
-        v-if="showConfirmModal"
-        class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
-      >
-        <div
-          class="bg-white p-6 rounded-xl shadow-lg max-w-md text-center text-black"
-        >
-          <h2 class="text-xl font-bold text-gray-800 mb-4">Confirm Deletion</h2>
-          <p class="itbms-message text-gray-700 mb-6">
-            Do you want to delete this sale item?
-          </p>
-          <div class="flex justify-center gap-4">
-            <button
-              @click="confirmDeleteItem"
-              class="itbms-confirm-button px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
-            >
-              Confirm
-            </button>
-            <button
-              @click="showConfirmModal = false"
-              class="itbms-cancel-button px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
-      </div>
-    </transition> -->
-
+    <!-- Enhanced Modals -->
     <Modal v-if="showConfirmModal" :title="'Confirm Deletion'" :message="'Do you want to delete this sale item?'"
       :displayConfirm="true" :confirmAction="confirmDeleteItem" :closeAction="() => {
         showConfirmModal = false;
-      }
-        ">
+      }">
     </Modal>
 
-    <!--Notfound Modal-->
-    <!-- <div
-      v-if="itemNotExist === true"
-      class="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center"
-    >
-      <div class="bg-white p-6 rounded-xl shadow-lg max-w-96 text-center">
-        <p class="text-gray-700 mb-6">
-          An error has occurred, the sale item does not exist.
-        </p>
-        <div class="flex justify-center gap-4">
-          <button
-            @click="(itemNotExist = false), updateItems()"
-            class="px-5 py-2 bg-gray-200 text-gray-800 rounded-lg hover:bg-gray-300 transition"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div> -->
-
-    <Modal v-if="itemNotExist === true" :title="'Confirm Deletion'"
+    <Modal v-if="itemNotExist === true" :title="'Error Occurred'"
       :message="'An error has occurred, the sale item does not exist.'" :displayConfirm="true"
       :confirmAction="confirmDeleteItem" :closeAction="() => {
         (itemNotExist = false), updateItems();
-      }
-        ">
+      }">
     </Modal>
 
   </div>
@@ -244,6 +310,8 @@ const brands = ref([]);
 const selectedBrand = ref("all");
 const router = useRouter();
 const itemNotExist = ref(false);
+const showConfirmModal = ref(false);
+const productToDeleteId = ref(null);
 
 //router
 const route = useRoute();
@@ -252,23 +320,31 @@ const deleted = ref(false);
 
 const updateItems = async () => {
   itemNotExist.value = false;
-  products.value = await fetchProducts(); // ใช้ฟังก์ชันที่คุณใช้ fetch รายการ sale items
+  products.value = await fetchProducts(); 
+};
+
+const confirmDeleteItem = async () => {
+  try {
+    const detail = await fetchProductById(productToDeleteId.value);
+
+    if (detail.error) {
+      itemNotExist.value = true;
+      return;
+    }
+    await deleteProduct(productToDeleteId.value);
+    deleted.value = true;
+    await updateItems();
+    showConfirmModal.value = false;
+  } catch (error) {
+    itemNotExist.value = true;
+    showConfirmModal.value = false;
+    deleted.value = false;
+  }
 };
 
 onMounted(async () => {
   try {
     const basicList = await fetchProducts();
-
-    // const result = [];
-    // for (const item of basicList) {
-    //   try {
-    //     const detailed = await fetchProductById(item.id);
-    //     result.push(detailed);
-    //   } catch (error) {
-    //     console.warn(`โหลดข้อมูลไม่ได้สำหรับ id ${item.id}`, error);
-    //   }
-    // }
-
     products.value = basicList;
   } catch (error) {
     console.error("Error fetching products:", error);
@@ -289,29 +365,6 @@ onMounted(async () => {
 
 const editProduct = (id) => {
   router.push({ name: "EditSaleItemDetail", params: { id: id } });
-};
-
-const showConfirmModal = ref(false);
-const productToDeleteId = ref(null);
-
-const confirmDeleteItem = async () => {
-  try {
-    const detail = await fetchProductById(productToDeleteId.value);
-    console.log(detail);
-
-    if (detail.error) {
-      itemNotExist.value = true;
-      return;
-    }
-    await deleteProduct(productToDeleteId.value);
-    deleted.value = true;
-    await updateItems();
-    showConfirmModal.value = false;
-  } catch (error) {
-    itemNotExist.value = true;
-    showConfirmModal.value = false;
-    deleted.value = false;
-  }
 };
 
 function deleteProductHandler(id) {
@@ -336,3 +389,20 @@ const filteredProducts = computed(() => {
   );
 });
 </script>
+
+<style scoped>
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.5s ease-out;
+}
+</style>

@@ -27,53 +27,6 @@
                 class="w-20 h-20 object-cover rounded-lg border border-gray-200 hover:ring-2 hover:ring-blue-300 transition cursor-pointer" />
             </div>
           </div>
-
-
-          <!-- <form @submit.prevent="saveBrand" class="lg:w-1/2 w-full space-y-6">
-
-          <div class="space-y-1">
-            <label for="name" class="block text-sm font-medium text-gray-700">Name</label>
-            <input id="name" required v-model="form.name" type="text" placeholder="Name"
-              class="itbms-name w-full border border-gray-300 rounded-xl p-3 focus:outline-none focus:ring-2 focus:ring-blue-300"
-              :ref="el => inputRefs[1] = el" @keydown.enter.prevent="handleEnter(1)" @blur="trimField('name')" />
-          </div>
-
-          <div class="grid grid-cols-2 gap-6">
-            <div>
-              <label class="block text-sm font-medium mb-1">WebsiteUrl</label>
-              <input id="websiteUrl" v-model="form.websiteUrl" type="text"
-                class="itbms-websiteUrl w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                :ref="el => inputRefs[2] = el" @keydown.enter.prevent="handleEnter(2)" @blur="trimField('websiteUrl')"/>
-            </div>
-            <div>
-              <label class="block text-sm font-medium mb-1">CountryOfOrigin</label>
-              <input id="countryOfOrigin" v-model="form.countryOfOrigin" type="text" step="0.1"
-                class="itbms-countryOfOrigin w-full border border-gray-300 rounded-xl p-2 focus:outline-none focus:ring-2 focus:ring-blue-300"
-                :ref="el => inputRefs[3] = el" @keydown.enter.prevent="handleEnter(3)" @blur="trimField('countryOfOrigin')"/>
-            </div>
-            <div>
-            <div>
-            <label for="isActive" class="block text-sm font-medium mb-1 text-gray-700">Active Status</label>
-            <input type="checkbox" class="itbms-isActive toggle" v-model="form.isActive" @click="form.isActive = !form.isActive" />
-          </div>
-            </div>
-          </div>
-
-          <div class="flex gap-4 pt-4">
-            <button type="submit"
-              class="itbms-save-button flex-1 py-3 rounded-xl bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
-              :disabled="!isFormModified"
-              :class="!isFormModified ? 'disabled:opacity-50' : ''"
-              @click="saveBrand"
-              >
-              Save
-            </button>
-            <button type="button" @click="cancelEdit"
-              class="itbms-cancel-button flex-1 py-3 rounded-xl border border-red-400 text-red-600 font-medium hover:bg-red-50 transition">
-              Cancel
-            </button>
-          </div>
-        </form> -->
           <BrandForm formtype="edit" :form="form" :originData="originData" @payload="saveBrand">
           </BrandForm>
         </div>
@@ -134,16 +87,6 @@ const form = reactive({
 // original snapshot for change detection
 const originData = ref({});
 
-// const trimField = (key) => {
-//   if (typeof form[key] === 'string') form[key] = form[key].trim();
-// };
-
-// const handleEnter = (index) => {
-//   const next = inputRefs.value[index + 1];
-//   if (next) next.focus();
-//   else saveBrand();
-// };
-
 onMounted(async () => {
   try {
     const data = await fetchBrandById(route.params.id);
@@ -184,12 +127,6 @@ const saveBrand = async (payload) => {
     else console.error(err);
   }
 };
-
-
-// cancel edit
-// const cancelEdit = () => {
-//   router.go(-1);
-// };
 
 // Watch for error modal to start countdown
 watch(showErrorModal, (v) => {
