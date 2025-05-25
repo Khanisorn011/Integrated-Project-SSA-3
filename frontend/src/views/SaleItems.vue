@@ -177,8 +177,8 @@
     </div>
 
     <!-- Empty State -->
-    <div v-if="saleItems.length === 0" class="text-center text-gray-400 py-24">
-      <i class="itbms-row text-2xl font-semibold mb-2">no sale item</i>
+    <div v-if="saleItems.length === 0" class="itbms-row text-center text-gray-400 py-24">
+      <i class="itbms-message text-2xl font-semibold mb-2">no sale item</i>
     </div>
 
     <!-- Sort Buttons -->
@@ -325,9 +325,12 @@ const sortDirection = computed(() => {
 const payload = ref({
   filterBrands: [],
   page: currentPage.value,
-  size: pageSize.value,
-  sortField: "createdOn",
-  sortDirection: sortDirection.value,
+  // size: pageSize.value,
+    size: 100,
+  // sortField: "createdOn",
+    sortField: "",
+  // sortDirection: sortDirection.value,
+    sortDirection: null,
 });
 
 onMounted(async () => {
@@ -358,7 +361,8 @@ watch(
       ...payload.value,
       filterBrands: selectedBrands.value,
       page: currentPage.value,
-      size: pageSize.value,
+      // size: pageSize.value,
+      size: 100,
       sortDirection: sortDirection.value,
     };
     const response = await fetchSaleItemByCondition(payload.value);

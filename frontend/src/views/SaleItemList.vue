@@ -42,35 +42,16 @@
       </section>
 
       <!-- Alerts with Enhanced Design -->
-      <div class="px-6 max-w-6xl mx-auto mb-8">
-        <div v-if="added" class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 p-6 rounded-xl shadow-lg mb-4 animate-slide-in">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            <div class="ml-3">
-              <p class="text-green-800 font-semibold">Success!</p>
-              <p class="text-green-700">The sale item has been successfully added.</p>
-            </div>
-          </div>
-        </div>
-
-        <div v-if="deleted" class="bg-gradient-to-r from-green-50 to-emerald-50 border-l-4 border-green-500 p-6 rounded-xl shadow-lg mb-4 animate-slide-in">
-          <div class="flex items-center">
-            <div class="flex-shrink-0">
-              <svg class="w-6 h-6 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-              </svg>
-            </div>
-            <div class="ml-3">
-              <p class="text-green-800 font-semibold">Deleted!</p>
-              <p class="text-green-700">The sale item has been deleted.</p>
-            </div>
-          </div>
-        </div>
-      </div>
+   <Alert
+      v-if="added"
+      :message="'The sale item has been successfully added.'"
+      :state="'created'"
+    />
+    <Alert
+      v-if="deleted"
+      :message="'The sale item has been deleted.'"
+      :state="'created'"
+    />
 
       <!-- Enhanced Controls Bar -->
       <div class="max-w-7xl mx-auto px-6 mb-12">
@@ -137,7 +118,7 @@
 
       <!-- Enhanced Empty State -->
       <div v-if="filteredProducts.length === 0" class="text-center py-32">
-        <div class="max-w-lg mx-auto">
+        <div class="itbms-row max-w-lg mx-auto">
           <div class="relative mb-8">
             <div class="w-32 h-32 mx-auto bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-2xl">
               <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -148,7 +129,7 @@
               <span class="text-lg">✨</span>
             </div>
           </div>
-          <h3 class="text-4xl font-bold mb-4 text-gray-700">No Sale Items Yet</h3>
+          <h3 class="itbms-message text-4xl font-bold mb-4 text-gray-700">no sale item</h3>
           <p class="text-gray-500 text-xl mb-8">Start building your inventory by adding your first mobile device</p>
           <router-link to="/sale-items/add" 
             class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
