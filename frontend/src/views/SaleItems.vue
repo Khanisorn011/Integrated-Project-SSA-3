@@ -325,11 +325,44 @@ const pageStore = usePageStore();
 // currentPage
 const currentPage = ref(pageStore.getPageNumber());
 // pageSize
-const pageSize = ref(10);
+const pageSize = ref(sessionStorage.getItem("pageSize") || 10);
 // pageResponse
 const pageResponse = ref({ totalPages: 0 });
 
 const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default");
+
+const payload = ref({
+  filterBrands: [],
+  page: currentPage.value,
+  size: pageSize.value,
+  sortField: "createdOn",
+  sortDirection: "ASC"
+});
+
+onMounted(async () => {
+  try {
+    brands.value = await fetchBrands();
+    const savedBrands = sessionStorage.getItem("selectedBrands");
+        payload.value = {
+      ...payload.value,
+      filterBrands: selectedBrands.value,
+      page: currentPage.value,
+      size: pageSize.value,
+      sortDirection: sortDirection.value,
+    };
+    const response = await fetchSaleItemByCondition(payload.value);
+    saleItems.value = response.content || [];
+    pageResponse.value.totalPages = response.totalPages || 0;
+
+    if (savedBrands) {
+      const parsed = JSON.parse(savedBrands);
+
+      selectedBrands.value.splice(0, selectedBrands.value.length, ...parsed);
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 
 const sortDirection = computed(() => {
   if (sortOrder.value === "asc") {
@@ -342,15 +375,6 @@ const sortDirection = computed(() => {
   };
   return null;
 });
-
-const payload = ref({
-  filterBrands: [],
-  page: currentPage.value,
-  size: pageSize.value,
-  sortField: "createdOn",
-  sortDirection: "ASC"
-});
-
 
 watch(
   [selectedBrands, currentPage, pageSize, sortDirection],
@@ -370,26 +394,15 @@ watch(
 );
 
 watch(currentPage, () => {
-  console.log(currentPage.value);
   pageStore.setPageNumber(currentPage.value);
-  console.log(pageStore.getPageNumber());
 });
+
+watch(pageSize , (pageSize) => {
+  sessionStorage.setItem("pageSize", pageSize);
+})
 
 watch(sortOrder, (newVal) => {
   sessionStorage.setItem("sortOrder", newVal);
-});
-
-onMounted(async () => {
-  try {
-    brands.value = await fetchBrands();
-    const savedBrands = sessionStorage.getItem("selectedBrands");
-    
-    if (savedBrands) {
-      selectedBrands.value = JSON.parse(savedBrands);
-    }
-  } catch (error) {
-    console.log(error);
-  }
 });
 
 watch(selectedBrands, (newVal) => {
