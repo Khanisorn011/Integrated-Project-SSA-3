@@ -8,6 +8,7 @@ import EditBrandDetail from "../views/EditBrandDetail.vue";
 import Brand from "../views/Brand.vue";
 import SaleItemList from "../views/SaleItemList.vue";
 import AddBrand from "../views/AddBrand.vue";
+import Modal from "../components/Modal.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +58,11 @@ const router = createRouter({
       path: '/brands/add',
       name: 'AddBrand',
       component: AddBrand
+    },
+    {
+      path: '/modal',
+      name: 'Modal',
+      component: Modal
     }
   ],
 });

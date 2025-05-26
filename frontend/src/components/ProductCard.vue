@@ -8,29 +8,29 @@
     class="block"
   >
     <div
-      class="bg-white text-black rounded-xl shadow-md p-4 hover:-translate-y-1 transition-transform w-full max-w-xs mx-auto min-h-[350px] flex flex-col justify-between "
+      class="bg-gradient-to-br from-purple-50 to-white text-gray-900 rounded-2xl p-5 hover:-translate-y-1 transition-transform duration-300 ease-in-out w-full max-w-xs mx-auto min-h-[360px] flex flex-col justify-between shadow-xl border border-purple-100"
     >
       <!-- Image -->
       <div
-        class="h-48 bg-zinc-200 rounded-lg mb-4 bg-center bg-cover"
+        class="h-48 bg-zinc-100 rounded-xl mb-4 bg-center bg-cover border border-purple-100 shadow-inner"
         :style="{ backgroundImage: `url(${imageUrl})` }"
       ></div>
 
       <!-- Product Info -->
       <div class="text-sm leading-snug space-y-1">
         <p
-          class="itbms-brand font-bold"
+          class="itbms-brand font-semibold tracking-wide text-purple-700"
           :class="{ 'text-gray-400': !product.brandName?.trim() }"
         >
           {{ product.brandName || "-" }}
         </p>
         <p
-          class="itbms-model"
+          class="itbms-model text-gray-700"
           :class="{ 'text-gray-400': !product.model?.trim() }"
         >
           {{ product.model || "-" }}
         </p>
-        <p>
+        <p class="text-gray-600">
           <span
             class="itbms-ramGb"
             :class="{ 'text-gray-400': !product.ramGb?.toString().trim() }"
@@ -44,10 +44,10 @@
           >
             {{ product.storageGb || "-" }}
           </span>
-          <span class="itbms-storageGb-unit">GB</span>
+          <span class="itbms-storageGb-unit text-gray-500 text-xs ml-1">GB</span>
         </p>
         <p
-          class="Itbms-color"
+          class="Itbms-color text-gray-600"
           :class="{ 'text-gray-400': !product.color?.trim() }"
         >
           {{ product.color || "-" }}
@@ -55,8 +55,8 @@
       </div>
 
       <!-- Price -->
-      <p class="text-lg font-semibold mt-3">
-        <span class="itbms-price-unit">Baht</span>
+      <p class="text-lg font-bold text-purple-800 mt-4">
+        <span class="itbms-price-unit text-sm font-medium text-gray-500">Baht</span>
         <span class="itbms-price pl-1.5">
           {{ product.price?.toLocaleString?.() || "-" }}
         </span>
@@ -64,6 +64,8 @@
     </div>
   </router-link>
 </template>
+
+
 
 <script setup>
 import {useStateStore} from '../stores/stateStore.js'

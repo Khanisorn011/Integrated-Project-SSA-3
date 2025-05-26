@@ -1,6 +1,6 @@
 async function fetchProducts() {
     try {
-      const res = await fetch('http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items')
+      const res = await fetch('http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v1/sale-items')
       const data = await res.json()
       return data
     } catch (err) {
@@ -12,7 +12,7 @@ async function fetchProducts() {
 async function fetchProductById(id) {
   try {
     const res = await fetch(
-      `http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items/${id}`
+      `http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v1/sale-items/${id}`
     );
     const data = await res.json();
 
@@ -29,7 +29,7 @@ async function fetchProductById(id) {
 async function postProduct(payload) {
   try {
     const response = await fetch(
-      "http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items",
+      "http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v1/sale-items",
       {
         method: "POST",
         headers: {
@@ -47,7 +47,7 @@ async function postProduct(payload) {
 async function editProduct(id, payload) {
   try {
     const response = await fetch(
-      `http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items/${id}`,
+      `http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v1/sale-items/${id}`,
       {
         method: "PUT",
         headers: {
@@ -70,14 +70,39 @@ async function editProduct(id, payload) {
 async function deleteProduct(id) {
   try {
     const response = await fetch(
-      `http://ip24ssa3.sit.kmutt.ac.th:8080/itb-mshop/v1/sale-items/${id}`,
+      `http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v1/sale-items/${id}`,
       {
         method: "DELETE",
       }
     );
     return response;
   } catch (error) {
-    throw error;
+    return {error};
+  }
+}
+
+async function fetchSaleItemByCondition(payload) {
+  try {
+    const request = new URLSearchParams(payload).toString();
+    const response = await fetch(
+      `http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v2/sale-items?${request}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        // body: JSON.stringify(payload),
+      }
+    );
+ 
+    if (!response.ok) {
+      throw new Error(`แก้ไขสินค้าไม่สำเร็จ (HTTP ${response.status})`);
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    return { error };
   }
 }
 
@@ -87,4 +112,5 @@ export {
   postProduct,
   editProduct,
   deleteProduct,
+  fetchSaleItemByCondition
 };

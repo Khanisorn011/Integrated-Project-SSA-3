@@ -6,6 +6,9 @@ import org.example.backend.entities.SaleItemBase;
 import org.example.backend.exceptions.SaleItemNotFoundException;
 import org.example.backend.repositories.SaleItemBaseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -58,5 +61,18 @@ public class SaleItemService {
     public List<SaleItemBase> getAllByBrandId(int brandId) {
         return saleItemBaseRepository.findAllByBrandId(brandId);
     }
-}
 
+    public Page<SaleItemBase> getByBrandNameIn(List<String> filterBrands, Integer pageNum, Integer pageSize, String sortField, String sortDirection) {
+
+        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
+        Sort sort = Sort.by(direction, sortField);
+        PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
+
+        if (filterBrands == null || filterBrands.isEmpty()) {
+            return saleItemBaseRepository.findAll(pageRequest);
+        } else {
+            return saleItemBaseRepository.findByBrandNameIn(filterBrands, pageRequest);
+        }
+    }
+    
+}

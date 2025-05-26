@@ -1,26 +1,26 @@
 package org.example.backend.controllers;
 
-import org.example.backend.dtos.SaleItemCreateDTO;
-import org.example.backend.dtos.SaleItemDTO;
-import org.example.backend.dtos.SaleItemDetailDTO;
-import org.example.backend.dtos.SaleItemEditDTO;
+import org.example.backend.dtos.*;
 import org.example.backend.entities.SaleItemBase;
 import org.example.backend.services.BrandBaseService;
 import org.example.backend.services.SaleItemService;
 import org.example.backend.utils.ListMapper;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/itb-mshop")
 @CrossOrigin(origins = {
     "http://ip24ssa3.sit.kmutt.ac.th",
-    "http://ip24ssa3.sit.kmutt.ac.th:5173"
+    "http://ip24ssa3.sit.kmutt.ac.th:5173",
+    "http://intproj24.sit.kmutt.ac.th"
 })
 
 public class SaleItemController {
@@ -40,6 +40,33 @@ public class SaleItemController {
 
         return ResponseEntity.ok(dto);
     }
+
+    @GetMapping("/v2/sale-items")
+    public ResponseEntity<PageResponseDTO> getSalesItemsWithPage(@ModelAttribute PageRequestDTO request) {
+        Page<SaleItemBase> saleItems = saleItemService.getByBrandNameIn(
+                request.getFilterBrands(), request.getPage(), request.getSize()
+                , request.getSortField() , request.getSortDirection()
+        );
+
+        // Convert content to DTO
+        List<SaleItemDetailDTO> contentDTOs = saleItems.getContent()
+                .stream()
+                .map(item -> modelMapper.map(item, SaleItemDetailDTO.class))
+                .collect(Collectors.toList());
+
+        // Set content and pagination into response DTO
+        PageResponseDTO pageResponseDTO = new PageResponseDTO();
+        pageResponseDTO.setContent(contentDTOs);
+        pageResponseDTO.setPage(saleItems.getNumber());
+        pageResponseDTO.setSize(saleItems.getSize());
+        pageResponseDTO.setTotalElements((int) saleItems.getTotalElements());
+        pageResponseDTO.setTotalPages(saleItems.getTotalPages());
+        pageResponseDTO.setFirst(saleItems.isFirst());
+        pageResponseDTO.setLast(saleItems.isLast());
+        pageResponseDTO.setSort(request.getSortField() + ": " + request.getSortDirection());
+        return ResponseEntity.ok(pageResponseDTO);
+    }
+
 
     @GetMapping("/v1/sale-items/{id}")
     public ResponseEntity<SaleItemDetailDTO> getSaleItemById(@PathVariable Integer id) {

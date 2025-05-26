@@ -23,7 +23,8 @@ import java.util.List;
 @RequestMapping("/itb-mshop")
 @CrossOrigin(origins = {
     "http://ip24ssa3.sit.kmutt.ac.th",
-    "http://ip24ssa3.sit.kmutt.ac.th:5173"
+    "http://ip24ssa3.sit.kmutt.ac.th:5173",
+    "http://intproj24.sit.kmutt.ac.th"
 })
 
 public class BrandBaseController {

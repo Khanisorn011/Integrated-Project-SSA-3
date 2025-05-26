@@ -1,18 +1,18 @@
 [
     {
         "name" : "huawei",
-        "url" : "../../images/huawei.png"
+        "url" : "../../ssa3/images/huawei.png"
     },
     {
         "name" : "iphone",
-        "url" : "../../images/iphone.png"
+        "url" : "../../ssa3/images/iphone.png"
     },
     {
         "name" : "oppo",
-        "url" : "../../images/oppo.png"
+        "url" : "../../ssa3/images/oppo.png"
     },
     {
         "name" : "xiaomi",
-        "url" : "../../images/xiaomi.png"
+        "url" : "../../ssa3/images/xiaomi.png"
     }
 ]
