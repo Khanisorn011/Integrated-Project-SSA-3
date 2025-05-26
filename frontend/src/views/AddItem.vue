@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col min-h-screen bg-white text-black">
+  <div class="flex flex-col min-h-screen bg-gradient-to-br from-indigo-100 via-white to-purple-100 text-black">
     <Header />
     <main class="flex-grow">
       <!-- Add Product Form -->

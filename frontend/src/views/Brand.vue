@@ -1,8 +1,8 @@
 <template>
-  <div class="bg-white min-h-screen font-sans">
+  <div class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 min-h-screen font-sans flex flex-col text-black">
     <!-- Header -->
     <Header></Header>
-
+    <main class="flex-grow">
     <div class="bg-white border-b border-gray-200 pt-8 pb-6 px-6 flex justify-between items-center">
       <div class="flex items-center space-x-4">
         <router-link to="/sale-items/list" class="text-blue-500 hover:text-blue-700 transition-colors">Sale Item
@@ -95,7 +95,7 @@
         }
         ">
     </Modal>
-
+    </main>
     <Footer></Footer>
   </div>
 </template>

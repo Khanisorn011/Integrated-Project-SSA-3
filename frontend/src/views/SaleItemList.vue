@@ -1,11 +1,5 @@
 <template>
-  <div class="bg-gradient-to-br from-indigo-50 via-white to-purple-50 text-gray-900 min-h-screen font-[Inter] flex flex-col relative overflow-hidden">
-    <!-- Animated Background Elements -->
-    <div class="absolute inset-0 overflow-hidden pointer-events-none">
-      <div class="absolute -top-40 -right-40 w-80 h-80 bg-gradient-to-br from-blue-400/20 to-purple-600/20 rounded-full blur-3xl animate-pulse"></div>
-      <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-gradient-to-br from-pink-400/20 to-orange-600/20 rounded-full blur-3xl animate-pulse delay-1000"></div>
-      <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-gradient-to-br from-cyan-400/10 to-blue-600/10 rounded-full blur-3xl animate-pulse delay-500"></div>
-    </div>
+  <div class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 text-gray-900 min-h-screen font-[Inter] flex flex-col relative overflow-hidden">
 
     <Header />
     
@@ -24,7 +18,7 @@
           </p>
           
           <!-- Stats Cards -->
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto mt-12">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto mt-12">
             <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
               <div class="text-3xl font-bold text-blue-600">{{ filteredProducts.length }}</div>
               <div class="text-gray-600 font-medium">Total Items</div>
@@ -32,10 +26,6 @@
             <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
               <div class="text-3xl font-bold text-purple-600">{{ brands.length }}</div>
               <div class="text-gray-600 font-medium">Brands</div>
-            </div>
-            <div class="bg-white/70 backdrop-blur-xl rounded-2xl p-6 border border-white/50 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-1">
-              <div class="text-3xl font-bold text-green-600">{{ selectedBrand === 'all' ? 'All' : '1' }}</div>
-              <div class="text-gray-600 font-medium">Selected Brand</div>
             </div>
           </div>
         </div>
@@ -187,43 +177,43 @@
                   :class="index % 2 === 0 ? 'bg-white/80' : 'bg-gray-50/50'">
                   
                   <td class="px-8 py-6 itbms-id text-center">
-                    <div class="inline-flex items-center justify-center w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 text-white rounded-2xl text-lg font-bold shadow-lg group-hover:shadow-xl group-hover:scale-110 transition-all duration-300">
+                    <div class="inline-flex items-center justify-center text-black rounded-2xl text-l font-bold shadow-lg group-hover:scale-110 transition-all duration-300 group-hover:text-blue-900">
                       {{ product.id }}
                     </div>
                   </td>
                   
                   <td class="px-8 py-6 itbms-brand text-center">
-                    <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border border-purple-200 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
+                    <span class="inline-flex items-center  text-l font-bold text-black group-hover:scale-110 transition-all duration-300 group-hover:text-blue-900">
                       {{ product.brandName }}
                     </span>
                   </td>
                   
                   <td class="px-8 py-6 itbms-model">
-                    <div class="font-bold text-lg text-gray-900 group-hover:text-blue-700 transition-colors duration-300">
+                    <div class="font-bold text-l text-black group-hover:text-blue-900 group-hover:scale-110 transition-colors duration-300">
                       {{ product.model }}
                     </div>
                   </td>
                   
                   <td class="px-8 py-6 itbms-ramGb text-center">
-                    <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
-                      🚀 {{ product.ramGb || "-" }} GB
+                    <span class="inline-flex items-center text-l font-bold text-green-700 group-hover:text-green-900 group-hover:scale-110 transition-all duration-300">
+                      {{ product.ramGb || "-" }} GB
                     </span>
                   </td>
                   
                   <td class="px-8 py-6 itbms-storageGb text-center">
-                    <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-orange-100 to-yellow-100 text-orange-800 border border-orange-200 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
-                      💾 {{ product.storageGb }} GB
+                    <span class="inline-flex items-center text-l font-bold  text-orange-700 group-hover:text-orange-900  group-hover:scale-110 transition-all duration-300">
+                      {{ product.storageGb }} GB
                     </span>
                   </td>
                   
                   <td class="px-8 py-6 itbms-color text-center">
-                    <span class="inline-flex items-center px-4 py-2 rounded-xl text-sm font-bold bg-gradient-to-r from-gray-100 to-slate-100 text-gray-800 border border-gray-200 shadow-md group-hover:shadow-lg group-hover:scale-105 transition-all duration-300">
-                      🎨 {{ product.color || "-" }}
+                    <span class="inline-flex items-center  text-l font-bold  text-black  group-hover:scale-110 transition-all duration-300 group-hover:text-blue-900">
+                      {{ product.color || "-" }}
                     </span>
                   </td>
                   
                   <td class="px-8 py-6 itbms-price text-center">
-                    <div class="text-2xl font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent group-hover:from-green-700 group-hover:to-emerald-700 transition-all duration-300">
+                    <div class="text-l font-black bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent group-hover:from-green-700 group-hover:to-emerald-700 transition-all duration-300 group-hover:scale-110">
                       {{ product.price?.toLocaleString() }} ฿
                     </div>
                   </td>

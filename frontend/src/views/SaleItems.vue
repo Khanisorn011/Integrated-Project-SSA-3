@@ -1,6 +1,6 @@
 <template>
   <div
-    class="bg-gradient-to-b from-purple-50 via-white to-white text-black min-h-screen font-[Poppins]"
+    class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 text-black min-h-screen font-[Poppins]"
   >
     <Header />
 
@@ -29,7 +29,7 @@
     />
 
     <!-- Enhanced Controls Bar -->
-    <div class="max-w-7xl mx-auto px-6 mb-12">
+    <div class="max-w-7xl mx-auto px-6 mb-12 ">
       <div
         class="bg-white/80 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl border border-white/30 ring-1 ring-gray-200/20 hover:shadow-3xl transition-all duration-700"
       >
@@ -166,7 +166,7 @@
             </button>
             <button
               @click="goToList"
-              class="flex-1 lg:flex-none px-6 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 bg-gray-700 text-gray-300 hover:bg-gray-600 font-semibold text-base"
+              class="flex-1 lg:flex-none px-6 py-3 rounded-xl transition-all duration-300 flex items-center justify-center gap-2 bg-white text-black hover:bg-gray-600 font-semibold text-base"
             >
               <span class="font-mono">≡</span>
               List
@@ -177,9 +177,32 @@
     </div>
 
     <!-- Empty State -->
-    <div v-if="saleItems.length === 0" class="itbms-row text-center text-gray-400 py-24">
+    <!-- <div v-if="saleItems.length === 0" class="itbms-row text-center text-gray-400 py-24">
       <i class="itbms-message text-2xl font-semibold mb-2">no sale item</i>
-    </div>
+    </div> -->
+    <div v-if="saleItems.length === 0" class="text-center py-32">
+        <div class="itbms-row max-w-lg mx-auto">
+          <div class="relative mb-8">
+            <div class="w-32 h-32 mx-auto bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-2xl">
+              <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
+              </svg>
+            </div>
+            <div class="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
+              <span class="text-lg">✨</span>
+            </div>
+          </div>
+          <h3 class="itbms-message text-4xl font-bold mb-4 text-gray-700">no sale item</h3>
+          <p class="text-gray-500 text-xl mb-8">Start building your inventory by adding your first mobile device</p>
+          <router-link to="/sale-items/add" 
+            class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+            </svg>
+            Add Your First Item
+          </router-link>
+        </div>
+      </div>
 
     <!-- Sort Buttons -->
     <main class="max-w-6xl mx-auto px-1 pb-8 flex flex-col gap-4">
@@ -248,7 +271,7 @@
       <div
         v-for="(product, index) in saleItems"
         :key="product.id"
-        class="bg-white/70 p-4 rounded-2xl border border-purple-100 hover:bg-purple-50 transition-all duration-300"
+        class="bg-white p-4 rounded-2xl hover:bg-purple-50 transition-all duration-300"
       >
         <ProductCard
           class="itbms-row"
