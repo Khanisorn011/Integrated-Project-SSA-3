@@ -322,6 +322,7 @@
         :pageSize="pageSize"
         @update:currentPage="(val) => (currentPage = val)"
         @update:pageSize="(val) => (pageSize = val)"
+        @clickButton="clickButton = !clickButton"
       />
     </div>
 
@@ -363,6 +364,8 @@ const pageResponse = ref({ totalPages: 0 });
 
 const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default");
 
+const clickButton = ref(false)
+
 const payload = ref({
   filterBrands: [],
   page: currentPage.value,
@@ -391,20 +394,17 @@ onMounted(async () => {
 
     const response = await fetchSaleItemByCondition(payload.value);
 
-    // if (currentPage.value > response.totalPages) {
-    //   if (currentPage.value === response.totalPages) {
-    //     const response = await fetchSaleItemByCondition(payload.value);
-    //     saleItems.value = response.content || [];
-    //     pageResponse.value.totalPages = response.totalPages || 0;
-    //   }
+    if (currentPage.value === response.totalPages) {
+      currentPage.value = response.totalPages;
+      const response = await fetchSaleItemByCondition(payload.value);
+      return;
+    }
 
-    //   if (response.totalPages !== 0) {
-    //     currentPage.value = response.totalPages;
-    //     const response = await fetchSaleItemByCondition(payload.value);
-    //     saleItems.value = response.content || [];
-    //     pageResponse.value.totalPages = response.totalPages || 0;
-    //   }
-    // }
+    if (response.totalPages !== 0 && currentPage.value > response.totalPages) {
+      currentPage.value = response.totalPages;
+       const response = await fetchSaleItemByCondition(payload.value);
+       return;
+    }
 
     saleItems.value = response.content || [];
     pageResponse.value.totalPages = response.totalPages || 0;
@@ -426,7 +426,7 @@ const sortDirection = computed(() => {
 });
 
 watch(
-  [selectedBrands, currentPage, pageSize, sortDirection],
+  [selectedBrands, currentPage, pageSize, sortDirection , clickButton],
   async () => {
     payload.value = {
       ...payload.value,
@@ -437,20 +437,17 @@ watch(
     };
     const response = await fetchSaleItemByCondition(payload.value);
 
-    // if (currentPage.value > response.totalPages) {
-    //   if (currentPage.value === response.totalPages) {
-    //     const response = await fetchSaleItemByCondition(payload.value);
-    //     saleItems.value = response.content || [];
-    //     pageResponse.value.totalPages = response.totalPages || 0;
-    //   }
+    if (currentPage.value === response.totalPages) {
+      currentPage.value = response.totalPages;
+      const response = await fetchSaleItemByCondition(payload.value);
+      return;
+    }
 
-    //   if (response.totalPages !== 0) {
-    //     currentPage.value = response.totalPages;
-    //     const response = await fetchSaleItemByCondition(payload.value);
-    //     saleItems.value = response.content || [];
-    //     pageResponse.value.totalPages = response.totalPages || 0;
-    //   }
-    // }
+    if (response.totalPages !== 0 && currentPage.value > response.totalPages) {
+      currentPage.value = response.totalPages;
+       const response = await fetchSaleItemByCondition(payload.value);
+       return;
+    }
 
     saleItems.value = response.content || [];
     pageResponse.value.totalPages = response.totalPages || 0;
