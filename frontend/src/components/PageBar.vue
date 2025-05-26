@@ -1,7 +1,7 @@
 <template>
   <div class="p-4 bg-gray-100 rounded-xl shadow-md flex flex-col md:flex-row md:items-center md:justify-between gap-4">
     <!-- Pagination Controls -->
-    <div class="join flex flex-wrap items-center gap-2" v-if="totalPages > 1">
+    <div class="join flex flex-wrap items-center gap-2" v-show="totalPages > 1">
       <button @click="$emit('update:currentPage', 0)" :disabled="currentPage === 0" class="itbms-page-first join-item btn btn-sm px-4">First</button>
       <button @click="$emit('update:currentPage', currentPage - 1)" :disabled="currentPage === 0" class="itbms-page-prev join-item btn btn-sm px-4">Prev</button>
 
@@ -59,6 +59,8 @@ const visiblePages = computed(() => {
   for (let i = visibleStart.value; i < end; i++) {
     pages.push(i);
   }
+  console.log(pages);
+  
   return pages;
 });
 </script>
