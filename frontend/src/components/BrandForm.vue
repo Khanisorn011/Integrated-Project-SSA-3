@@ -17,6 +17,7 @@
           @keydown.enter.prevent="handleEnter(0)"
           @blur="trimField('name')"
         />
+        <p v-if="errors.name" class="text-red-500 text-sm mt-1">{{ errors.name }}</p>
       </div>
 
       <!-- Other Fields -->
@@ -37,6 +38,7 @@
             @keydown.enter.prevent="handleEnter(1)"
             @blur="trimField('websiteUrl')"
           />
+          <p v-if="errors.websiteUrl" class="text-red-500 text-sm mt-1">{{ errors.websiteUrl }}</p>
         </div>
         <div>
           <label
@@ -54,6 +56,7 @@
             @keydown.enter.prevent="handleEnter(2)"
             @blur="trimField('countryOfOrigin')"
           />
+          <p v-if="errors.countryOfOrigin" class="text-red-500 text-sm mt-1">{{ errors.countryOfOrigin }}</p>
         </div>
         <div>
           <label
@@ -118,6 +121,12 @@ const form = reactive({
   isActive: true,
 });
 
+const errors = reactive({
+  name: '',
+  websiteUrl: '',
+  countryOfOrigin: '',
+});
+
 const payload = computed(() => ({
   name: form.name.trim(),
   websiteUrl: form.websiteUrl.trim() || undefined,
@@ -126,7 +135,10 @@ const payload = computed(() => ({
 }));
 
 const trimField = (key) => {
-  if (typeof form[key] === "string") form[key] = form[key].trim();
+  if (typeof form[key] === "string") {
+    form[key] = form[key].trim()
+    validateField(key)
+  }
 };
 
 const handleEnter = (index) => {
@@ -139,11 +151,15 @@ const cancel = () => {
 };
 
 const isFormValid = computed(() => {
-  return form.name.trim() !== "";
+  return (
+    form.name.trim().length > 0 &&
+    !errors.name &&
+    !errors.websiteUrl &&
+    !errors.countryOfOrigin
+  );
 });
 
 const handleSubmit = () => {
-  console.log(payload.value);
   emits("payload", payload.value);
 };
 
@@ -159,4 +175,35 @@ if (props.formtype === "edit") {
     originData.value = JSON.parse(JSON.stringify(props.form)); // Save original data for comparison
   });
 }
+
+const validateField = (key) => {
+  const value = form[key].trim();
+
+  switch (key) {
+    case 'name':
+      errors.name = value.length < 1 || value.length > 30
+        ? 'Brand name must be 1–30 characters long.'
+        : '';
+      break;
+
+    case 'websiteUrl':
+      if (value) {
+        try {
+          new URL(value);
+          errors.websiteUrl = '';
+        } catch (e) {
+          errors.websiteUrl = 'Brand URL must be a valid URL or not specified.';
+        }
+      } else {
+        errors.websiteUrl = '';
+      }
+      break;
+
+    case 'countryOfOrigin':
+      errors.countryOfOrigin = value.length > 80
+        ? 'Brand country of origin must be 1–80 characters long or not specified.'
+        : '';
+      break;
+  }
+};
 </script>
