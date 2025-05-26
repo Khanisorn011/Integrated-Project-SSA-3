@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-gray-50 min-h-screen flex flex-col">
+  <div class="bg-gray-50 min-h-screen flex flex-col bg-gradient-to-br from-indigo-100 via-white to-purple-100">
     <Header />
     <main class="flex-grow">
 
