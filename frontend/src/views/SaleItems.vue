@@ -65,7 +65,6 @@
             <!-- Filter Brand -->
             <div
               class="w-full sm:w-auto relative min-w-[250px]"
-              id="itbms-brand-filter"
             >
               <div
                 class="flex flex-col sm:flex-row sm:items-center gap-3 w-full"
@@ -75,28 +74,25 @@
                     class="w-full min-h-[48px] flex items-center justify-between px-4 py-2 text-base bg-white/90 backdrop-blur-sm border-2 border-gray-200 rounded-2xl shadow-md hover:shadow-lg cursor-pointer text-gray-700 transition-all"
                   >
                     <div
-                      class="flex flex-wrap items-center gap-1 overflow-hidden"
+                      class="itbms-brand-filter flex flex-wrap items-center gap-1 overflow-hidden"
                     >
-                      <template v-if="selectedBrands.length === 0">
-                        <span class="text-gray-400">Filter by brand(s)</span>
-                      </template>
-                      <template v-else>
-                        <span
+                        <span v-if="selectedBrands.length === 0" class="text-gray-400">Filter by brand(s)</span>
+                        <span v-else
                           v-for="brand in selectedBrands"
                           :key="brand"
-                          class="bg-purple-100 text-purple-700 text-sm px-2 py-1 rounded-lg flex items-center gap-1"
+                          class="itbms-filter-item bg-purple-100 text-purple-700 text-sm px-2 py-1 rounded-lg flex items-center gap-1"
                         >
                           {{ brand }}
                           <button
                             @click="removeBrand(brand)"
-                            class="text-purple-500 hover:text-red-600"
+                            class="itbms-filter-item-clear text-purple-500 hover:text-red-600"
                           >
                             ✕
                           </button>
                         </span>
-                      </template>
                     </div>
-                    <button @click="toggleDropdown">
+                    <button @click="toggleDropdown"
+                    class="itbms-brand-filter-button">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 text-gray-700"
@@ -132,7 +128,7 @@
                 <!-- Clear Button -->
                 <button
                   @click="clearAllBrands"
-                  class="px-4 py-2 text-sm font-medium bg-purple-50 text-purple-700 border border-purple-200 rounded-xl hover:bg-red-500 hover:text-white transition-all"
+                  class="itbms-brand-filter-clear px-4 py-2 text-sm font-medium bg-purple-50 text-purple-700 border border-purple-200 rounded-xl hover:bg-red-500 hover:text-white transition-all"
                 >
                   Clear
                 </button>
@@ -209,6 +205,7 @@
       <div v-if="saleItems.length !== 0" class="flex justify-end gap-3 mt-4">
         <button
           @click="sortOrder = 'default'"
+          class="itbms-brand-none"
           :class="[
             'p-2 rounded-lg',
             sortOrder === 'default'
@@ -239,6 +236,7 @@
               ? 'bg-purple-600 text-white'
               : 'bg-gray-100 text-gray-700',
           ]"
+          class="itbms-brand-asc"
         >
           <img
             src="@/assets/icons/view-sort-ascending-svgrepo-com.svg"
@@ -254,6 +252,7 @@
               ? 'bg-purple-600 text-white'
               : 'bg-gray-100 text-gray-700',
           ]"
+          class="itbms-brand-desc"
         >
           <img
             src="@/assets/icons/view-sort-descending-svgrepo-com.svg"
@@ -348,12 +347,9 @@ const sortDirection = computed(() => {
 const payload = ref({
   filterBrands: [],
   page: currentPage.value,
-  // size: pageSize.value,
-    size: 100,
-  // sortField: "createdOn",
-    sortField: "",
-  // sortDirection: sortDirection.value,
-    sortDirection: null,
+  size: pageSize.value,
+  sortField: "createdOn",
+  sortDirection: sortDirection.value
 });
 
 onMounted(async () => {
@@ -384,8 +380,7 @@ watch(
       ...payload.value,
       filterBrands: selectedBrands.value,
       page: currentPage.value,
-      // size: pageSize.value,
-      size: 100,
+      size: pageSize.value,
       sortDirection: sortDirection.value,
     };
     const response = await fetchSaleItemByCondition(payload.value);
@@ -398,7 +393,7 @@ watch(
 let prevSorted = [];
 let prevSelected = [];
 
-watch([selectedBrands, sortOrder], () => {
+watch([selectedBrands, sortOrder , pageSize ], () => {
   pageStore.setPageNumber(0);
   currentPage.value = pageStore.getPageNumber();
 });

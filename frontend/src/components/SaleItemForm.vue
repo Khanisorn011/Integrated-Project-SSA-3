@@ -40,6 +40,7 @@
               <input @blur="trim('model')" v-model="form.model" type="text" placeholder="Enter model name"
                 class="itbms-model w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
                 maxlength="60" :ref="el => inputRefs[1] = el" @keydown.enter.prevent="handleEnter(1)" />
+
             </div>
 
             <!-- Price + Quantity -->
@@ -155,6 +156,9 @@ import { useRouter } from "vue-router";
 import { useStateStore } from "../stores/stateStore.js";
 import { fetchBrands } from "../libs/fetchBrand.js";
 
+//validate
+
+
 const stateStore = useStateStore();
 const { getImageUrl } = stateStore;
 
@@ -200,7 +204,6 @@ watch(
     form.value.brandName = selected ? selected.name : "";
   }
 );
-
 
   const payload = computed(() => ({
     model: form.value.model.trim(),
