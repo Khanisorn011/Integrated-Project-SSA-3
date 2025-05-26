@@ -309,46 +309,27 @@ import { fetchBrands } from "../libs/fetchBrand";
 import { fetchSaleItemByCondition } from "../libs/fetchSaleItem";
 import PageBar from "../components/PageBar.vue";
 import { usePageStore } from "../stores/pageStore.js";
+const imageArray = images;
 
+//saleItems
+const saleItems = ref([]);
 // brand array (all)
 const brands = ref([]);
-// select 
+// select brand to filter
 const selectedBrands = ref([]);
-const imageArray = images;
+// router
 const router = useRouter();
 const showDropdown = ref(false);
 const pageStore = usePageStore();
 
-const saleItems = ref([]);
+// currentPage
 const currentPage = ref(pageStore.getPageNumber());
+// pageSize
 const pageSize = ref(10);
+// pageResponse
 const pageResponse = ref({ totalPages: 0 });
 
 const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default");
-
-onMounted(() => {
-  pageStore.setPageNumber(currentPage.value);
-  console.log(pageStore.getPageNumber());
-  console.log(currentPage.value);
-});
-
-watch(currentPage, () => {
-  console.log(currentPage.value);
-  pageStore.setPageNumber(currentPage.value);
-  console.log(pageStore.getPageNumber());
-});
-
-watch(sortOrder, (newVal) => {
-  sessionStorage.setItem("sortOrder", newVal);
-});
-
-const payload = ref({
-  filterBrands: [],
-  page: currentPage.value,
-  size: pageSize.value,
-  sortField: "createdOn",
-  sortDirection: "ASC"
-});
 
 const sortDirection = computed(() => {
   if (sortOrder.value === "asc") {
@@ -362,6 +343,41 @@ const sortDirection = computed(() => {
   return null;
 });
 
+const payload = ref({
+  filterBrands: [],
+  page: currentPage.value,
+  size: pageSize.value,
+  sortField: "createdOn",
+  sortDirection: "ASC"
+});
+
+
+watch(
+  [selectedBrands, currentPage, pageSize, sortDirection],
+  async () => {
+    payload.value = {
+      ...payload.value,
+      filterBrands: selectedBrands.value,
+      page: currentPage.value,
+      size: pageSize.value,
+      sortDirection: sortDirection.value,
+    };
+    const response = await fetchSaleItemByCondition(payload.value);
+    saleItems.value = response.content || [];
+    pageResponse.value.totalPages = response.totalPages || 0;
+  },
+  { immediate: true }
+);
+
+watch(currentPage, () => {
+  console.log(currentPage.value);
+  pageStore.setPageNumber(currentPage.value);
+  console.log(pageStore.getPageNumber());
+});
+
+watch(sortOrder, (newVal) => {
+  sessionStorage.setItem("sortOrder", newVal);
+});
 
 onMounted(async () => {
   try {
@@ -383,26 +399,6 @@ watch(selectedBrands, (newVal) => {
 const sortedBrands = computed(() => {
   return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
 });
-
-watch(
-  [selectedBrands, currentPage, pageSize, sortDirection],
-  async () => {
-    payload.value = {
-      ...payload.value,
-      filterBrands: selectedBrands.value,
-      page: currentPage.value,
-      size: pageSize.value,
-      sortDirection: sortDirection.value,
-    };
-    const response = await fetchSaleItemByCondition(payload.value);
-    saleItems.value = response.content || [];
-    pageResponse.value.totalPages = response.totalPages || 0;
-  },
-  { immediate: true }
-);
-
-let prevSorted = [];
-let prevSelected = [];
 
 watch([selectedBrands, sortOrder , pageSize ], () => {
   pageStore.setPageNumber(0);

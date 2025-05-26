@@ -4,7 +4,9 @@ import { acceptHMRUpdate, defineStore } from "pinia";
 export const usePageStore = defineStore("counter", () => {
   const pageNumber = ref(sessionStorage.getItem("pageNumber") || 0);
   const pageSize = ref(sessionStorage.getItem("pageSize") || 0)
-  
+  const sortOrder = ref(sessionStorage.getItem("sortOrder") || "asc")
+  const selectedBrand = ref(sessionStorage.getItem("sortOrder") || [])
+
   const setPageNumber = (pageNum) => {
     pageNumber.value = pageNum;
     sessionStorage.setItem("pageNumber", pageNum);
