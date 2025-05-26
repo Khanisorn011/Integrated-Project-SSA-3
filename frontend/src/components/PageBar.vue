@@ -32,13 +32,17 @@
 </template>
 
 <script setup>
-import { ref, watch, computed } from 'vue';
+import { ref, watch, computed, onMounted } from 'vue';
 
 const props = defineProps({
   currentPage: Number,
   pageSize: Number,
   totalPages: Number,
 });
+
+onMounted(() => {
+   console.log(props.totalPages);
+})
 
 const emit = defineEmits(['update:currentPage', 'update:pageSize']);
 

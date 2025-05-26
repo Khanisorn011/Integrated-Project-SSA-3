@@ -261,7 +261,7 @@ const validateField = (key) => {
       break;
     case 'color':
       const trimmedColor = value?.trim() || '';
-      errors.color = trimmedDescription.length > 40 ? "Color must be 1–40 characters long or not specified." : '';
+      errors.color = trimmedColor.length > 40 ? "Color must be 1–40 characters long or not specified." : '';
       break;
   }
 };

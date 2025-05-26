@@ -309,38 +309,27 @@ import { fetchBrands } from "../libs/fetchBrand";
 import { fetchSaleItemByCondition } from "../libs/fetchSaleItem";
 import PageBar from "../components/PageBar.vue";
 import { usePageStore } from "../stores/pageStore.js";
+const imageArray = images;
 
+//saleItems
+const saleItems = ref([]);
 // brand array (all)
 const brands = ref([]);
-// select 
+// select brand to filter
 const selectedBrands = ref([]);
-const imageArray = images;
+// router
 const router = useRouter();
 const showDropdown = ref(false);
 const pageStore = usePageStore();
 
-const saleItems = ref([]);
+// currentPage
 const currentPage = ref(pageStore.getPageNumber());
-const pageSize = ref(10);
+// pageSize
+const pageSize = ref(sessionStorage.getItem("pageSize") || 10);
+// pageResponse
 const pageResponse = ref({ totalPages: 0 });
 
 const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default");
-
-onMounted(() => {
-  pageStore.setPageNumber(currentPage.value);
-  console.log(pageStore.getPageNumber());
-  console.log(currentPage.value);
-});
-
-watch(currentPage, () => {
-  console.log(currentPage.value);
-  pageStore.setPageNumber(currentPage.value);
-  console.log(pageStore.getPageNumber());
-});
-
-watch(sortOrder, (newVal) => {
-  sessionStorage.setItem("sortOrder", newVal);
-});
 
 const payload = ref({
   filterBrands: [],
@@ -348,6 +337,31 @@ const payload = ref({
   size: pageSize.value,
   sortField: "createdOn",
   sortDirection: "ASC"
+});
+
+onMounted(async () => {
+  try {
+    brands.value = await fetchBrands();
+    const savedBrands = sessionStorage.getItem("selectedBrands");
+        payload.value = {
+      ...payload.value,
+      filterBrands: selectedBrands.value,
+      page: currentPage.value,
+      size: pageSize.value,
+      sortDirection: sortDirection.value,
+    };
+    const response = await fetchSaleItemByCondition(payload.value);
+    saleItems.value = response.content || [];
+    pageResponse.value.totalPages = response.totalPages || 0;
+
+    if (savedBrands) {
+      const parsed = JSON.parse(savedBrands);
+
+      selectedBrands.value.splice(0, selectedBrands.value.length, ...parsed);
+    }
+  } catch (error) {
+    console.log(error);
+  }
 });
 
 const sortDirection = computed(() => {
@@ -360,28 +374,6 @@ const sortDirection = computed(() => {
     return "DESC"
   };
   return null;
-});
-
-
-onMounted(async () => {
-  try {
-    brands.value = await fetchBrands();
-    const savedBrands = sessionStorage.getItem("selectedBrands");
-    
-    if (savedBrands) {
-      selectedBrands.value = JSON.parse(savedBrands);
-    }
-  } catch (error) {
-    console.log(error);
-  }
-});
-
-watch(selectedBrands, (newVal) => {
-  sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
-});
-
-const sortedBrands = computed(() => {
-  return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
 });
 
 watch(
@@ -401,8 +393,25 @@ watch(
   { immediate: true }
 );
 
-let prevSorted = [];
-let prevSelected = [];
+watch(currentPage, () => {
+  pageStore.setPageNumber(currentPage.value);
+});
+
+watch(pageSize , (pageSize) => {
+  sessionStorage.setItem("pageSize", pageSize);
+})
+
+watch(sortOrder, (newVal) => {
+  sessionStorage.setItem("sortOrder", newVal);
+});
+
+watch(selectedBrands, (newVal) => {
+  sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
+});
+
+const sortedBrands = computed(() => {
+  return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
+});
 
 watch([selectedBrands, sortOrder , pageSize ], () => {
   pageStore.setPageNumber(0);
