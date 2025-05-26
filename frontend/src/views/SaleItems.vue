@@ -29,7 +29,7 @@
     />
 
     <!-- Enhanced Controls Bar -->
-    <div class="max-w-7xl mx-auto px-6 mb-12 ">
+    <div class="max-w-7xl mx-auto px-6 mb-12">
       <div
         class="bg-white/80 backdrop-blur-2xl rounded-3xl p-8 shadow-2xl border border-white/30 ring-1 ring-gray-200/20 hover:shadow-3xl transition-all duration-700"
       >
@@ -63,9 +63,7 @@
             </router-link>
 
             <!-- Filter Brand -->
-            <div
-              class="w-full sm:w-auto relative min-w-[250px]"
-            >
+            <div class="w-full sm:w-auto relative min-w-[250px]">
               <div
                 class="flex flex-col sm:flex-row sm:items-center gap-3 w-full"
               >
@@ -74,27 +72,32 @@
                     class="w-full min-h-[48px] flex items-center justify-between px-4 py-2 text-base bg-white/90 backdrop-blur-sm border-2 border-gray-200 rounded-2xl shadow-md hover:shadow-lg cursor-pointer text-gray-700 transition-all"
                   >
                     <div
-                    @click="toggleDropdown"
+                      @click="toggleDropdown"
                       class="itbms-brand-filter flex flex-wrap items-center gap-1 overflow-hidden"
                     >
-                        <span v-if="selectedBrands.length === 0" class="text-gray-400">Filter by brand(s)</span>
-                        <span 
-                          v-for="brand in selectedBrands"
-                          :key="brand"
-                          class="itbms-filter-item bg-purple-100 text-purple-700 text-sm px-2 py-1 rounded-lg flex items-center gap-1"
+                      <span
+                        v-if="selectedBrands.length === 0"
+                        class="text-gray-400"
+                        >Filter by brand(s)</span
+                      >
+                      <span
+                        v-for="brand in selectedBrands"
+                        :key="brand"
+                        class="itbms-filter-item bg-purple-100 text-purple-700 text-sm px-2 py-1 rounded-lg flex items-center gap-1"
+                      >
+                        {{ brand }}
+                        <button
+                          @click="removeBrand(brand)"
+                          class="itbms-filter-item-clear text-purple-500 hover:text-red-600"
                         >
-                          {{ brand }}
-                          <button
-                            @click="removeBrand(brand)"
-                            class="itbms-filter-item-clear text-purple-500 hover:text-red-600"
-                          >
-                            ✕
-                          </button>
-                        </span>
-                     
+                          ✕
+                        </button>
+                      </span>
                     </div>
-                    <button @click="toggleDropdown"
-                    class="itbms-brand-filter-button">
+                    <button
+                      @click="toggleDropdown"
+                      class="itbms-brand-filter-button"
+                    >
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         class="w-5 h-5 text-gray-700"
@@ -144,8 +147,7 @@
           >
             <button
               disabled
-              class="flex-1 lg:flex-none px-6 py-3 rounded-xl bg-purple-600 text-white shadow-md flex items-center justify-center gap-2 text-base font-semibold
-              bg-gradient-to-r from-blue-600 to-purple-600"
+              class="flex-1 lg:flex-none px-6 py-3 rounded-xl bg-purple-600 text-white shadow-md flex items-center justify-center gap-2 text-base font-semibold bg-gradient-to-r from-blue-600 to-purple-600"
             >
               <svg
                 class="w-6 h-6"
@@ -179,28 +181,58 @@
       <i class="itbms-message text-2xl font-semibold mb-2">no sale item</i>
     </div> -->
     <div v-if="saleItems.length === 0" class="text-center py-32">
-        <div class="itbms-row max-w-lg mx-auto">
-          <div class="relative mb-8">
-            <div class="w-32 h-32 mx-auto bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-2xl">
-              <svg class="w-16 h-16 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-              </svg>
-            </div>
-            <div class="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce">
-              <span class="text-lg">✨</span>
-            </div>
-          </div>
-          <h3 class="itbms-message text-4xl font-bold mb-4 text-gray-700">no sale item</h3>
-          <p class="text-gray-500 text-xl mb-8">Start building your inventory by adding your first mobile device</p>
-          <router-link to="/sale-items/add" 
-            class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1">
-            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+      <div class="itbms-row max-w-lg mx-auto">
+        <div class="relative mb-8">
+          <div
+            class="w-32 h-32 mx-auto bg-gradient-to-br from-blue-100 to-purple-100 rounded-full flex items-center justify-center shadow-2xl"
+          >
+            <svg
+              class="w-16 h-16 text-gray-400"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="1.5"
+                d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2 2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"
+              ></path>
             </svg>
-            Add Your First Item
-          </router-link>
+          </div>
+          <div
+            class="absolute -top-2 -right-2 w-8 h-8 bg-yellow-400 rounded-full flex items-center justify-center animate-bounce"
+          >
+            <span class="text-lg">✨</span>
+          </div>
         </div>
+        <h3 class="itbms-message text-4xl font-bold mb-4 text-gray-700">
+          no sale item
+        </h3>
+        <p class="text-gray-500 text-xl mb-8">
+          Start building your inventory by adding your first mobile device
+        </p>
+        <router-link
+          to="/sale-items/add"
+          class="inline-flex items-center gap-3 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg hover:from-blue-700 hover:to-purple-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+        >
+          <svg
+            class="w-6 h-6"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
+            ></path>
+          </svg>
+          Add Your First Item
+        </router-link>
       </div>
+    </div>
 
     <!-- Sort Buttons -->
     <main class="max-w-6xl mx-auto px-1 pb-8 flex flex-col gap-4">
@@ -336,29 +368,46 @@ const payload = ref({
   page: currentPage.value,
   size: pageSize.value,
   sortField: "createdOn",
-  sortDirection: "ASC"
+  sortDirection: "ASC",
 });
 
 onMounted(async () => {
   try {
     brands.value = await fetchBrands();
     const savedBrands = sessionStorage.getItem("selectedBrands");
-        payload.value = {
+
+    if (savedBrands) {
+      const parsed = JSON.parse(savedBrands);
+      selectedBrands.value.splice(0, selectedBrands.value.length, ...parsed);
+    }
+
+    payload.value = {
       ...payload.value,
       filterBrands: selectedBrands.value,
       page: currentPage.value,
       size: pageSize.value,
       sortDirection: sortDirection.value,
     };
+
     const response = await fetchSaleItemByCondition(payload.value);
+
+    // if (currentPage.value > response.totalPages) {
+    //   if (currentPage.value === response.totalPages) {
+    //     const response = await fetchSaleItemByCondition(payload.value);
+    //     saleItems.value = response.content || [];
+    //     pageResponse.value.totalPages = response.totalPages || 0;
+    //   }
+
+    //   if (response.totalPages !== 0) {
+    //     currentPage.value = response.totalPages;
+    //     const response = await fetchSaleItemByCondition(payload.value);
+    //     saleItems.value = response.content || [];
+    //     pageResponse.value.totalPages = response.totalPages || 0;
+    //   }
+    // }
+
     saleItems.value = response.content || [];
     pageResponse.value.totalPages = response.totalPages || 0;
-
-    if (savedBrands) {
-      const parsed = JSON.parse(savedBrands);
-
-      selectedBrands.value.splice(0, selectedBrands.value.length, ...parsed);
-    }
   } catch (error) {
     console.log(error);
   }
@@ -366,13 +415,13 @@ onMounted(async () => {
 
 const sortDirection = computed(() => {
   if (sortOrder.value === "asc") {
-    payload.value.sortField = "brand.name"
-    return "ASC"
-  };
+    payload.value.sortField = "brand.name";
+    return "ASC";
+  }
   if (sortOrder.value === "desc") {
-    payload.value.sortField = "brand.name"
-    return "DESC"
-  };
+    payload.value.sortField = "brand.name";
+    return "DESC";
+  }
   return null;
 });
 
@@ -387,6 +436,22 @@ watch(
       sortDirection: sortDirection.value,
     };
     const response = await fetchSaleItemByCondition(payload.value);
+
+    // if (currentPage.value > response.totalPages) {
+    //   if (currentPage.value === response.totalPages) {
+    //     const response = await fetchSaleItemByCondition(payload.value);
+    //     saleItems.value = response.content || [];
+    //     pageResponse.value.totalPages = response.totalPages || 0;
+    //   }
+
+    //   if (response.totalPages !== 0) {
+    //     currentPage.value = response.totalPages;
+    //     const response = await fetchSaleItemByCondition(payload.value);
+    //     saleItems.value = response.content || [];
+    //     pageResponse.value.totalPages = response.totalPages || 0;
+    //   }
+    // }
+
     saleItems.value = response.content || [];
     pageResponse.value.totalPages = response.totalPages || 0;
   },
@@ -397,9 +462,9 @@ watch(currentPage, () => {
   pageStore.setPageNumber(currentPage.value);
 });
 
-watch(pageSize , (pageSize) => {
+watch(pageSize, (pageSize) => {
   sessionStorage.setItem("pageSize", pageSize);
-})
+});
 
 watch(sortOrder, (newVal) => {
   sessionStorage.setItem("sortOrder", newVal);
@@ -413,7 +478,7 @@ const sortedBrands = computed(() => {
   return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
 });
 
-watch([selectedBrands, sortOrder , pageSize ], () => {
+watch([selectedBrands, sortOrder, pageSize], () => {
   pageStore.setPageNumber(0);
   currentPage.value = pageStore.getPageNumber();
 });
