@@ -8,6 +8,8 @@ export default defineConfig({
     baseAPI: 'http://localhost:8080/itb-mshop',
     // baseUrl: 'http://intproj24.sit.kmutt.ac.th/ssa3/',
     // baseAPI: 'http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/',
+    // baseUrl: 'http://intproj24.sit.kmutt.ac.th/ssa3/',
+    // baseAPI: 'http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/',
     setupNodeEvents(on, config) {
       // implement node event listeners here
     },

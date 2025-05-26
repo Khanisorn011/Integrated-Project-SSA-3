@@ -74,10 +74,11 @@
                     class="w-full min-h-[48px] flex items-center justify-between px-4 py-2 text-base bg-white/90 backdrop-blur-sm border-2 border-gray-200 rounded-2xl shadow-md hover:shadow-lg cursor-pointer text-gray-700 transition-all"
                   >
                     <div
+                    @click="toggleDropdown"
                       class="itbms-brand-filter flex flex-wrap items-center gap-1 overflow-hidden"
                     >
                         <span v-if="selectedBrands.length === 0" class="text-gray-400">Filter by brand(s)</span>
-                        <span v-else
+                        <span 
                           v-for="brand in selectedBrands"
                           :key="brand"
                           class="itbms-filter-item bg-purple-100 text-purple-700 text-sm px-2 py-1 rounded-lg flex items-center gap-1"
@@ -90,6 +91,7 @@
                             ✕
                           </button>
                         </span>
+                     
                     </div>
                     <button @click="toggleDropdown"
                     class="itbms-brand-filter-button">
@@ -112,7 +114,7 @@
                     <label
                       v-for="(brand, index) in sortedBrands"
                       :key="index"
-                      class="flex items-center px-4 py-2 text-sm cursor-pointer hover:bg-purple-50"
+                      class="itbms-filter-item flex items-center px-4 py-2 text-sm cursor-pointer hover:bg-purple-50"
                     >
                       <input
                         type="checkbox"
@@ -308,7 +310,9 @@ import { fetchSaleItemByCondition } from "../libs/fetchSaleItem";
 import PageBar from "../components/PageBar.vue";
 import { usePageStore } from "../stores/pageStore.js";
 
+// brand array (all)
 const brands = ref([]);
+// select 
 const selectedBrands = ref([]);
 const imageArray = images;
 const router = useRouter();
@@ -338,25 +342,32 @@ watch(sortOrder, (newVal) => {
   sessionStorage.setItem("sortOrder", newVal);
 });
 
-const sortDirection = computed(() => {
-  if (sortOrder.value === "asc") return "ASC";
-  if (sortOrder.value === "desc") return "DESC";
-  return null;
-});
-
 const payload = ref({
   filterBrands: [],
   page: currentPage.value,
   size: pageSize.value,
   sortField: "createdOn",
-  sortDirection: sortDirection.value
+  sortDirection: "ASC"
 });
+
+const sortDirection = computed(() => {
+  if (sortOrder.value === "asc") {
+    payload.value.sortField = "brand.name"
+    return "ASC"
+  };
+  if (sortOrder.value === "desc") {
+    payload.value.sortField = "brand.name"
+    return "DESC"
+  };
+  return null;
+});
+
 
 onMounted(async () => {
   try {
     brands.value = await fetchBrands();
-
     const savedBrands = sessionStorage.getItem("selectedBrands");
+    
     if (savedBrands) {
       selectedBrands.value = JSON.parse(savedBrands);
     }
@@ -374,7 +385,7 @@ const sortedBrands = computed(() => {
 });
 
 watch(
-  [selectedBrands, currentPage, pageSize, sortOrder],
+  [selectedBrands, currentPage, pageSize, sortDirection],
   async () => {
     payload.value = {
       ...payload.value,

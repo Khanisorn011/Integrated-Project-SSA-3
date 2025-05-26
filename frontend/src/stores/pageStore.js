@@ -3,17 +3,27 @@ import { acceptHMRUpdate, defineStore } from "pinia";
 
 export const usePageStore = defineStore("counter", () => {
   const pageNumber = ref(sessionStorage.getItem("pageNumber") || 0);
-
+  const pageSize = ref(sessionStorage.getItem("pageSize") || 0)
+  
   const setPageNumber = (pageNum) => {
     pageNumber.value = pageNum;
     sessionStorage.setItem("pageNumber", pageNum);
   };
 
+  const setPageSize = (size) => {
+    pageSize.value = size
+    sessionStorage.setItem("pageSize",size)
+  }
+
   const getPageNumber = () => {
     return Number(pageNumber.value);
   };
 
-  return { setPageNumber, getPageNumber };
+    const getPageSize = () => {
+    return Number(pageSize.value) || 10;
+  };
+
+  return { setPageNumber, getPageNumber , setPageSize , getPageSize};
 });
 
 if (import.meta.hot) {
