@@ -98,7 +98,7 @@ async function fetchSaleItemByCondition(payload) {
     if (!response.ok) {
       throw new Error(`แก้ไขสินค้าไม่สำเร็จ (HTTP ${response.status})`);
     }
- 
+
     const data = await response.json();
     return data;
   } catch (error) {
