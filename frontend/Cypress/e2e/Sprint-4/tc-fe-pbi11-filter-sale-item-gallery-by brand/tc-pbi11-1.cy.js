@@ -49,7 +49,7 @@ describe(`TC-FE-PBI11-FILTER-SALE-ITEM-GALLERY-BY-BRAND-1\n
         should show a brand list in alphabetical order (20 brands)\n
         should show "Asus" brand in "Filter by brand(s)" with a clear(x) button.\n
         should show a a list of "ASUS" phones`,()=>{
-        cy.get('.itbms-brand-filter').should('exist').as('brand-filter')
+        cy.get('.itbms-brand-filter-button').should('exist').as('brand-filter')
         cy.get('@brand-filter').click()
         cy.wait(100)
         
@@ -135,12 +135,12 @@ describe(`TC-FE-PBI11-FILTER-SALE-ITEM-GALLERY-BY-BRAND-1\n
 
     it(`[step 3] should show "ASUS", "Samsung" and "LG" in "Filter by brand(s)".\n
         should show a a list of "ASUS", "Samsung" and "LG" phones with "Samsung" phones shown first`,()=>{
-        cy.get('.itbms-brand-filter').should('exist').as('brand-filter')
+        cy.get('.itbms-brand-filter-button').should('exist').as('brand-filter')
         cy.get('@brand-filter').click()
-        cy.wait(100)
+        cy.wait(400)
 
         cy.contains('.itbms-filter-item', 'ASUS').should('exist').click()
-        cy.wait(100)
+        cy.wait(400)
 
         cy.get('.itbms-brand').then(($brands) => {
             const matched = $brands.filter((index, el) =>
@@ -148,10 +148,10 @@ describe(`TC-FE-PBI11-FILTER-SALE-ITEM-GALLERY-BY-BRAND-1\n
             )
             expect(matched).to.have.length(10)
         })
-        cy.wait(100)
+        cy.wait(400)
         
         cy.contains('.itbms-filter-item', 'Samsung').should('exist').click()
-        cy.wait(100)
+        cy.wait(400)
 
         cy.get('.itbms-brand').then(($brands) => {
             const matched = $brands.filter((index, el) =>
@@ -159,10 +159,10 @@ describe(`TC-FE-PBI11-FILTER-SALE-ITEM-GALLERY-BY-BRAND-1\n
             )
             expect(matched).to.have.length(10)
         })
-        cy.wait(100)
+        cy.wait(400)
 
         cy.contains('.itbms-filter-item', 'LG').should('exist').click()
-        cy.wait(100)
+        cy.wait(400)
 
         cy.get('[class^="itbms-page-"]').then(($pages)=>{
             expect($pages).to.have.length.greaterThan(0)

@@ -182,7 +182,7 @@ const validateField = (key) => {
   switch (key) {
     case 'name':
       errors.name = value.length < 1 || value.length > 30
-        ? 'Brand name must be 1–30 characters long.'
+        ? 'Brand name must be 1-30 characters long.'
         : '';
       break;
  
@@ -201,7 +201,7 @@ const validateField = (key) => {
  
     case 'countryOfOrigin':
       errors.countryOfOrigin = value.length > 80
-        ? 'Brand country of origin must be 1–80 characters long or not specified.'
+        ? 'Brand country of origin must be 1-80 characters long or not specified.'
         : '';
       break;
   }

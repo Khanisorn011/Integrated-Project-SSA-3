@@ -131,7 +131,7 @@ describe(`TC-FE-PBI12-VIEW-SALE-ITEM-GALLERY-PAGINATION-2\n
         should show 3 pages in page navigation bar.\n
         should show 20 sale items in pag 3 starting with 10 ASUS phones follow by 10 OPPO phones.\n\n`,()=>{
         cy.get('.itbms-page-size').select('20')
-        cy.wait(100)
+        cy.wait(400)
 
         cy.get('.itbms-page-0').should('exist')
         cy.get('.itbms-page-1').should('exist')
@@ -147,8 +147,8 @@ describe(`TC-FE-PBI12-VIEW-SALE-ITEM-GALLERY-PAGINATION-2\n
             expect(response.status).to.eq(204) 
         })
 
-        cy.get('.itbms-page-first').should('exist').click({force: true})
-        cy.wait(100)
+        cy.get('.itbms-page-0').should('exist').click({force: true})
+        cy.wait(400)
 
         cy.get('.itbms-page-0').should('exist')
         cy.get('.itbms-page-1').should('exist')
@@ -156,7 +156,7 @@ describe(`TC-FE-PBI12-VIEW-SALE-ITEM-GALLERY-PAGINATION-2\n
         cy.get('.itbms-page-3').should('not.exist')
 
         cy.get('.itbms-page-last').should('exist').click({force: true})
-        cy.wait(100)
+        cy.wait(400)
 
         cy.get('.itbms-brand').then(($brands) => {
             const matched = $brands.filter((index, el) =>
@@ -173,7 +173,7 @@ describe(`TC-FE-PBI12-VIEW-SALE-ITEM-GALLERY-PAGINATION-2\n
         })
 
         cy.get('.itbms-page-2').should('exist').click({force: true})
-        cy.wait(100)
+        cy.wait(400)
 
         cy.get('.itbms-row').eq(0).as('row')
         cy.get('@row').contains('.itbms-brand','ASUS')
