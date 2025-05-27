@@ -471,7 +471,7 @@ onMounted(async () => {
 
 // Watchers for reactive updates
 watch([selectedBrands, sortOrder, pageSize], () => {
-  fetchData(true); // Reset to page 1 when filters change
+  fetchData(true); // reset to page 1 
 });
 
 watch(currentPage, () => {
