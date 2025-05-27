@@ -67,7 +67,6 @@ public class SaleItemController {
         return ResponseEntity.ok(pageResponseDTO);
     }
 
-
     @GetMapping("/v1/sale-items/{id}")
     public ResponseEntity<SaleItemDetailDTO> getSaleItemById(@PathVariable Integer id) {
         return ResponseEntity.ok(modelMapper.map(saleItemService.getById(id), SaleItemDetailDTO.class));
