@@ -224,6 +224,7 @@ watch(showErrorModal, (newVal) => {
 const confirmDeleteProduct = async () => {
   try {
     const res = await deleteProduct(route.params.id);
+    
     if (res.ok) {
       showConfirmModal.value = false;
       router.push({ path: "/sale-items", query: { deleted: "true" } });
