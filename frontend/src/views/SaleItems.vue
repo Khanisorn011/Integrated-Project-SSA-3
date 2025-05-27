@@ -312,14 +312,15 @@
     </main>
 
     <!-- Pagination -->
-    <div class="max-w-7xl mx-auto px-6 pb-12">
+<div class="max-w-7xl mx-auto px-6 pb-12">
       <PageBar
         :currentPage="currentPage"
         :totalPages="pageResponse.totalPages"
         :pageSize="Number(pageSize)"
         @update:currentPage="(val) => (currentPage = val)"
         @update:pageSize="(val) => (pageSize = val)"
-        @clickButton="clickButton = !clickButton"
+        @clickButton="clickbutton = !clickbutton"
+        @goLastPage="goToLastPage"
       />
     </div>
 
@@ -328,7 +329,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, onBeforeMount, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Alert from "../components/Alert.vue";
 import Footer from "../components/Footer.vue";
@@ -351,7 +352,7 @@ const currentPage = ref(1);
 const pageSize = ref(Number(sessionStorage.getItem("pageSize")) || 10);
 const pageResponse = ref({ totalPages: 0 });
 const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default");
-const clickButton = ref(false);
+const clickbutton = ref(false);
 const isLoading = ref(false);
 
 // Router and store
@@ -374,7 +375,7 @@ const sortDirection = computed(() => {
 watch(sortOrder, () => {
   console.log(sortOrder.value);
   console.log(sortDirection);
-})
+});
 
 const sortedBrands = computed(() => {
   return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
@@ -411,9 +412,20 @@ const fetchData = async (resetPage = false) => {
       );
       saleItems.value = correctedResponse.content || [];
       pageResponse.value.totalPages = correctedResponse.totalPages || 0;
+      console.log(`if : ${pageResponse.value.totalPages}`);
+    }
+
+    if (response.content.length <= 0) {
+      console.log("?");
+
+      currentPage.value = pageStore.setPageNumber(
+        pageStore.getPageNumber() - 1
+      );
+      currentPage.value = pageStore.getPageNumber();
     } else {
       saleItems.value = response.content || [];
       pageResponse.value.totalPages = response.totalPages || 0;
+      console.log(`else : ${pageResponse.value.totalPages}`);
     }
 
     // Update page store
@@ -428,9 +440,9 @@ const fetchData = async (resetPage = false) => {
 };
 
 // Initialize data on component mount
-onMounted(async () => {
+onBeforeMount(async () => {
   console.log(currentPage.value);
-  
+
   try {
     // Load brands
     brands.value = await fetchBrands();
@@ -456,14 +468,19 @@ onMounted(async () => {
     console.log(payload);
 
     await fetchData();
-    const response = await fetchSaleItemByCondition(payload);
-    console.log(response);
-    if (response.content.length <= 0) {
-      currentPage.value = pageStore.setPageNumber(
-        pageStore.getPageNumber() - 1
-      );
-      currentPage.value = pageStore.getPageNumber();
-    }
+    console.log(console.log(`onMounted : ${pageResponse.value.totalPages}`));
+
+    // const response = await fetchSaleItemByCondition(payload);
+    // pageResponse.value.totalPages = response.totalPages || 0;
+
+    // if (response.content.length <= 0) {
+    //   console.log("?");
+
+    //   currentPage.value = pageStore.setPageNumber(
+    //     pageStore.getPageNumber() - 1
+    //   );
+    //   currentPage.value = pageStore.getPageNumber();
+    // }
   } catch (error) {
     console.error("Error in onMounted:", error);
   }
@@ -471,17 +488,18 @@ onMounted(async () => {
 
 // Watchers for reactive updates
 watch([selectedBrands, sortOrder, pageSize], () => {
-  fetchData(true); // reset to page 1 
+  fetchData(true); // reset to page 1
 });
 
 watch(currentPage, () => {
   console.log(currentPage.value);
   if (currentPage.value >= 0) {
     fetchData();
+      console.log(currentPage.value);
   }
 });
 
-watch(clickButton, () => {
+watch(clickbutton, () => {
   fetchData();
 });
 
@@ -514,4 +532,12 @@ function removeBrand(brand) {
 function goToList() {
   router.push("/sale-items/list");
 }
+
+const goToLastPage = async () => {
+  await fetchData();
+  currentPage.value = pageResponse.value.totalPages - 1;
+  await fetchData();
+};
+ 
+
 </script>
