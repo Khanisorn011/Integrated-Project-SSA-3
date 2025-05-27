@@ -34,7 +34,12 @@
       <button
         v-for="page in visiblePages"
         :key="page"
-        @click="$emit('update:currentPage', page)"
+        @click="
+          () => {
+            emit('update:currentPage', page);
+            emit('clickButton');
+          }
+        "
         :class="[
           `itbms-page-${page} join-item btn btn-sm px-3`,
           currentPage == page && 'btn-primary',
@@ -57,12 +62,7 @@
         Next
       </button>
       <button
-        @click="
-          () => {
-            emit('update:currentPage', totalPages - 1);
-            emit('clickButton');
-          }
-        "
+        @click="$emit('goLastPage')"
         :disabled="currentPage === totalPages - 1"
         class="itbms-page-last join-item btn btn-sm px-4"
       >
@@ -95,9 +95,12 @@ const props = defineProps({
   totalPages: Number,
 });
 
-onMounted(() => {
-  console.log(props.totalPages);
-});
+watch(
+  () => props.totalPages,
+  () => {
+    console.log(props.totalPages);
+  }
+);
 
 const emit = defineEmits([
   "update:currentPage",

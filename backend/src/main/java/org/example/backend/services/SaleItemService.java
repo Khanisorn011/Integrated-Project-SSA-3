@@ -66,7 +66,10 @@ public class SaleItemService {
     public Page<SaleItemBase> getByBrandNameIn(List<String> filterBrands, Integer pageNum, Integer pageSize, String sortField, String sortDirection) {
 
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
-        Sort sort = Sort.by(direction, sortField);
+
+        // กำหนด fallback sort โดยให้ id เป็นลำดับรอง
+        Sort sort = Sort.by(direction, sortField).and(Sort.by(Sort.Direction.ASC, "id"));
+
         PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
 
         if (filterBrands == null || filterBrands.isEmpty()) {
@@ -75,6 +78,7 @@ public class SaleItemService {
             return saleItemBaseRepository.findByBrandNameIn(filterBrands, pageRequest);
         }
     }
+
 
 
 
