@@ -40,7 +40,7 @@
             <label class="text-gray-700 font-medium block mb-1">Model <span class="text-red-500">*</span></label>
             <input @blur="trim('model')" v-model="form.model" type="text" placeholder="Enter model name"
               class="itbms-model w-full border border-gray-300 p-3 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-all duration-200"
-              maxlength="60" :ref="el => inputRefs[1] = el" @keydown.enter.prevent="handleEnter(1)" />
+              maxlength="80" :ref="el => inputRefs[1] = el" @keydown.enter.prevent="handleEnter(1)" />
             <p v-if="errors.model" class="text-red-500 text-sm mt-1">{{ errors.model }}</p>
           </div>
 
@@ -93,7 +93,7 @@
               <div>
                 <label class="text-gray-600 text-sm block mb-1">Screen Size</label>
                 <div class="relative">
-                  <input @blur="trim('screenSizeInch')" v-model="form.screenSizeInch" type="number" step="0.1"
+                  <input @blur="trim('screenSizeInch')" v-model="form.screenSizeInch" type="number" step="0.01"
                     placeholder="0.0"
                     class="itbms-screenSizeInch w-full border border-gray-300 p-3 pl-16 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
                     :ref="el => inputRefs[5] = el" @keydown.enter.prevent="handleEnter(5)" />
@@ -231,17 +231,17 @@ const validateField = (key) => {
       break;
     case 'model':
       const trimmedModel = value?.trim() || '';
-      errors.model = trimmedModel.length === 0 ? 'Model is required.' : trimmedModel.length > 60 ? 'Model must be 1–60 characters long.' : '';
+      errors.model = trimmedModel.length === 0 || trimmedModel.length > 60 ? 'Model must be 1–60 characters long.' : '';
       break;
     case 'description':
       const trimmedDescription = value?.trim() || '';
-      errors.description = trimmedDescription.length === 0 ? "Description must be 1–65,535 characters long." : '';
+      errors.description = trimmedDescription.length === 0 || trimmedDescription.length > 65535  ? "Description must be 1–65,535 characters long." : '';
       break;
     case 'price':
-      errors.price = !value || Number(value) <= 0 ? "Price must be non-negative integer." : '';
+      errors.price = value === '' || isNaN(Number(value)) || Number(value) < 0 ? "Price must be non-negative integer." : '';
       break;
     case 'ramGb':
-      errors.ramGb = value && Number(value) < 0 ? "RAM size must be positive integer or not specified." : '';
+      errors.ramGb = value !== '' && value !== null && value !== undefined && Number(value) <= 0 ? "RAM size must be positive integer or not specified." : '';
       break;
     case 'screenSizeInch':
       const isValidDecimal = (val) => {
@@ -251,13 +251,13 @@ const validateField = (key) => {
         const decimalPart = val.toString().split('.')[1];
         return !decimalPart || decimalPart.length <= 2;
       };
-      errors.screenSizeInch = value && (!isValidDecimal(value)) ? "Screen size must be a positive number with at most 2 decimal places." : '';
+      errors.screenSizeInch = value !== '' && (!isValidDecimal(value)) ? "Screen size must be a positive number with at most 2 decimal places." : '';
       break;
     case 'storageGb':
-      errors.storageGb = value && Number(value) < 0 ? "Storage size must be positive integer or not specified." : '';
+      errors.storageGb = value !== '' && value !== null && value !== undefined && Number(value) <= 0 ? "Storage size must be positive integer or not specified." : '';
       break;
     case 'quantity':
-      errors.quantity = value && Number(value) < 0 ? 'Quantity must be 0 or more.' : '';
+      errors.quantity = value !== '' && Number(value) < 0 ? 'Quantity must be 0 or more.' : '';
       break;
     case 'color':
       const trimmedColor = value?.trim() || '';
@@ -298,7 +298,7 @@ const isFormValid = computed(() => {
     form.value.brandName &&
     form.value.model?.trim().length > 0 &&
     form.value.description?.trim().length > 0 &&
-    form.value.price > 0 &&
+    form.value.price >= 0 &&
     !Object.values(errors).some((e) => e)
   );
 });
