@@ -63,7 +63,8 @@
                 <strong>Screen Size: </strong><span class="itbms-screenSizeInch"
                   :class="{ 'text-gray-400': !product.screenSizeInch }">{{
                     product.screenSizeInch
-                      ? Number(product.screenSizeInch).toFixed(1)
+                      ? Number(product.screenSizeInch)
+                      // .toFixed(1)
                       : "-"
                   }}</span><span class="itbms-screenSizeInch-unit" v-if="product.screenSizeInch">Inches</span>
               </p>
