@@ -25,7 +25,7 @@ create table SALE_ITEM_BASE (
     price int not null,
     ramGb int,
     storageGb int,
-    screenSizeInch decimal(4,1),
+    screenSizeInch decimal(4,2),
     color text character set utf8,
     createdOn datetime default now() not null,
     updatedOn datetime default now() on update now() not null,
