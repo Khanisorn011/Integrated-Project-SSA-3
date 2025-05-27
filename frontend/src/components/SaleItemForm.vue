@@ -238,6 +238,7 @@ const validateField = (key) => {
     case 'description':
       const trimmedDescription = value?.trim() || '';
       errors.description = trimmedDescription.length === 0 || trimmedDescription.length > 65535  ? "Description must be 1-65,535 characters long." : '';
+
       break;
     case 'price':
       errors.price = value === '' || isNaN(Number(value)) || Number(value) < 0 ? "Price must be non-negative integer." : '';
