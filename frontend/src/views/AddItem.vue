@@ -29,10 +29,13 @@ import { ref, onMounted, watch, computed } from "vue";
 import { useRouter } from "vue-router";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
-import { postProduct } from "../libs/fetchProduct.js";
+import { postSaleItem } from "../libs/fetchSaleItem.js";
 import { fetchBrands } from "../libs/fetchBrand.js";
 import { useStateStore } from "../stores/stateStore.js";
 import SaleItemForm from "../components/SaleItemForm.vue"
+import { useAlertStore } from "../stores/alertStore";
+
+const alertStore = useAlertStore()
 
 // router
 const router = useRouter();
@@ -53,6 +56,7 @@ const form = ref({
   description: "",
 });
 
+// fetch all brand
 onMounted(async () => {
   try {
     brands.value = await fetchBrands();
@@ -63,6 +67,8 @@ onMounted(async () => {
 });
 
 const submitting = ref(false);
+
+// save saleItems
 const saveProduct = async (payload) => {
   try {
     const matched = brands.value.find(b => b.name === payload.brand.name);
@@ -70,9 +76,11 @@ const saveProduct = async (payload) => {
       ...payload,
       brand: { id: matched?.id, name: matched?.name }
     }
-    const res = await postProduct(sendPayload);
+    const res = await postSaleItem(sendPayload);
     if (res && res.ok) {
-      router.push({ path: "/sale-items/list", query: { added: "true" } });
+      // router.push({ path: "/sale-items/list"});
+      router.back()
+      alertStore.setModuleAlert('saleItem','created')
     } else {
       alert("Failed to add product.");
     }

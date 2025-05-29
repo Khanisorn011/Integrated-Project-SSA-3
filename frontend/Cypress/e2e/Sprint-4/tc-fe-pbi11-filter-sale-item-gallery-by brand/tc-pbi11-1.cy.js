@@ -6,8 +6,8 @@ describe(`TC-FE-PBI11-FILTER-SALE-ITEM-GALLERY-BY-BRAND-1\n
 
     beforeEach(()=> {
         cy.visit(resource) ;
-        cy.wait(100) ;
-    }) ;
+        cy.wait(400) ;
+    });
 
     it(`Open the sale item gallery page at ${resource}`, () => {
     })
@@ -51,7 +51,7 @@ describe(`TC-FE-PBI11-FILTER-SALE-ITEM-GALLERY-BY-BRAND-1\n
         should show a a list of "ASUS" phones`,()=>{
         cy.get('.itbms-brand-filter-button').should('exist').as('brand-filter')
         cy.get('@brand-filter').click()
-        cy.wait(100)
+        cy.wait(400)
         
         cy.get('.itbms-filter-item').as('brand-options')
         cy.get('@brand-options').should('have.length', 20)
@@ -77,7 +77,7 @@ describe(`TC-FE-PBI11-FILTER-SALE-ITEM-GALLERY-BY-BRAND-1\n
         cy.get('@brand-options').eq(19).contains('ZTE')
 
         cy.get('@brand-options').eq(1).contains('ASUS').click()
-        cy.wait(100)
+        cy.wait(400)
 
         cy.get('.itbms-brand').then(($brands) => {
             const matched = $brands.filter((index, el) =>
@@ -85,7 +85,7 @@ describe(`TC-FE-PBI11-FILTER-SALE-ITEM-GALLERY-BY-BRAND-1\n
             )
             expect(matched).to.have.length(10)
         })
-        cy.wait(100)
+        cy.wait(400)
     })
 
     it('[Step 2] should add a sale item "LG, W41 Pro/6/128GB/5,600".',()=>{
@@ -93,7 +93,7 @@ describe(`TC-FE-PBI11-FILTER-SALE-ITEM-GALLERY-BY-BRAND-1\n
 
         cy.get('.itbms-sale-item-add').should('exist').as('addSaleItemButton'); 
         cy.get('@addSaleItemButton').click();
-        cy.wait(100)
+        cy.wait(400)
 
         cy.get('.itbms-brand').as('brandSelect') ;
         cy.get('@brandSelect').select('LG') ;
@@ -121,7 +121,7 @@ describe(`TC-FE-PBI11-FILTER-SALE-ITEM-GALLERY-BY-BRAND-1\n
 
         cy.get('.itbms-save-button').as('save') ;
         cy.get('@save').click({force:true}) ;
-        cy.wait(100)
+        cy.wait(400)
 
         cy.wait('@saveRequest').then((interception)=>{
             const response = interception.response

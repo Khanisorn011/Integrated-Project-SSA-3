@@ -111,7 +111,7 @@
                 <div class="relative">
                   <input @blur="trim('storageGb')" v-model="form.storageGb" type="number" placeholder="0"
                     class="itbms-storageGb w-full border border-gray-300 p-3 pl-12 rounded-lg focus:ring-1 focus:ring-blue-400 focus:border-blue-400 outline-none transition-all duration-200"
-                    :ref="el = inputRefs[6] = el" @keydown.enter.prevent="handleEnter(6)" />
+                    :ref="el => inputRefs[6] = el" @keydown.enter.prevent="handleEnter(6)" />
                   <div
                     class="absolute inset-y-0 left-0 flex items-center px-3 pointer-events-none text-gray-500 font-medium">
                     GB
@@ -149,7 +149,7 @@
             ]">
               Save
             </button>
-            <button type="button" @click="router.push('/sale-items')"
+            <button type="button" @click="router.back()"
               class="itbms-cancel-button px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:text-red-600 hover:border-red-200 transition-all duration-200">
               Cancel
             </button>
@@ -200,20 +200,33 @@ const handleEnter = (index) => {
 };
  
 onMounted(async () => {
+  console.log(props.formtype);
+  console.log(props.form);
+  
   try {
     brands.value = await fetchBrands();
     brands.value.sort((a, b) => a.name.localeCompare(b.name));
- 
-    if (brands.value.length > 0 && !form.value.brandId) {
+    
+ if (props.formtype !== 'edit') {
+   if (brands.value.length > 0 && !form.value.brandId) {
       form.value.brandId = brands.value[0].id;
     }
+ }
   } catch (err) {
     console.error("Failed to load brands", err);
   }
  
   if (props.formtype === "edit") {
+    console.log("edit");
+    
     Object.assign(form.value, props.form);
-    originData.value = JSON.parse(JSON.stringify(props.form));
+    originData.value = JSON.parse(JSON.stringify(form.value));
+    console.log(form.value);
+    console.log(originData.value);
+    console.log(JSON.stringify(form.value) === JSON.stringify(originData.value));
+    console.log(isFormModified.value);
+    
+    
   }
 });
  
@@ -237,7 +250,7 @@ const validateField = (key) => {
       break;
     case 'description':
       const trimmedDescription = value?.trim() || '';
-      errors.description = trimmedDescription.length === 0 || trimmedDescription.length > 65535  ? "Description must be 1-65,535 characters long." : '';
+      errors.description = trimmedDescription.length === 0 || trimmedDescription.length > 16384  ? "Description must be 1-16,384 characters long." : '';
 
       break;
     case 'price':

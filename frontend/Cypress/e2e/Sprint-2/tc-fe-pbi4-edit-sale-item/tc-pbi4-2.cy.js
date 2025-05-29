@@ -54,11 +54,11 @@ describe(`TC-FE-PBI4-ADD-SALE-ITEM-2\n
         cy.get('.itbms-model').contains('Galaxy S25 Ultra').should('exist').as('newSaleItem') 
         cy.get('@newSaleItem').parents('.itbms-row').as('row')
         cy.get('@row').click()
-        cy.wait(100)
+        cy.wait(2000)
 
         cy.get('.itbms-edit-button').as('edit') ;
         cy.get('@edit').click()
-        cy.wait(100)
+        cy.wait(2000)
 
         cy.get('.itbms-brand').contains('Samsung')
         cy.get('input.itbms-model').should('have.value','Galaxy S25 Ultra')
