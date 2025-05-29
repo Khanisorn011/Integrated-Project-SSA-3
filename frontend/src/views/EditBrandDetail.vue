@@ -62,6 +62,9 @@ import BrandForm from "../components/BrandForm.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";
+import { useAlertStore } from "../stores/alertStore.js";
+
+const alertStore = useAlertStore()
 
 // get image
 const stateStore = useStateStore();
@@ -121,7 +124,8 @@ const saveBrand = async (payload) => {
     const editPayload = { id: route.params.id, ...payload }
     const a = await editBrand(route.params.id, editPayload);
 
-    router.push({ path: `/brands`, query: { updated: 'true' } });
+    router.push({ path: `/brands`});
+    alertStore.setModuleAlert('brand','updated')
   } catch (err) {
     if (err.response?.status === 404) showErrorModal.value = true;
     else console.error(err);

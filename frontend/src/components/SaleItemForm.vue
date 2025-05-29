@@ -149,7 +149,7 @@
             ]">
               Save
             </button>
-            <button type="button" @click="router.push('/sale-items')"
+            <button type="button" @click="router.back()"
               class="itbms-cancel-button px-6 py-3 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 hover:text-red-600 hover:border-red-200 transition-all duration-200">
               Cancel
             </button>

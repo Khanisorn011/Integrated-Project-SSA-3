@@ -340,7 +340,9 @@ import { fetchBrands } from "../libs/fetchBrand";
 import { fetchSaleItemByCondition } from "../libs/fetchSaleItem";
 import PageBar from "../components/PageBar.vue";
 import { usePageStore } from "../stores/pageStore.js";
+import { useAlertStore } from "../stores/alertStore";
 
+const alertStore = useAlertStore()
 // loop image
 const imageArray = images;
 
@@ -367,8 +369,8 @@ const isLoading = ref(false);
 // router
 const router = useRouter();
 const route = useRoute();
-const added = computed(() => route.query.added === "true");
-const deleted = computed(() => route.query.deleted === "true");
+const added = computed(() => alertStore.getModuleAlert('saleItem') === "created");
+const deleted = computed(() => alertStore.getModuleAlert('saleItem') === "deleted");
 
 // page store
 const pageStore = usePageStore();

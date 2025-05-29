@@ -112,15 +112,18 @@ import Footer from "../components/Footer.vue";
 import Header from "../components/Header.vue";
 import Modal from "../components/Modal.vue";
 import Alert from "../components/Alert.vue";
+import { useAlertStore } from "../stores/alertStore.js";
+
+const alertStore = useAlertStore()
 
 // brands
 const brands = ref([]);
 
 // router
 const route = useRoute();
-const added = computed(() => route.query.added === "true");
-const deleted = ref(false);
-const updated = computed(() => route.query.updated === "true");
+const added = computed(() => alertStore.getModuleAlert('brand') === "created");
+const deleted = computed(() => alertStore.getModuleAlert('brand') === "deleted");
+const updated = computed(() => alertStore.getModuleAlert('brand') === "updated");
 
 // fetch brands
 onMounted(async () => {
@@ -184,7 +187,7 @@ const confirmDeleteProduct = async () => {
       return;
     }
     await deleteBrandById(brandIdToDelete.value);
-    deleted.value = true;
+    alertStore.setModuleAlert('brand','deleted')
     brands.value = await fetchBrands();
     showConfirmModal.value = false;
   } catch (error) {

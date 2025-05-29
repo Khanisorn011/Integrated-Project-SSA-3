@@ -49,14 +49,16 @@
 <script setup>
 import { ref, reactive, onMounted, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { fetchProductById, editProduct } from "../libs/fetchProduct.js";
+import { fetchSaleItemById, editSaleItem } from "../libs/fetchSaleItem.js";
 import { fetchBrands } from '../libs/fetchBrand.js'
 import Modal from "../components/Modal.vue";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";
 import SaleItemForm from '../components/SaleItemForm.vue'
+import { useAlertStore } from "../stores/alertStore";
 
+const alertStore = useAlertStore()
 // router
 const route = useRoute();
 const router = useRouter();
@@ -88,7 +90,7 @@ const form = reactive({
 // fetch saleItems and assign origin data
 onMounted(async () => {
   try {
-    const data = await fetchProductById(route.params.id);
+    const data = await fetchSaleItemById(route.params.id);
     product.value = data;
 
     Object.assign(form, {
@@ -123,9 +125,10 @@ const saveProduct = async (payload) => {
       brand: { id: matched?.id, name: matched?.name }
     }
 
-    const a = await editProduct(route.params.id, sendPayload);
+    const a = await editSaleItem(route.params.id, sendPayload);
+    alertStore.setModuleAlert('saleItem','updated')
+    router.push({ path: `/sale-items/${route.params.id}`});
 
-    router.push({ path: `/sale-items/${route.params.id}`, query: { updated: 'true' } });
   } catch (err) {
     if (err.response?.status === 404) showErrorModal.value = true;
     else console.error(err);
