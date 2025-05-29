@@ -16,10 +16,10 @@
     <main class="container mx-auto py-6 px-4">
       <!-- Alerts -->
       <div class="max-w-4xl mx-auto mb-6">
-        <Alert v-if="added" :message="'The brand has been added.'" :state="'created'">
+        <Alert v-if="added" :message="'The brand has been added.'" :state="'success'">
         </Alert>
 
-        <Alert v-if="deleted" :message="'The brand has been deleted.'" :state="'error'">
+        <Alert v-if="deleted" :message="'The brand has been deleted.'" :state="'success'">
         </Alert>
 
         <Alert v-if="updated" :message="'The brand has been updated.'" :state="'updated'">
@@ -112,6 +112,7 @@ import Footer from "../components/Footer.vue";
 import Header from "../components/Header.vue";
 import Modal from "../components/Modal.vue";
 import Alert from "../components/Alert.vue";
+
 // brands
 const brands = ref([]);
 
@@ -125,7 +126,6 @@ const updated = computed(() => route.query.updated === "true");
 onMounted(async () => {
   try {
     brands.value = await fetchBrands();
-    console.log(brands.value);
   } catch (err) {
     console.error("Failed to load brands:", err);
   }
@@ -137,17 +137,21 @@ const showConfirmModal = ref(false);
 //have item in brand modal
 const showHaveItemInBrandModal = ref(false);
 
+// brand id want to delete
 const brandIdToDelete = ref(null);
+// brand want to delete
 const chooseBrand = ref(null);
-const checkItdeleted = ref(null);
 
+// display brand not exist modal
 const brandNotExist = ref(false);
 
+// fetch after delete or brand not found
 const updateBrand = async () => {
   brandNotExist.value = false;
   brands.value = await fetchBrands();
 };
 
+// display delete modal
 const displayModal = async (brandId) => {
   try {
     brandIdToDelete.value = brandId;
@@ -171,6 +175,7 @@ const displayModal = async (brandId) => {
   }
 };
 
+// confirm delete
 const confirmDeleteProduct = async () => {
   try {
     const detail = await fetchBrandById(brandIdToDelete.value);

@@ -63,14 +63,18 @@ import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";
 
-const route = useRoute();
-const router = useRouter();
+// get image
 const stateStore = useStateStore();
 const { getImageUrl } = stateStore;
 
-const brand = ref(null);
-// const inputRefs = ref([]);
+// router
+const route = useRoute();
+const router = useRouter();
 
+// focus brand
+const brand = ref(null);
+
+// error modal brand not found
 const showErrorModal = ref(false);
 const secondsLeft = ref(3);
 let timeoutRef = null;
@@ -84,9 +88,10 @@ const form = reactive({
   isActive: true
 });
 
-// original snapshot for change detection
+// original data
 const originData = ref({});
 
+// fetch brand and assign form data
 onMounted(async () => {
   try {
     const data = await fetchBrandById(route.params.id);
@@ -94,8 +99,6 @@ onMounted(async () => {
       throw new Error("invalid Id")
     }
     brand.value = data;
-    console.log(brand.value);
-    console.log(brand.value.name);
 
     Object.assign(form, {
       name: brand.value.name,
@@ -103,11 +106,8 @@ onMounted(async () => {
       countryOfOrigin: brand.value.countryOfOrigin,
       isActive: brand.value.isActive
     });
-    console.log(form);
 
     originData.value = { ...form };
-    console.log("test");
-
   } catch (err) {
     showErrorModal.value = true;
     timeoutRef = setTimeout(() => router.push("/brands"), 3000);
@@ -115,10 +115,10 @@ onMounted(async () => {
   }
 });
 
+// save Brand
 const saveBrand = async (payload) => {
   try {
     const editPayload = { id: route.params.id, ...payload }
-    console.log(editPayload);
     const a = await editBrand(route.params.id, editPayload);
 
     router.push({ path: `/brands`, query: { updated: 'true' } });
@@ -139,6 +139,7 @@ watch(showErrorModal, (v) => {
   }
 });
 
+// go brand list
 const goBrandList = () => {
   clearTimeout(timeoutRef); clearInterval(countdownInterval);
   router.push("/brands/list");

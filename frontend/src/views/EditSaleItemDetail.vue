@@ -57,16 +57,16 @@ import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";
 import SaleItemForm from '../components/SaleItemForm.vue'
 
+// router
 const route = useRoute();
 const router = useRouter();
-// const stateStore = useStateStore();
-// const { getImageUrl } = stateStore;
 
-
+// saleItem data
 const product = ref(null);
+// all brands
 const brands = ref([]);
-// const inputRefs = ref([]);
 
+// error id not found modal
 const showErrorModal = ref(false);
 const secondsLeft = ref(3);
 let timeoutRef = null;
@@ -85,11 +85,11 @@ const form = reactive({
   quantity: null,
 });
 
+// fetch saleItems and assign origin data
 onMounted(async () => {
   try {
     const data = await fetchProductById(route.params.id);
     product.value = data;
-    console.log(product.value);
 
     Object.assign(form, {
       brandName: data.brandName,
@@ -112,20 +112,18 @@ onMounted(async () => {
   }
 });
 
+// save SaleITems
 const saveProduct = async (payload) => {
   try {
-    console.log(payload);
 
     const matched = brands.value.find(b => b.name === payload.brand.name);
-    console.log(matched);
 
     const sendPayload = {
       ...payload,
       brand: { id: matched?.id, name: matched?.name }
     }
-    console.log(sendPayload);
+
     const a = await editProduct(route.params.id, sendPayload);
-    console.log(a);
 
     router.push({ path: `/sale-items/${route.params.id}`, query: { updated: 'true' } });
   } catch (err) {
@@ -145,6 +143,7 @@ watch(showErrorModal, (v) => {
   }
 });
 
+// go sale item list
 const goSaleItemList = () => {
   clearTimeout(timeoutRef); clearInterval(countdownInterval);
   router.push("/sale-items");

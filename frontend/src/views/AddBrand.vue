@@ -32,11 +32,10 @@ import Footer from '../components/Footer.vue';
 import { AddBrand } from '../libs/fetchBrand.js';
 import BrandForm from '../components/BrandForm.vue'
 
+// router
 const router = useRouter();
 
-
-
-
+// save brand
 const saveBrand = async (payload) => {
   try {
     const res = await AddBrand(payload);

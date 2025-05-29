@@ -89,28 +89,25 @@
 <script setup>
 import { ref, watch, computed, onMounted } from "vue";
 
+// props currentPage , pageSize , totalPage
 const props = defineProps({
   currentPage: Number,
   pageSize: Number,
   totalPages: Number,
 });
 
-watch(
-  () => props.totalPages,
-  () => {
-    console.log(props.totalPages);
-  }
-);
-
+// emit currentPage , pageSize , click to change page ?
 const emit = defineEmits([
   "update:currentPage",
   "update:pageSize",
   "clickButton",
 ]);
 
+// page
 const maxVisible = 10;
 const visibleStart = ref(0);
 
+// handle show page
 watch(
   () => props.currentPage,
   (newPage) => {
@@ -122,14 +119,13 @@ watch(
   }
 );
 
+// page show
 const visiblePages = computed(() => {
   const pages = [];
   const end = Math.min(visibleStart.value + maxVisible, props.totalPages);
   for (let i = visibleStart.value; i < end; i++) {
     pages.push(i);
   }
-  console.log(pages);
-
   return pages;
 });
 </script>

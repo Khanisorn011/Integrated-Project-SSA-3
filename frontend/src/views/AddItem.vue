@@ -53,6 +53,7 @@ const form = ref({
   description: "",
 });
 
+// fetch all brand
 onMounted(async () => {
   try {
     brands.value = await fetchBrands();
@@ -63,6 +64,8 @@ onMounted(async () => {
 });
 
 const submitting = ref(false);
+
+// save saleItems
 const saveProduct = async (payload) => {
   try {
     const matched = brands.value.find(b => b.name === payload.brand.name);

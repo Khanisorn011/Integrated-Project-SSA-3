@@ -20,12 +20,12 @@
     <Alert
       v-if="added"
       :message="'The sale item has been successfully added.'"
-      :state="'created'"
+      :state="'success'"
     />
     <Alert
       v-if="deleted"
       :message="'The sale item has been deleted.'"
-      :state="'created'"
+      :state="'success'"
     />
 
     <!-- Enhanced Controls Bar -->
@@ -341,29 +341,44 @@ import { fetchSaleItemByCondition } from "../libs/fetchSaleItem";
 import PageBar from "../components/PageBar.vue";
 import { usePageStore } from "../stores/pageStore.js";
 
+// loop image
 const imageArray = images;
 
-// Reactive variables
+// saleItems in this page
 const saleItems = ref([]);
+// all brands
 const brands = ref([]);
+// select brand to filter
 const selectedBrands = ref([]);
+// show brand drop down
 const showDropdown = ref(false);
+// current page
 const currentPage = ref(1);
+// pageSize
 const pageSize = ref(Number(sessionStorage.getItem("pageSize")) || 10);
+//total page
 const pageResponse = ref({ totalPages: 0 });
+// sort order
 const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default");
+// check click button to change page ?
 const clickbutton = ref(false);
 const isLoading = ref(false);
 
-// Router and store
+// router
 const router = useRouter();
 const route = useRoute();
-const pageStore = usePageStore();
-
-// Computed properties
 const added = computed(() => route.query.added === "true");
 const deleted = computed(() => route.query.deleted === "true");
 
+// page store
+const pageStore = usePageStore();
+
+// sort brands list
+const sortedBrands = computed(() => {
+  return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
+});
+
+// sort direction value
 const sortDirection = computed(() => {
   if (sortOrder.value === "asc") return "ASC";
   if (sortOrder.value === "desc") return "DESC";
@@ -372,16 +387,7 @@ const sortDirection = computed(() => {
   }
 });
 
-watch(sortOrder, () => {
-  console.log(sortOrder.value);
-  console.log(sortDirection);
-});
-
-const sortedBrands = computed(() => {
-  return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
-});
-
-// Main function to fetch data
+// fetchData
 const fetchData = async (resetPage = false) => {
   if (isLoading.value) return; // Prevent duplicate calls
 
@@ -412,11 +418,9 @@ const fetchData = async (resetPage = false) => {
       );
       saleItems.value = correctedResponse.content || [];
       pageResponse.value.totalPages = correctedResponse.totalPages || 0;
-      console.log(`if : ${pageResponse.value.totalPages}`);
     }
 
     if (response.content.length <= 0) {
-      console.log("?");
 
       currentPage.value = pageStore.setPageNumber(
         pageStore.getPageNumber() - 1
@@ -425,7 +429,6 @@ const fetchData = async (resetPage = false) => {
     } else {
       saleItems.value = response.content || [];
       pageResponse.value.totalPages = response.totalPages || 0;
-      console.log(`else : ${pageResponse.value.totalPages}`);
     }
 
     // Update page store
@@ -440,13 +443,10 @@ const fetchData = async (resetPage = false) => {
 };
 
 // Initialize data on component mount
-onBeforeMount(async () => {
-  console.log(currentPage.value);
-
+onMounted(async () => {
   try {
     // Load brands
     brands.value = await fetchBrands();
-    console.log("onMount");
 
     // Restore saved state
     const savedBrands = sessionStorage.getItem("selectedBrands");
@@ -464,46 +464,31 @@ onBeforeMount(async () => {
       sortField: sortDirection.value === "default" ? "createdOn" : "brand.name",
       sortDirection: sortDirection.value,
     };
-    // Initial data fetch
-    console.log(payload);
 
     await fetchData();
-    console.log(console.log(`onMounted : ${pageResponse.value.totalPages}`));
-
-    // const response = await fetchSaleItemByCondition(payload);
-    // pageResponse.value.totalPages = response.totalPages || 0;
-
-    // if (response.content.length <= 0) {
-    //   console.log("?");
-
-    //   currentPage.value = pageStore.setPageNumber(
-    //     pageStore.getPageNumber() - 1
-    //   );
-    //   currentPage.value = pageStore.getPageNumber();
-    // }
   } catch (error) {
     console.error("Error in onMounted:", error);
   }
 });
 
-// Watchers for reactive updates
+// watch for fetch new Data
 watch([selectedBrands, sortOrder, pageSize], () => {
   fetchData(true); // reset to page 1
 });
 
+// watch for fetch new Data
 watch(currentPage, () => {
-  console.log(currentPage.value);
   if (currentPage.value >= 0) {
     fetchData();
-      console.log(currentPage.value);
   }
 });
 
+// watch for fetch new Data
 watch(clickbutton, () => {
   fetchData();
 });
 
-// Save to session storage
+// SAVE TO SESSION STORAGE
 watch(pageSize, (newVal) => {
   sessionStorage.setItem("pageSize", newVal.toString());
 });
@@ -516,23 +501,28 @@ watch(selectedBrands, (newVal) => {
   sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
 });
 
-// UI event handlers
+// UI EVENT HANDLER
+// show drop down
 function toggleDropdown() {
   showDropdown.value = !showDropdown.value;
 }
 
+// clear all filter brand
 function clearAllBrands() {
   selectedBrands.value = [];
 }
 
+// remove filter brand
 function removeBrand(brand) {
   selectedBrands.value = selectedBrands.value.filter((b) => b !== brand);
 }
 
+// go to list
 function goToList() {
   router.push("/sale-items/list");
 }
 
+// if go to last page
 const goToLastPage = async () => {
   await fetchData();
   currentPage.value = pageResponse.value.totalPages - 1;
