@@ -422,8 +422,7 @@ const fetchData = async (resetPage = false) => {
       pageResponse.value.totalPages = correctedResponse.totalPages || 0;
     }
 
-    if (response.content.length <= 0) {
-
+    if (response.content.length <= 0 && currentPage.value > pageResponse.value.totalPages - 1) {
       currentPage.value = pageStore.setPageNumber(
         pageStore.getPageNumber() - 1
       );
@@ -431,6 +430,7 @@ const fetchData = async (resetPage = false) => {
     } else {
       saleItems.value = response.content || [];
       pageResponse.value.totalPages = response.totalPages || 0;
+       console.log(pageResponse.value.totalPages - 1);
     }
 
     // Update page store
@@ -466,7 +466,6 @@ onMounted(async () => {
       sortField: sortDirection.value === "default" ? "createdOn" : "brand.name",
       sortDirection: sortDirection.value,
     };
-
     await fetchData();
   } catch (error) {
     console.error("Error in onMounted:", error);
@@ -475,6 +474,8 @@ onMounted(async () => {
 
 // watch for fetch new Data
 watch([selectedBrands, sortOrder, pageSize], () => {
+  console.log(selectedBrands.value);
+  
   fetchData(true); // reset to page 1
 });
 
