@@ -78,9 +78,5 @@ public class SaleItemService {
             return saleItemBaseRepository.findByBrandNameIn(filterBrands, pageRequest);
         }
     }
-
-
-
-
 }
 
