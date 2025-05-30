@@ -106,8 +106,8 @@
 
           <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div class="h-64 bg-gray-100 flex items-center justify-center p-8">
-                <img src="" alt="Smartphone Model" class="h-full object-contain" />
+              <div class="h-64 bg-gray-100 flex items-center justify-center">
+                <img src="/images/phoneBar1.png" alt="Smartphone Model" class="h-full object-cover w-full" />
               </div>
               <div class="p-8">
                 <h3 class="text-xl font-semibold mb-2">iPhone 15 Pro</h3>
@@ -117,8 +117,8 @@
             </div>
 
             <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
-              <div class="h-64 bg-gray-100 flex items-center justify-center p-8">
-                <img src="" alt="Smartphone Model" class="h-full object-contain" />
+              <div class="h-64 bg-gray-100 flex items-center justify-center">
+                <img src="/images/phoneBar2.png" alt="Smartphone Model" class="h-full object-cover w-full" />
               </div>
               <div class="p-8">
                 <h3 class="text-xl font-semibold mb-2">Samsung Galaxy S24</h3>

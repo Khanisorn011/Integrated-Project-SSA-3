@@ -3,7 +3,7 @@
     class="bg-gradient-to-br from-indigo-100 via-white to-purple-100 text-black min-h-screen font-[Poppins]"
   >
     <Header />
- 
+
     <!-- Section Title -->
     <section class="py-12 px-7 text-center">
       <h2
@@ -15,19 +15,19 @@
         ดูสินค้าทั้งหมดที่มีในระบบในรูปแบบแกลเลอรี
       </p>
     </section>
- 
+
     <!-- Alerts -->
     <Alert
       v-if="added"
       :message="'The sale item has been successfully added.'"
-      :state="'created'"
+      :state="'success'"
     />
     <Alert
       v-if="deleted"
       :message="'The sale item has been deleted.'"
-      :state="'created'"
+      :state="'success'"
     />
- 
+
     <!-- Enhanced Controls Bar -->
     <div class="max-w-7xl mx-auto px-6 mb-12">
       <div
@@ -61,7 +61,7 @@
               </svg>
               <span class="relative z-10">Add Sale Item</span>
             </router-link>
- 
+
             <!-- Filter Brand -->
             <div class="w-full sm:w-auto relative min-w-[250px]">
               <div
@@ -108,7 +108,7 @@
                       </svg>
                     </button>
                   </div>
- 
+
                   <!-- Dropdown -->
                   <div
                     v-if="showDropdown"
@@ -129,7 +129,7 @@
                     </label>
                   </div>
                 </div>
- 
+
                 <!-- Clear Button -->
                 <button
                   @click="clearAllBrands"
@@ -140,7 +140,7 @@
               </div>
             </div>
           </div>
- 
+
           <!-- View Toggle Buttons -->
           <div
             class="flex gap-2 w-full lg:w-auto bg-gradient-to-r from-gray-100 to-gray-200 p-2 rounded-2xl shadow-inner"
@@ -175,7 +175,7 @@
         </div>
       </div>
     </div>
- 
+
     <!-- Empty State -->
     <div v-if="saleItems.length === 0" class="text-center py-32">
       <div class="itbms-row max-w-lg mx-auto">
@@ -230,7 +230,7 @@
         </router-link>
       </div>
     </div>
- 
+
     <!-- Sort Buttons -->
     <main class="max-w-6xl mx-auto px-1 pb-8 flex flex-col gap-4">
       <div v-if="saleItems.length !== 0" class="flex justify-end gap-3 mt-4">
@@ -293,7 +293,7 @@
         </button>
       </div>
     </main>
- 
+
     <!-- Product Grid -->
     <main
       class="max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6 px-6 pb-16"
@@ -310,25 +310,26 @@
         />
       </div>
     </main>
- 
+
     <!-- Pagination -->
-    <div class="max-w-7xl mx-auto px-6 pb-12">
+<div class="max-w-7xl mx-auto px-6 pb-12">
       <PageBar
         :currentPage="currentPage"
         :totalPages="pageResponse.totalPages"
         :pageSize="Number(pageSize)"
         @update:currentPage="(val) => (currentPage = val)"
         @update:pageSize="(val) => (pageSize = val)"
-        @clickButton="clickButton = !clickButton"
+        @clickButton="clickbutton = !clickbutton"
+        @goLastPage="goToLastPage"
       />
     </div>
- 
+
     <Footer />
   </div>
 </template>
- 
+
 <script setup>
-import { computed, onMounted, ref, watch } from "vue";
+import { computed, onMounted, onBeforeMount, ref, watch } from "vue";
 import { useRoute, useRouter } from "vue-router";
 import Alert from "../components/Alert.vue";
 import Footer from "../components/Footer.vue";
@@ -339,30 +340,47 @@ import { fetchBrands } from "../libs/fetchBrand";
 import { fetchSaleItemByCondition } from "../libs/fetchSaleItem";
 import PageBar from "../components/PageBar.vue";
 import { usePageStore } from "../stores/pageStore.js";
- 
+import { useAlertStore } from "../stores/alertStore";
+
+const alertStore = useAlertStore()
+// loop image
 const imageArray = images;
- 
-// Reactive variables
+
+// saleItems in this page
 const saleItems = ref([]);
+// all brands
 const brands = ref([]);
+// select brand to filter
 const selectedBrands = ref([]);
+// show brand drop down
 const showDropdown = ref(false);
+// current page
 const currentPage = ref(1);
+// pageSize
 const pageSize = ref(Number(sessionStorage.getItem("pageSize")) || 10);
+//total page
 const pageResponse = ref({ totalPages: 0 });
+// sort order
 const sortOrder = ref(sessionStorage.getItem("sortOrder") || "default");
-const clickButton = ref(false);
+// check click button to change page ?
+const clickbutton = ref(false);
 const isLoading = ref(false);
- 
-// Router and store
+
+// router
 const router = useRouter();
 const route = useRoute();
+const added = computed(() => alertStore.getModuleAlert('saleItem') === "created");
+const deleted = computed(() => alertStore.getModuleAlert('saleItem') === "deleted");
+
+// page store
 const pageStore = usePageStore();
- 
-// Computed properties
-const added = computed(() => route.query.added === "true");
-const deleted = computed(() => route.query.deleted === "true");
- 
+
+// sort brands list
+const sortedBrands = computed(() => {
+  return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
+});
+
+// sort direction value
 const sortDirection = computed(() => {
   if (sortOrder.value === "asc") return "ASC";
   if (sortOrder.value === "desc") return "DESC";
@@ -370,27 +388,18 @@ const sortDirection = computed(() => {
     return "default"; // default
   }
 });
- 
-watch(sortOrder, () => {
-  console.log(sortOrder.value);
-  console.log(sortDirection);
-})
- 
-const sortedBrands = computed(() => {
-  return [...brands.value].sort((a, b) => a.name.localeCompare(b.name));
-});
- 
-// Main function to fetch data
+
+// fetchData
 const fetchData = async (resetPage = false) => {
   if (isLoading.value) return; // Prevent duplicate calls
- 
+
   try {
     isLoading.value = true;
- 
+
     if (resetPage) {
       currentPage.value = 0;
     }
- 
+
     const payload = {
       filterBrands: selectedBrands.value,
       page: currentPage.value || 0,
@@ -398,53 +407,55 @@ const fetchData = async (resetPage = false) => {
       sortField: sortDirection.value === "default" ? "createdOn" : "brand.name",
       sortDirection: sortDirection.value,
     };
- 
+
     const response = await fetchSaleItemByCondition(payload);
- 
+
     // Handle pagination adjustment
     if (response.totalPages > 0 && currentPage.value > response.totalPages) {
       currentPage.value = response.totalPages;
-      // Fetch again with corrected page
       const correctedPayload = { ...payload, page: currentPage.value };
       const correctedResponse = await fetchSaleItemByCondition(
         correctedPayload
       );
       saleItems.value = correctedResponse.content || [];
       pageResponse.value.totalPages = correctedResponse.totalPages || 0;
+    }
+
+    if (response.content.length <= 0 && currentPage.value > pageResponse.value.totalPages - 1) {
+      currentPage.value = pageStore.setPageNumber(
+        pageStore.getPageNumber() - 1
+      );
+      currentPage.value = pageStore.getPageNumber();
     } else {
       saleItems.value = response.content || [];
       pageResponse.value.totalPages = response.totalPages || 0;
     }
- 
+
     // Update page store
     pageStore.setPageNumber(currentPage.value);
   } catch (error) {
-    console.error("Error fetching data:", error);
     saleItems.value = [];
     pageResponse.value.totalPages = 0;
   } finally {
     isLoading.value = false;
   }
 };
- 
+
 // Initialize data on component mount
 onMounted(async () => {
-  console.log(currentPage.value);
- 
   try {
     // Load brands
     brands.value = await fetchBrands();
-    console.log("onMount");
- 
+
     // Restore saved state
     const savedBrands = sessionStorage.getItem("selectedBrands");
     if (savedBrands) {
       selectedBrands.value = JSON.parse(savedBrands);
     }
- 
+
     // Get initial page from store
     currentPage.value = pageStore.getPageNumber() || 0;
- 
+
     const payload = {
       filterBrands: selectedBrands.value,
       page: currentPage.value || 0,
@@ -452,67 +463,70 @@ onMounted(async () => {
       sortField: sortDirection.value === "default" ? "createdOn" : "brand.name",
       sortDirection: sortDirection.value,
     };
-    // Initial data fetch
-    console.log(payload);
- 
     await fetchData();
-    const response = await fetchSaleItemByCondition(payload);
-    console.log(response);
-    if (response.content.length <= 0) {
-      currentPage.value = pageStore.setPageNumber(
-        pageStore.getPageNumber() - 1
-      );
-      currentPage.value = pageStore.getPageNumber();
-    }
   } catch (error) {
     console.error("Error in onMounted:", error);
   }
 });
- 
-// Watchers for reactive updates
+
+// watch for fetch new Data
 watch([selectedBrands, sortOrder, pageSize], () => {
   fetchData(true); // reset to page 1
 });
- 
+
+// watch for fetch new Data
 watch(currentPage, () => {
-  console.log(currentPage.value);
   if (currentPage.value >= 0) {
     fetchData();
   }
 });
- 
-watch(clickButton, () => {
+
+// watch for fetch new Data
+watch(clickbutton, () => {
   fetchData();
 });
- 
-// Save to session storage
+
+// SAVE TO SESSION STORAGE
 watch(pageSize, (newVal) => {
   sessionStorage.setItem("pageSize", newVal.toString());
 });
- 
+
 watch(sortOrder, (newVal) => {
   sessionStorage.setItem("sortOrder", newVal);
 });
- 
+
 watch(selectedBrands, (newVal) => {
   sessionStorage.setItem("selectedBrands", JSON.stringify(newVal));
 });
- 
-// UI event handlers
+
+// UI EVENT HANDLER
+// show drop down
 function toggleDropdown() {
   showDropdown.value = !showDropdown.value;
 }
- 
+
+// clear all filter brand
 function clearAllBrands() {
   selectedBrands.value = [];
 }
- 
+
+// remove filter brand
 function removeBrand(brand) {
   selectedBrands.value = selectedBrands.value.filter((b) => b !== brand);
 }
- 
+
+// go to list
 function goToList() {
   router.push("/sale-items/list");
 }
-</script>
+
+// if go to last page
+const goToLastPage = async () => {
+  await fetchData();
+  currentPage.value = pageResponse.value.totalPages - 1;
+  await fetchData();
+};
  
+
+</script>
+

@@ -17,11 +17,6 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/itb-mshop")
-@CrossOrigin(origins = {
-    "http://ip24ssa3.sit.kmutt.ac.th",
-    "http://ip24ssa3.sit.kmutt.ac.th:5173",
-    "http://intproj24.sit.kmutt.ac.th"
-})
 
 public class SaleItemController {
     @Autowired
@@ -48,13 +43,11 @@ public class SaleItemController {
                 , request.getSortField() , request.getSortDirection()
         );
 
-        // Convert content to DTO
         List<SaleItemDetailDTO> contentDTOs = saleItems.getContent()
                 .stream()
                 .map(item -> modelMapper.map(item, SaleItemDetailDTO.class))
                 .collect(Collectors.toList());
 
-        // Set content and pagination into response DTO
         PageResponseDTO pageResponseDTO = new PageResponseDTO();
         pageResponseDTO.setContent(contentDTOs);
         pageResponseDTO.setPage(saleItems.getNumber());

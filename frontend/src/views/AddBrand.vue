@@ -31,22 +31,24 @@ import Header from '../components/Header.vue';
 import Footer from '../components/Footer.vue';
 import { AddBrand } from '../libs/fetchBrand.js';
 import BrandForm from '../components/BrandForm.vue'
+import { useAlertStore } from '../stores/alertStore';
 
+//store
+const alertStore = useAlertStore()
+// router
 const router = useRouter();
 
-
-
-
+// save brand
 const saveBrand = async (payload) => {
   try {
     const res = await AddBrand(payload);
     if (res) {
-      router.push({ path: '/brands', query: { added: 'true' } });
+      router.push({ path: '/brands'});
+      alertStore.setModuleAlert('brand','created')
     } else {
       alert('Failed to add brand.');
     }
   } catch (error) {
-    console.error(error);
     alert('Already has this brand name.');
   } finally {
 

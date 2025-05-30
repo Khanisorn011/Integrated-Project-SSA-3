@@ -102,9 +102,13 @@
 import { ref, reactive, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
  
+// emit payLoad to parent element
 const emits = defineEmits(["payload"]);
+
+//router
 const router = useRouter();
  
+//for handle enter
 const inputRefs = ref([]);
 const submitting = ref(false);
  
@@ -126,63 +130,17 @@ const errors = reactive({
   websiteUrl: '',
   countryOfOrigin: '',
 });
- 
-const payload = computed(() => ({
-  name: form.name.trim(),
-  websiteUrl: form.websiteUrl.trim() || undefined,
-  countryOfOrigin: form.countryOfOrigin.trim() || undefined,
-  isActive: form.isActive,
-}));
- 
-const trimField = (key) => {
-  if (typeof form[key] === "string") {
-    form[key] = form[key].trim()
-    validateField(key)
-  }
-};
- 
-const handleEnter = (index) => {
-  const nextInput = inputRefs.value[index + 1];
-  if (nextInput) nextInput.focus();
-};
- 
-const cancel = () => {
-  router.back();
-};
- 
-const isFormValid = computed(() => {
-  return (
-    form.name.trim().length > 0 &&
-    !errors.name &&
-    !errors.websiteUrl &&
-    !errors.countryOfOrigin
-  );
-});
- 
-const handleSubmit = () => {
-  emits("payload", payload.value);
-};
- 
-//for edit brand
-const originData = ref({});
-const isFormModified = computed(
-  () => JSON.stringify(form) !== JSON.stringify(originData.value)
-);
- 
-if (props.formtype === "edit") {
-  onMounted(() => {
-    Object.assign(form, props?.form);
-    originData.value = JSON.parse(JSON.stringify(props.form)); // Save original data for comparison
-  });
-}
- 
+
+//FORM CONTROL
+
+// validate control message
 const validateField = (key) => {
   const value = form[key].trim();
  
   switch (key) {
     case 'name':
       errors.name = value.length < 1 || value.length > 30
-        ? 'Brand name must be 1–30 characters long.'
+        ? 'Brand name must be 1-30 characters long.'
         : '';
       break;
  
@@ -201,10 +159,69 @@ const validateField = (key) => {
  
     case 'countryOfOrigin':
       errors.countryOfOrigin = value.length > 80
-        ? 'Brand country of origin must be 1–80 characters long or not specified.'
+        ? 'Brand country of origin must be 1-80 characters long or not specified.'
         : '';
       break;
   }
 };
-</script>
+
+// trim field after blur
+const trimField = (key) => {
+  if (typeof form[key] === "string") {
+    form[key] = form[key].trim()
+    validateField(key)
+  }
+};
  
+// handle enter input
+const handleEnter = (index) => {
+  const nextInput = inputRefs.value[index + 1];
+  if (nextInput) nextInput.focus();
+};
+
+// cancel process
+const cancel = () => {
+  router.back();
+};
+ 
+// payload 
+const payload = computed(() => ({
+  name: form.name.trim(),
+  websiteUrl: form.websiteUrl.trim() || null,
+  countryOfOrigin: form.countryOfOrigin.trim() || null,
+  isActive: form.isActive,
+}));
+ 
+// form validation
+const isFormValid = computed(() => {
+  return (
+    form.name.trim().length > 0 &&
+    !errors.name &&
+    !errors.websiteUrl &&
+    !errors.countryOfOrigin
+  );
+});
+ 
+// submit (emit , send payload)
+const handleSubmit = () => {
+  emits("payload", payload.value);
+};
+
+// ------------------------------------------------------------------------
+// FOR EDIT FORM
+
+// for edit brand
+const originData = ref({});
+const isFormModified = computed(
+  () => JSON.stringify(form) !== JSON.stringify(originData.value)
+);
+ 
+// set origin data
+if (props.formtype === "edit") {
+  onMounted(() => {
+    Object.assign(form, props?.form);
+    originData.value = JSON.parse(JSON.stringify(props.form));
+  });
+}
+
+</script>

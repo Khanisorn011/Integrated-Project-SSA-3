@@ -1,6 +1,6 @@
 async function fetchBrands() {
   try {
-    const res = await fetch("http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v1/brands");
+    const res = await fetch("/ssa3/itb-mshop/v1/brands");
     const data = await res.json();
     return data;
   } catch (err) {
@@ -10,9 +10,8 @@ async function fetchBrands() {
 
 async function fetchBrandById(id) {
   try {
-    const res = await fetch(`http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v1/brands/${id}`);
+    const res = await fetch(`/ssa3/itb-mshop/v1/brands/${id}`);
     const data = await res.json();
-    console.log(data);
 
     if (!res.ok) {
       throw new Error(`An error has occurred, the brand does not exist.`);
@@ -26,7 +25,7 @@ async function fetchBrandById(id) {
 
 async function editBrand(id, payload) {
   try {
-    const res = await fetch(`http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v1/brands/${id}`, {
+    const res = await fetch(`/ssa3/itb-mshop/v1/brands/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +45,7 @@ async function editBrand(id, payload) {
 
 async function deleteBrandById(id) {
   try {
-    const res = await fetch(`http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v1/brands/${id}`, {
+    const res = await fetch(`/ssa3/itb-mshop/v1/brands/${id}`, {
       method: "DELETE",
     });
 
@@ -60,7 +59,7 @@ async function deleteBrandById(id) {
 
 async function AddBrand(payload) {
   try {
-    const res = await fetch("http://intproj24.sit.kmutt.ac.th:8080/ssa3/itb-mshop/v1/brands", {
+    const res = await fetch("/ssa3/itb-mshop/v1/brands", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

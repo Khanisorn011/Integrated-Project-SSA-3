@@ -2,14 +2,14 @@ import { defineStore , acceptHMRUpdate } from 'pinia';
 import { ref , computed } from 'vue';
 
 export const useStateStore = defineStore('imageStore', () => {
-  const imageUrl = ref(JSON.parse(sessionStorage.getItem('imageUrl')) || null)
+  const imageUrl = ref(JSON.parse(sessionStorage.getItem('imageUrl')) || "../images/huawei.png")
 
   const setImageUrl = (url) => {
-    imageUrl.value = url || '../../images/huawei.png'
+    imageUrl.value = url || '../images/huawei.png'
     sessionStorage.setItem('imageUrl',JSON.stringify(imageUrl.value))
   }
 
-  const getImageUrl = computed(() => imageUrl.value || '../../images/huawei.png');
+  const getImageUrl = computed(() => imageUrl.value || '../images/huawei.png');
  
   return {
     setImageUrl,

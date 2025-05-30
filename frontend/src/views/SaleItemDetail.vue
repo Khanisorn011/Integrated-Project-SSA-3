@@ -90,13 +90,13 @@
             <!-- Edit / Delete Buttons -->
             <div class="flex gap-4 mt-6">
               <!-- Edit Button -->
-              <button @click="editProduct"
+              <button @click="editSaleItem"
                 class="itbms-edit-button px-4 py-2 rounded-md border border-gray-300 bg-white text-gray-800 hover:bg-gray-100 transition font-medium">
                 Edit
               </button>
 
               <!-- Delete Button -->
-              <button @click="deleteProductHandler"
+              <button @click="deleteSaleItemHandler"
                 class="itbms-delete-button px-4 py-2 rounded-md border border-red-300 bg-white text-red-600 hover:bg-red-50 transition font-medium">
                 Delete
               </button>
@@ -137,7 +137,7 @@
               Do you want to delete this sale item?
             </p>
             <div class="flex justify-center gap-4">
-              <button @click="confirmDeleteProduct"
+              <button @click="confirmDeleteSaleItem"
                 class="itbms-confirm-button px-5 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
                 Confirm
               </button>
@@ -157,12 +157,14 @@
 <script setup>
 import { ref, onMounted, watch, computed } from "vue";
 import { useRoute, useRouter } from "vue-router";
-import { fetchProductById, deleteProduct } from "../libs/fetchProduct.js";
+import { fetchSaleItemById, deleteSaleItem } from "../libs/fetchSaleItem.js";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { useStateStore } from "../stores/stateStore.js";
 import Alert from "../components/Alert.vue";
+import { useAlertStore } from "../stores/alertStore";
 
+const alertStore = useAlertStore()
 // router
 const route = useRoute();
 const router = useRouter();
@@ -185,11 +187,11 @@ const { getImageUrl } = stateStore;
 // confirm to delete
 const showConfirmModal = ref(false);
 
-const updated = computed(() => route.query.updated === "true");
+const updated = computed(() => alertStore.getModuleAlert('saleItem') === "updated");
 
 onMounted(async () => {
   try {
-    product.value = await fetchProductById(route.params.id);
+    product.value = await fetchSaleItemById(route.params.id);
   } catch (error) {
     showErrorModal.value = true;
     timeoutRef.value = setTimeout(() => {
@@ -206,7 +208,7 @@ const goBack = () => {
 };
 
 // go edit page
-const editProduct = () => {
+const editSaleItem = () => {
   router.push({ name: "EditSaleItemDetail" });
 };
 
@@ -222,13 +224,14 @@ watch(showErrorModal, (newVal) => {
 });
 
 // confirm delete
-const confirmDeleteProduct = async () => {
+const confirmDeleteSaleItem = async () => {
   try {
-    const res = await deleteProduct(route.params.id);
+    const res = await deleteSaleItem(route.params.id);
     
     if (res.ok) {
       showConfirmModal.value = false;
-      router.push({ path: "/sale-items", query: { deleted: "true" } });
+      router.push({ path: "/sale-items"});
+      alertStore.setModuleAlert('saleItem','deleted')
     } else if (res.status === 404) {
       showConfirmModal.value = false;
       showErrorModal.value = true;
@@ -254,7 +257,7 @@ const confirmDeleteProduct = async () => {
 };
 
 // show delete confirm modal
-const deleteProductHandler = () => {
+const deleteSaleItemHandler = () => {
   showConfirmModal.value = true;
 };
 </script>

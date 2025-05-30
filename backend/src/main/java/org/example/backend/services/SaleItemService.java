@@ -62,17 +62,16 @@ public class SaleItemService {
         return saleItemBaseRepository.findAllByBrandId(brandId);
     }
 
-    public Page<SaleItemBase> getByBrandNameIn(List<String> filterBrands, Integer pageNum, Integer pageSize, String sortField, String sortDirection) {
-
-        Sort.Direction direction = Sort.Direction.fromString(sortDirection);
-        Sort sort = Sort.by(direction, sortField);
-        PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
-
-        if (filterBrands == null || filterBrands.isEmpty()) {
-            return saleItemBaseRepository.findAll(pageRequest);
-        } else {
-            return saleItemBaseRepository.findByBrandNameIn(filterBrands, pageRequest);
-        }
+    public Page<SaleItemBase> getByBrandNameIn(List<String> filterBrands, Integer pageNum, Integer pageSize, String sortField, String sortDirection) { 
+    Sort.Direction direction = Sort.Direction.fromString(sortDirection);
+    Sort sort = Sort.by(direction, sortField).and(Sort.by(Sort.Direction.ASC, "id"));
+ 
+    PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
+ 
+    if (filterBrands == null || filterBrands.isEmpty()) {
+        return saleItemBaseRepository.findAll(pageRequest);
+    } else {
+        return saleItemBaseRepository.findByBrandNameIn(filterBrands, pageRequest);
     }
-    
+}
 }

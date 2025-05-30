@@ -35,12 +35,12 @@
    <Alert
       v-if="added"
       :message="'The sale item has been successfully added.'"
-      :state="'created'"
+      :state="'success'"
     />
     <Alert
       v-if="deleted"
       :message="'The sale item has been deleted.'"
-      :state="'created'"
+      :state="'success'"
     />
 
       <!-- Enhanced Controls Bar -->
@@ -220,7 +220,7 @@
                   
                   <td class="px-8 py-6">
                     <div class="flex gap-4 justify-center">
-                      <button @click="editProduct(product.id)"
+                      <button @click="editSaleItem(product.id)"
                         class="itbms-edit-button group bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white p-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden">
                         <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                         <svg class="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -228,7 +228,7 @@
                         </svg>
                       </button>
                       
-                      <button @click="deleteProductHandler(product.id)"
+                      <button @click="deleteSaleItemHandler(product.id)"
                         class="itbms-delete-button group bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 text-white p-4 rounded-2xl transition-all duration-300 shadow-lg hover:shadow-2xl transform hover:-translate-y-2 hover:scale-110 relative overflow-hidden">
                         <div class="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 transform -skew-x-12 -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
                         <svg class="w-5 h-5 relative z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -265,16 +265,19 @@
 </template>
 
 <script setup>
-import { fetchProductById, deleteProduct } from "../libs/fetchProduct.js";
+import { fetchSaleItemById, deleteSaleItem } from "../libs/fetchSaleItem.js";
 import { ref, computed, onMounted } from "vue";
 import { useRouter, useRoute } from "vue-router";
 import Header from "../components/Header.vue";
 import Footer from "../components/Footer.vue";
 import { fetchBrands } from "../libs/fetchBrand";
-import { fetchProducts } from "../libs/fetchProduct";
+import { fetchSaleItems } from "../libs/fetchSaleItem";
 import Modal from "../components/Modal.vue";
 import Alert from "../components/Alert.vue";
 import images from "../data/image.json";
+import { useAlertStore } from "../stores/alertStore";
+
+const alertStore = useAlertStore()
 
 const products = ref([]);
 const brands = ref([]);
@@ -286,24 +289,24 @@ const productToDeleteId = ref(null);
 
 //router
 const route = useRoute();
-const added = computed(() => route.query.added === "true");
-const deleted = ref(false);
+const added = computed(() => alertStore.getModuleAlert('saleItem') === "created");
+const deleted = computed(() => alertStore.getModuleAlert('saleItem') === "deleted");
 
 const updateItems = async () => {
   itemNotExist.value = false;
-  products.value = await fetchProducts(); 
+  products.value = await fetchSaleItems(); 
 };
 
 const confirmDeleteItem = async () => {
   try {
-    const detail = await fetchProductById(productToDeleteId.value);
+    const detail = await fetchSaleItemById(productToDeleteId.value);
 
     if (detail.error) {
       itemNotExist.value = true;
       return;
     }
-    await deleteProduct(productToDeleteId.value);
-    deleted.value = true;
+    await deleteSaleItem(productToDeleteId.value);
+    alertStore.setModuleAlert('saleItem','deleted')
     await updateItems();
     showConfirmModal.value = false;
   } catch (error) {
@@ -315,30 +318,27 @@ const confirmDeleteItem = async () => {
 
 onMounted(async () => {
   try {
-    const basicList = await fetchProducts();
+    const basicList = await fetchSaleItems();
     products.value = basicList;
   } catch (error) {
-    console.error("Error fetching products:", error);
     products.value = [];
   }
 
   try {
     brands.value = await fetchBrands();
     if (!Array.isArray(brands.value)) {
-      console.error("Error: fetched brands is not an array");
       brands.value = [];
     }
   } catch (error) {
-    console.error("Error fetching brands:", error);
     brands.value = [];
   }
 });
 
-const editProduct = (id) => {
+const editSaleItem = (id) => {
   router.push({ name: "EditSaleItemDetail", params: { id: id } });
 };
 
-function deleteProductHandler(id) {
+function deleteSaleItemHandler(id) {
   productToDeleteId.value = id;
   showConfirmModal.value = true;
 }
