@@ -67,7 +67,6 @@ public class SaleItemService {
 
         Sort.Direction direction = Sort.Direction.fromString(sortDirection);
 
-        // กำหนด fallback sort โดยให้ id เป็นลำดับรอง
         Sort sort = Sort.by(direction, sortField).and(Sort.by(Sort.Direction.ASC, "id"));
 
         PageRequest pageRequest = PageRequest.of(pageNum, pageSize, sort);
