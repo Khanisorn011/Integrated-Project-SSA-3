@@ -1,6 +1,6 @@
 async function fetchBrands() {
   try {
-    const res = await fetch("http://localhost:8080/itb-mshop/v1/brands");
+    const res = await fetch(`${import.meta.env.VITE_APP_URL}/brands`);
     const data = await res.json();
     return data;
   } catch (err) {
@@ -10,7 +10,7 @@ async function fetchBrands() {
 
 async function fetchBrandById(id) {
   try {
-    const res = await fetch(`http://localhost:8080/itb-mshop/v1/brands/${id}`);
+    const res = await fetch(`${import.meta.env.VITE_APP_URL}/brands/${id}`);
     const data = await res.json();
     console.log(data);
 
@@ -26,7 +26,7 @@ async function fetchBrandById(id) {
 
 async function editBrand(id, payload) {
   try {
-    const res = await fetch(`http://localhost:8080/itb-mshop/v1/brands/${id}`, {
+    const res = await fetch(`${import.meta.env.VITE_APP_URL}/brands/${id}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
@@ -46,7 +46,7 @@ async function editBrand(id, payload) {
 
 async function deleteBrandById(id) {
   try {
-    const res = await fetch(`http://localhost:8080/itb-mshop/v1/brands/${id}`, {
+    const res = await fetch(`${import.meta.env.VITE_APP_URL}/brands/${id}`, {
       method: "DELETE",
     });
 
@@ -60,7 +60,7 @@ async function deleteBrandById(id) {
 
 async function AddBrand(payload) {
   try {
-    const res = await fetch("http://localhost:8080/itb-mshop/v1/brands", {
+    const res = await fetch(`${import.meta.env.VITE_APP_URL}/brands`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

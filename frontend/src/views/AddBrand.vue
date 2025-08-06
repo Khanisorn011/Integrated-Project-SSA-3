@@ -19,11 +19,13 @@
         <h1 class="text-3xl font-bold text-gray-900 mb-8 border-b border-gray-200 pb-4">Add New Brand</h1>
         <BrandForm formtype="add" @payload="saveBrand" />
       </div>
+      <Modal v-if="showModal" :title="'Duplicate Brand'" :message="'Already has this brand name.'"
+        :displayConfirm="false" :closeAction="() => { showModal = false }">
+      </Modal>
     </main>
     <Footer />
   </div>
 </template>
-
 <script setup>
 import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
@@ -32,25 +34,31 @@ import Footer from '../components/Footer.vue';
 import { AddBrand } from '../libs/fetchBrand.js';
 import BrandForm from '../components/BrandForm.vue'
 import { useAlertStore } from '../stores/alertStore';
-
+import Modal from '../components/Modal.vue'
 //store
 const alertStore = useAlertStore()
 // router
 const router = useRouter();
+
+const showModal = ref(false)
+const modalTitle = ref('')
+const modalMessage = ref('')
 
 // save brand
 const saveBrand = async (payload) => {
   try {
     const res = await AddBrand(payload);
     if (res) {
-      router.push({ path: '/brands'});
-      alertStore.setModuleAlert('brand','created')
+      router.push({ path: '/brands' });
+      alertStore.setModuleAlert('brand', 'created')
     } else {
       alert('Failed to add brand.');
     }
   } catch (error) {
     console.error(error);
-    alert('Already has this brand name.');
+    modalTitle.value = 'Duplicate Brand'
+    modalMessage.value = 'Already has this brand name.'
+    showModal.value = true
   } finally {
 
   }

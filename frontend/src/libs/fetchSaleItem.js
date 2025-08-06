@@ -1,6 +1,6 @@
 async function fetchSaleItems() {
     try {
-      const res = await fetch('http://localhost:8080/itb-mshop/v1/sale-items')
+      const res = await fetch(`${import.meta.env.VITE_APP_URL}/sale-items`)
       const data = await res.json()
       return data
     } catch (err) {
@@ -12,7 +12,7 @@ async function fetchSaleItems() {
 async function fetchSaleItemById(id) {
   try {
     const res = await fetch(
-      `http://localhost:8080/itb-mshop/v1/sale-items/${id}`
+      `${import.meta.env.VITE_APP_URL}/sale-items/${id}`
     );
     const data = await res.json();
 
@@ -29,7 +29,7 @@ async function fetchSaleItemById(id) {
 async function postSaleItem(payload) {
   try {
     const response = await fetch(
-      "http://localhost:8080/itb-mshop/v1/sale-items",
+      `${VITE_APP_URL}/sale-items`,
       {
         method: "POST",
         headers: {
@@ -47,7 +47,7 @@ async function postSaleItem(payload) {
 async function editSaleItem(id, payload) {
   try {
     const response = await fetch(
-      `http://localhost:8080/itb-mshop/v1/sale-items/${id}`,
+      `${import.meta.env.VITE_APP_URL}/sale-items/${id}`,
       {
         method: "PUT",
         headers: {
@@ -70,7 +70,7 @@ async function editSaleItem(id, payload) {
 async function deleteSaleItem(id) {
   try {
     const response = await fetch(
-      `http://localhost:8080/itb-mshop/v1/sale-items/${id}`,
+      `${import.meta.env.VITE_APP_URL}/sale-items/${id}`,
       {
         method: "DELETE",
       }
@@ -85,7 +85,7 @@ async function fetchSaleItemByCondition(payload) {
   try {
     const request = new URLSearchParams(payload).toString();
     const response = await fetch(
-      `http://localhost:8080/itb-mshop/v2/sale-items?${request}`,
+      `${import.meta.env.VITE_APP_URL_2}/sale-items?${request}`,
       {
         method: "GET",
         headers: {
