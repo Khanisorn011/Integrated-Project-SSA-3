@@ -29,13 +29,11 @@ public class BrandBaseService {
         return brandBaseRepository.findById(id).orElseThrow(() -> new BrandNotFoundException("Brand not found with id: " + id));
     }
 
-    @Transactional
     public BrandBase createBrand(BrandBase brandBase){
         BrandBase created = brandBaseRepository.save(brandBase);
-        em.flush();
-        em.refresh(created);
         return created;
     }
+
     public boolean existsByNameIgnoreCase(String name) {
         return brandBaseRepository.existsByNameIgnoreCase(name);
     }

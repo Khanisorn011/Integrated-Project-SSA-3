@@ -64,12 +64,25 @@ public class SaleItemBase {
     @Column(name = "color")
     private String color;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdOn", nullable = false, updatable = false, insertable = false)
     private Instant createdOn;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updatedOn", nullable = false, updatable = false, insertable = false)
     private Instant updatedOn;
 
+    public void setModel(String model) {
+        this.model = model != null ? model.trim() : null;
+    }
+
+    public void setDescription(String description) {
+        this.description = description != null ? description.trim() : null;
+    }
+
+    public void setColor(String color) {
+        String colorValue = (color != null && !color.trim().isEmpty()) ? color.trim() : null;
+        this.color = colorValue;
+    }
+    public void setQuantity(Integer quantity) {
+        this.quantity = (quantity != null && quantity >= 0) ? quantity : 1;
+    }
 }

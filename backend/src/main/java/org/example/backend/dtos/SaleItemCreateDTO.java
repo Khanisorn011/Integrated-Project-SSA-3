@@ -23,20 +23,20 @@ public class SaleItemCreateDTO {
         this.id =  null;
     }
 
-    public void setModel(String model) {
-        this.model = model != null ? model.trim() : null;
-    }
-
-    public void setDescription(String description) {
-        this.description = description != null ? description.trim() : null;
-    }
-
-    public void setColor(String color) {
-        String colorValue = (color != null && !color.trim().isEmpty()) ? color.trim() : null;
-        this.color = colorValue;
-    }
-    public void setQuantity(Integer quantity) {
-        this.quantity = (quantity != null && quantity >= 0) ? quantity : 1;
-    }
+//    public void setModel(String model) {
+//        this.model = model != null ? model.trim() : null;
+//    }
+//
+//    public void setDescription(String description) {
+//        this.description = description != null ? description.trim() : null;
+//    }
+//
+//    public void setColor(String color) {
+//        String colorValue = (color != null && !color.trim().isEmpty()) ? color.trim() : null;
+//        this.color = colorValue;
+//    }
+//    public void setQuantity(Integer quantity) {
+//        this.quantity = (quantity != null && quantity >= 0) ? quantity : 1;
+//    }
 }
 

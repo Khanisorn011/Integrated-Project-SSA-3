@@ -38,15 +38,27 @@ public class BrandBase {
     @Column(name = "countryOfOrigin", length = 80)
     private String countryOfOrigin;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "createdOn", nullable = false, updatable = false, insertable = false)
     private Instant createdOn;
 
-    @ColumnDefault("CURRENT_TIMESTAMP")
     @Column(name = "updatedOn", nullable = false, updatable = false, insertable = false)
     private Instant updatedOn;
 
     @OneToMany(mappedBy = "brand")
     private Set<SaleItemBase> saleItemBases = new LinkedHashSet<>();
+
+
+    public void setName(String name) {
+        this.name = name != null ? name.trim() : null;
+    }
+    public void setWebsiteUrl(String websiteUrl) {
+        this.websiteUrl = websiteUrl != null ? websiteUrl.trim() : null;
+    }
+    public void setCountryOfOrigin(String countryOfOrigin) {
+        this.countryOfOrigin = countryOfOrigin != null ? countryOfOrigin.trim() : null;
+    }
+    public void setIsActive(Boolean isActive) {
+        this.isActive = (isActive != null) ? isActive : true;
+    }
 
 }
